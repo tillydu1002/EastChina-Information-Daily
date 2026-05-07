@@ -1,6 +1,12 @@
 .DS_Store
 Thumbs.db
 *.log
+*.bak
 .vscode/
 .idea/
 node_modules/
+
+# 本地校验脚本和产物
+check_urls.js
+check_urls_report.json
+

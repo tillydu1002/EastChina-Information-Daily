@@ -1,66 +1,130 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-  <meta http-equiv="Pragma" content="no-cache">
-  <meta http-equiv="Expires" content="0">
-  <title>华东区域政策日报 · 数据校准中</title>
-  <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif;
-      background: linear-gradient(135deg, #1a3a6c 0%, #0f2447 100%);
-      color: #fff;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-    }
-    .card {
-      max-width: 520px;
-      width: 100%;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 16px;
-      padding: 36px 28px;
-      backdrop-filter: blur(8px);
-    }
-    .icon { font-size: 48px; margin-bottom: 12px; }
-    h1 { font-size: 22px; font-weight: 600; margin-bottom: 16px; line-height: 1.4; }
-    p { font-size: 14px; line-height: 1.7; color: rgba(255,255,255,.85); margin-bottom: 12px; }
-    .meta {
-      margin-top: 20px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(255,255,255,.1);
-      font-size: 12px;
-      color: rgba(255,255,255,.5);
-    }
-    .badge {
-      display: inline-block;
-      padding: 3px 10px;
-      background: rgba(255,193,7,.15);
-      color: #ffc107;
-      border-radius: 12px;
-      font-size: 12px;
-      margin-bottom: 16px;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="theme-color" content="#1a3a6c" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>华东政策日报</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="card">
-    <div class="icon">🛠️</div>
-    <span class="badge">数据校准中</span>
-    <h1>华东区域政策日报暂时下线</h1>
-    <p>原页面所列政策、友商、腾讯动态的部分原文链接存在校验问题，为保证信息可追溯性与质量，已暂时关闭对外访问。</p>
-    <p>团队正在重建数据采集流水线，校验每一条信息的原文链接 200 可达后再恢复发布。</p>
-    <p>预计恢复时间：链接核验完成后第一时间上线。</p>
-    <div class="meta">
-      数据来源：华东公共事务部门 · 内部校准期间不对外提供数据<br>
-      更新时间：2026-05-07
+
+  <!-- ===== 顶部头：标题 + 日期选择器 ===== -->
+  <header class="app-header">
+    <div class="app-header-row">
+      <div class="app-title">
+        <span class="app-title-main" id="reportTitle">华东政策日报</span>
+        <span class="app-title-sub" id="reportSubtitle"></span>
+      </div>
+      <button class="date-trigger" id="dateTrigger" type="button">
+        <span class="date-trigger-icon">📅</span>
+        <span class="date-trigger-text" id="dateTriggerText">2026-05-07</span>
+        <span class="date-trigger-arrow">▼</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ===== 日期切换弹层 ===== -->
+  <div class="date-picker-mask" id="datePickerMask" hidden>
+    <div class="date-picker">
+      <div class="date-picker-header">
+        <span>切换日期</span>
+        <button class="date-picker-close" id="datePickerClose" type="button">×</button>
+      </div>
+      <div class="date-picker-list" id="datePickerList">
+        <!-- 由 JS 渲染日期项 -->
+      </div>
     </div>
   </div>
+
+  <!-- ===== 主内容区（每个 page 是一个 tab 的内容） ===== -->
+  <main class="app-main" id="appMain">
+
+    <section class="page" data-page="highlights" id="page-highlights">
+      <div class="page-header">
+        <h2>📌 本日导读</h2>
+        <p class="page-desc">前 2 条紧急事项 · 后续为重要事项 · 点击卡片查看原文</p>
+      </div>
+      <div class="page-body" id="highlightsBody"></div>
+    </section>
+
+    <section class="page" data-page="alerts" id="page-alerts" hidden>
+      <div class="page-header">
+        <h2>⚠️ 预警提示</h2>
+        <p class="page-desc">紧急（红） · 重要（蓝） · 关注（绿）</p>
+      </div>
+      <div class="page-body" id="alertsBody"></div>
+    </section>
+
+    <section class="page" data-page="entries" id="page-entries" hidden>
+      <div class="page-header">
+        <h2>📄 重点政策动态</h2>
+        <p class="page-desc">国家级 · 上海 · 江苏 · 浙江 · 安徽 · 福建 · 湖南 · 江西</p>
+      </div>
+      <div class="page-body" id="entriesBody"></div>
+    </section>
+
+    <section class="page" data-page="personnel" id="page-personnel" hidden>
+      <div class="page-header">
+        <h2>👤 人事变动</h2>
+        <p class="page-desc">副部级及以上含四维分析卡片</p>
+      </div>
+      <div class="page-body" id="personnelBody"></div>
+    </section>
+
+    <section class="page" data-page="competitors" id="page-competitors" hidden>
+      <div class="page-header">
+        <h2>🏢 行业动态</h2>
+        <p class="page-desc">腾讯 · 国外友商 · 国内友商 · 点击卡片查看原文</p>
+      </div>
+      <div class="page-body" id="competitorsBody"></div>
+    </section>
+
+    <section class="page" data-page="events" id="page-events" hidden>
+      <div class="page-header">
+        <h2>📅 区域重要活动</h2>
+        <p class="page-desc">关联度评级：⭐⭐⭐ 高 / ⭐⭐ 中 / ⭐ 低</p>
+      </div>
+      <div class="page-body" id="eventsBody"></div>
+    </section>
+
+  </main>
+
+  <!-- ===== 底部固定 Tab Bar ===== -->
+  <nav class="tab-bar" id="tabBar" role="tablist">
+    <button class="tab-item active" data-tab="highlights" role="tab">
+      <span class="tab-icon">📌</span>
+      <span class="tab-label">导读</span>
+    </button>
+    <button class="tab-item" data-tab="alerts" role="tab">
+      <span class="tab-icon">⚠️</span>
+      <span class="tab-label">预警</span>
+    </button>
+    <button class="tab-item" data-tab="entries" role="tab">
+      <span class="tab-icon">📄</span>
+      <span class="tab-label">政策</span>
+    </button>
+    <button class="tab-item" data-tab="personnel" role="tab">
+      <span class="tab-icon">👤</span>
+      <span class="tab-label">人事</span>
+    </button>
+    <button class="tab-item" data-tab="competitors" role="tab">
+      <span class="tab-icon">🏢</span>
+      <span class="tab-label">行业</span>
+    </button>
+    <button class="tab-item" data-tab="events" role="tab">
+      <span class="tab-icon">📅</span>
+      <span class="tab-label">活动</span>
+    </button>
+  </nav>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

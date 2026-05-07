@@ -1,8 +1,15 @@
 /* ============================================================
- * 华东区域政策日报 H5 数据文件（多日版 v2）
- * 规则版本：v3.8（2026-05-06）
+ * 华东区域政策日报 H5 数据文件（多日版 v3-真实数据）
+ * 规则版本：v3.8（2026-05-07 重建版）
  *
- * ⚠ 维护铁律（v3.8）：
+ * ⚠ 重建说明（2026-05-07）：
+ *   - 此版本清除了 5/7 事故前的所有占位数据（url=xxx、编造新闻）
+ *   - 本次数据全部来源于真实抓取：AI 日报、新浪财经早餐、央行官方通告、
+ *     国家数据局、A 股头条、新华网、上证报、中新网、央视新闻、国创中心等
+ *   - url 字段均为真实可访问链接；没有真实直链的条目 url 留空，不再编造
+ *   - 采集窗口：2026-05-05 ~ 2026-05-06 两天
+ *
+ * ⚠ 维护铁律：
  *   - 每日新增数据：在 DAILY_DATA_BY_DATE 中追加新的日期键
  *   - AVAILABLE_DATES 数组按降序排列（最新在前）
  *   - 历史数据增量追加，不替换
@@ -10,7 +17,6 @@
  * ⚠ 字段约定（v3.8）：
  *   - 政策（entries）：title / dept / date / content / impact(high|mid|low) / region / category / url
  *   - 人事（personnel）：date / source / scope / appointments[] / removals[]
- *       - 人员字段：name / newRole / prevRole / note / analysis(可选，仅副部级+)
  *   - 友商（competitors）：name / date / region(intl|cn) / category / title / update / url
  *   - 活动（events）：name / time / location / relevance(3|2|1) / note
  *   - 预警（alerts）：level(1|2|3) / title / status / countdown(数字，天) / unit / deadline / url
@@ -20,239 +26,193 @@
 
 /* === 可选日期列表（降序，最新在前） === */
 window.AVAILABLE_DATES = [
-  "2026-05-07",
-  "2026-05-06"
+  "2026-05-06",
+  "2026-05-05"
 ];
 
 /* === 各日期数据 === */
 window.DAILY_DATA_BY_DATE = {
 
-  /* ============== 2026-05-07（周四） ============== */
-  "2026-05-07": {
-    reportDate: "2026-05-07",
-    reportWeekday: "周四",
-    reportTitle: "华东区域政策日报",
-    reportSubtitle: "2026年5月7日 · 收录窗口 5月5日—5月7日（3天）",
-
-    highlights: [
-      {
-        type: "urgent",
-        title: "网信办启动「清朗·AIGC内容标识」专项整治，5月15日前完成自查整改",
-        action: "建议法务+混元/腾讯元宝团队在5月10日前完成内容标识合规自查，重点核对生成内容水印与显著标识规范"
-      },
-      {
-        type: "urgent",
-        title: "上海发布《数据要素市场化配置改革三年行动方案》，公共数据授权运营试点扩围",
-        action: "建议腾讯云华东区联合智慧城市团队启动对接，争取浦东/临港新片区试点资格"
-      },
-      {
-        type: "important",
-        title: "浙江出台《人工智能产业高质量发展行动计划（2026—2028）》，对千卡以上算力集群给予最高3000万元补贴",
-        action: "可联合腾讯云杭州枢纽申报算力补贴；商务团队对接省经信厅"
-      },
-      {
-        type: "important",
-        title: "国家版署5月版号过审144款，腾讯获批3款（含1款重点产品）",
-        action: "持续跟踪后续节奏，IEG发行团队提前准备5月底上线档期"
-      },
-      {
-        type: "important",
-        title: "江苏省政府人事任免：原省工信厅厅长调任副省长，分管数字经济与工业",
-        action: "GR华东团队尽快建立新分管副省长沟通通道，重点汇报腾讯在苏数字经济布局"
-      }
-    ],
-
-    entries: [
-      { region: "国家级", category: "数据安全", title: "网信办启动「清朗·AIGC内容标识」专项整治行动", dept: "国家网信办", date: "2026-05-07", content: "针对生成式AI内容未按规定标识、深度合成滥用等问题开展为期2个月的专项整治。要求平台5月15日前完成内容标识自查整改，重点核查文本/图片/音视频水印与显著标识合规情况。", impact: "high", impactReason: "直接影响腾讯混元、元宝等AIGC产品的内容合规配置，需法务+产品快速联动", url: "https://www.cac.gov.cn/2026-05/07/c_xxx.htm" },
-      { region: "国家级", category: "人工智能", title: "工信部印发《大模型安全测试规范（试行）》", dept: "工业和信息化部", date: "2026-05-06", content: "明确大模型上线前需通过红队测试、价值对齐评估、内容安全过滤三项强制测试，建立国家级测试平台。规范自2026年7月1日起施行。", impact: "high", impactReason: "混元等模型迭代将受测试流程影响，需提前对接测试平台", url: "https://www.miit.gov.cn/zwgk/zcwj/xxx.html" },
-      { region: "国家级", category: "消费零售", title: "国务院办公厅印发《关于扩大服务消费的若干措施》", dept: "国务院办公厅", date: "2026-05-06", content: "20条措施涵盖文旅、餐饮、家政、数字消费等领域，明确支持直播电商、即时零售等新业态规范健康发展。", impact: "mid", impactReason: "视频号电商、微信支付有政策受益空间", url: "https://www.gov.cn/zhengce/zhengceku/xxx.htm" },
-      { region: "上海", category: "数字经济", title: "上海市政府印发《数据要素市场化配置改革三年行动方案（2026—2028）》", dept: "上海市人民政府", date: "2026-05-07", content: "提出公共数据授权运营试点扩围至浦东、临港、虹桥3大片区，建立数据资产入表+交易撮合+收益分配全链条机制。到2028年培育数据交易额超300亿元。", impact: "high", impactReason: "腾讯云华东区可重点对接公共数据授权运营业务", url: "https://www.shanghai.gov.cn/nw12344/20260507/xxx.html" },
-      { region: "上海", category: "人工智能", title: "上海经信委发布《模速空间·大模型生态加速计划》", dept: "上海市经济信息化委员会", date: "2026-05-06", content: "面向大模型创业企业提供算力券（单家最高500万元）、场景券（单家最高200万元），重点支持垂类模型与AI Agent应用。", impact: "mid", impactReason: "可关注AI Agent生态合作机会", url: "https://sheitc.sh.gov.cn/xxx" },
-      { region: "江苏", category: "数字经济", title: "江苏省政府办公厅印发《加快推进算力一体化布局实施方案》", dept: "江苏省人民政府办公厅", date: "2026-05-06", content: "构建「南京-苏州-无锡」算力金三角，2027年底前建成国家级智算中心3个，对单项目最高补贴1亿元。", impact: "high", impactReason: "腾讯云苏州/南京数据中心可争取专项补贴", url: "https://www.jiangsu.gov.cn/art/2026/5/6/xxx.shtml" },
-      { region: "江苏", category: "金融监管", title: "江苏银保监局发布《消费金融机构合规经营指引》", dept: "江苏银保监局", date: "2026-05-05", content: "强化对持牌消费金融公司的资金来源、合作渠道、息费披露监管，要求2026年6月30日前完成存量整改。", impact: "mid", impactReason: "财付通+微众在苏业务需对照自查", url: "http://jiangsu.cbirc.gov.cn/xxx" },
-      { region: "浙江", category: "人工智能", title: "浙江省人民政府印发《人工智能产业高质量发展行动计划（2026—2028）》", dept: "浙江省人民政府", date: "2026-05-07", content: "目标到2028年人工智能产业规模突破8000亿元；对千卡以上智算集群最高补贴3000万元，对入选「省级AI Agent标杆应用」最高奖励500万元。", impact: "high", impactReason: "腾讯云杭州枢纽+混元Agent均有申报空间", url: "https://www.zj.gov.cn/art/2026/5/7/xxx.shtml" },
-      { region: "浙江", category: "数字内容", title: "浙江网信办通报第二批生成式AI备案名单（共47款）", dept: "浙江省网信办", date: "2026-05-06", content: "47款生成式AI服务通过备案，涵盖通用大模型、垂类工具、AI Agent等。备案信息可在浙江网信办官网公示栏查询。", impact: "low", impactReason: "行业进展信息，关注备案节奏", url: "http://www.zjwx.gov.cn/xxx" },
-      { region: "安徽", category: "数字经济", title: "安徽省大数据局印发《公共数据资源开发利用试点方案》", dept: "安徽省大数据局", date: "2026-05-06", content: "在合肥、芜湖、滁州三市开展公共数据授权运营试点，重点开发交通、医保、政务三大领域数据产品。", impact: "mid", impactReason: "腾讯云华东可对接合肥试点", url: "https://dss.ah.gov.cn/xxx" },
-      { region: "安徽", category: "教育", title: "安徽省教育厅启动「人工智能+教育」试点学校申报", dept: "安徽省教育厅", date: "2026-05-05", content: "首批遴选100所中小学开展AI+教育试点，重点覆盖智能学伴、个性化学习、AI教研等场景。", impact: "low", impactReason: "腾讯教育可对接试点资源", url: "http://jyt.ah.gov.cn/xxx" },
-      { region: "福建", category: "数字经济", title: "福建省政府发布《数字福建建设2026年工作要点》", dept: "福建省人民政府", date: "2026-05-07", content: "明确32项重点任务，含数字政府、数字经济、数据要素三大板块。第四届数字中国建设峰会将于5月23日在福州举办。", impact: "high", impactReason: "数字中国建设峰会是腾讯重要参展节点", url: "https://www.fujian.gov.cn/zwgk/zxwj/szfwj/202605/xxx.htm" },
-      { region: "福建", category: "文旅文化", title: "福建省文旅厅印发《数字文旅高质量发展实施意见》", dept: "福建省文化和旅游厅", date: "2026-05-06", content: "推动文旅企业数字化转型，鼓励运用AR/VR/AIGC等技术开发数字文旅产品。", impact: "mid", impactReason: "腾讯文旅、阅文IP可对接", url: "https://wlt.fujian.gov.cn/zwgk/zcfg/xxx" },
-      { region: "湖南", category: "人工智能", title: "湖南省工信厅发布《通用人工智能产业三年行动方案》", dept: "湖南省工业和信息化厅", date: "2026-05-06", content: "提出「岳麓·智算」品牌，到2028年建成长沙国家级算力枢纽，引育大模型企业30家以上。", impact: "mid", impactReason: "可关注长沙算力布局", url: "https://gxt.hunan.gov.cn/xxx" },
-      { region: "湖南", category: "游戏", title: "湖南省广电局发布网络游戏属地审查工作指引", dept: "湖南省广播电视局", date: "2026-05-05", content: "明确属地游戏企业版号申报、运营备案、未成年人保护等事项的属地化办理流程。", impact: "low", impactReason: "在湘游戏业务备案参考", url: "http://gdj.hunan.gov.cn/xxx" },
-      { region: "江西", category: "数字经济", title: "江西省政府办公厅印发《数字经济做优做强三年行动方案》", dept: "江西省人民政府办公厅", date: "2026-05-06", content: "重点发展VR、移动物联网、电子信息等优势产业，到2028年数字经济规模突破1.5万亿元。", impact: "mid", impactReason: "南昌VR产业基地可对接合作", url: "https://www.jiangxi.gov.cn/art/2026/5/6/xxx.shtml" },
-      { region: "江西", category: "医疗健康", title: "江西省卫健委发布《互联网医院规范运行管理办法（修订）》", dept: "江西省卫生健康委员会", date: "2026-05-05", content: "强化对互联网医院的接诊规范、处方审核、数据安全管理要求。", impact: "low", impactReason: "腾讯健康可参考运营合规", url: "http://hc.jiangxi.gov.cn/xxx" },
-      { region: "国家级", category: "人工智能", title: "（补录）国家发改委印发《算力互联互通行动计划》", dept: "国家发展改革委", date: "2026-05-04", content: "推动「东数西算」八大枢纽节点算力调度互联，2027年底前建成全国一体化算力网络。", impact: "mid", impactReason: "腾讯云全国数据中心布局相关", url: "https://www.ndrc.gov.cn/xxx", isBackfill: true }
-    ],
-
-    personnel: [
-      {
-        date: "2026-05-07", source: "江苏省人民政府", scope: "江苏省政府人事任免（5月7日）",
-        appointments: [{
-          name: "张明远", newRole: "江苏省人民政府副省长", prevRole: "江苏省工业和信息化厅厅长", note: "分管工业、信息化、数字经济、国资工作",
-          analysis: {
-            bio: "1969年生，南京大学计算机科学博士，历任无锡市副市长、苏州市委常委、省工信厅副厅长、厅长。长期分管信息化与数字经济。",
-            leaderLink: "2018—2021年任苏州市委常委期间，与时任江苏省委书记某领导有共事经历。",
-            tencentLink: "任工信厅厅长期间主导「江苏数字经济三年行动」，腾讯云苏州数据中心、微信支付江苏区域合作均与其分管业务直接相关。",
-            impact: "利好 — 对腾讯在苏数字经济业务延续性有积极影响，建议GR团队尽快建立汇报通道。"
-          }
-        }],
-        removals: [{ name: "李建华", prevRole: "江苏省人民政府副省长", newRole: "（另有任用）", note: "因工作调整免去现职" }]
-      },
-      {
-        date: "2026-05-06", source: "国务院", scope: "国务院人事任免（5月6日）",
-        appointments: [{
-          name: "王立国", newRole: "工业和信息化部副部长", prevRole: "中国电子信息产业发展研究院院长", note: "分管信息技术发展司、人工智能产业相关工作",
-          analysis: {
-            bio: "1965年生，清华大学电子工程博士，长期从事电子信息产业政策研究。曾任工信部赛迪研究院副院长、中国电子信息产业发展研究院院长。",
-            leaderLink: "暂未发现明显交集。",
-            tencentLink: "其分管的人工智能产业政策与腾讯混元、AI Agent业务直接相关，赛迪研究院过往多次发布大模型与AI算力研究报告，与腾讯研究院有学术对接。",
-            impact: "中性偏利好 — 业内技术派出身，对AI产业理解深入，政策制定预计更务实。"
-          }
-        }],
-        removals: []
-      },
-      {
-        date: "2026-05-06", source: "上海市委组织部", scope: "上海市管领导干部任前公示（5月6日）",
-        appointments: [
-          { name: "陈浩", newRole: "上海市浦东新区区委书记（拟任）", prevRole: "上海市经济和信息化委员会主任", note: "公示期5月6日—5月12日" },
-          { name: "刘玉芳", newRole: "上海市黄浦区区长（拟任）", prevRole: "上海市黄浦区副区长", note: "公示期5月6日—5月12日" }
-        ],
-        removals: []
-      },
-      {
-        date: "2026-05-05", source: "浙江省委组织部", scope: "浙江省管领导干部任前公示（5月5日）",
-        appointments: [
-          { name: "周伟", newRole: "杭州市副市长（拟任）", prevRole: "浙江省发改委副主任", note: "省会副市长，预计分管发改/数字经济" },
-          { name: "孙丽娟", newRole: "宁波市委常委（拟任）", prevRole: "宁波市政府秘书长", note: "公示期5月5日—5月11日" }
-        ],
-        removals: []
-      },
-      {
-        date: "2026-05-06", source: "安徽先锋网", scope: "安徽省地市主官任免（5月6日）",
-        appointments: [{ name: "黄海涛", newRole: "芜湖市委书记", prevRole: "安徽省委组织部副部长", note: "" }],
-        removals: [{ name: "潘明", prevRole: "芜湖市委书记", newRole: "（另有任用）", note: "" }]
-      }
-    ],
-
-    alerts: [
-      { level: 1, title: "AIGC内容标识专项整治：5月15日前完成自查", status: "网信办5月7日启动，混元/元宝需法务+产品快速联动", countdown: 8, unit: "天", deadline: "2026-05-15", url: "https://www.cac.gov.cn/2026-05/07/c_xxx.htm" },
-      { level: 1, title: "江苏消费金融机构合规整改窗口", status: "存量业务6月30日前完成整改，财付通在苏合作机构需对照自查", countdown: 54, unit: "天", deadline: "2026-06-30", url: "http://jiangsu.cbirc.gov.cn/xxx" },
-      { level: 2, title: "工信部《大模型安全测试规范》7月1日施行", status: "混元下一版本上线前需通过国家测试平台三项强制测试", countdown: 55, unit: "天", deadline: "2026-07-01", url: "https://www.miit.gov.cn/zwgk/zcwj/xxx.html" },
-      { level: 2, title: "未成年人游戏防沉迷暑期专项检查", status: "国家版署预计6月初启动，IEG提前准备实名+人脸合规材料", countdown: 30, unit: "天", deadline: "2026-06-06", url: "" },
-      { level: 3, title: "数字中国建设峰会·福州（持续跟踪）", status: "5月23—26日举办，腾讯参展+演讲，CDG市场团队5月15日前定稿展位方案", countdown: 16, unit: "天", deadline: "2026-05-23", url: "" },
-      { level: 3, title: "上海公共数据授权运营试点申报", status: "三年行动方案已发布，腾讯云华东可关注后续实施细则", countdown: 30, unit: "天", deadline: "2026-06-06", url: "" }
-    ],
-
-    tencent: [
-      { date: "2026-05-07", title: "腾讯混元发布 Hunyuan-Turbo-V2，多模态推理能力提升42%", content: "新版本在 MMMU、MathVista 等多模态评测中大幅领先，推理速度提升至上一代的1.8倍，已上线腾讯云千帆大模型服务平台。", url: "https://cloud.tencent.com/xxx" },
-      { date: "2026-05-06", title: "腾讯云华东总部启动「智算江南」生态计划", content: "联合苏州、无锡、合肥三地政府，面向AI企业提供算力补贴+场景对接+资本对接，首批入驻企业30家。", url: "https://cloud.tencent.com/xxx" },
-      { date: "2026-05-05", title: "微信小店上线「数字商品」类目，覆盖会员/虚拟道具/课程", content: "向所有商家开放数字商品上架能力，与视频号直播打通，预计7月起将开放小程序联动。", url: "" }
-    ],
-
-    competitors: [
-      { name: "OpenAI", date: "2026-05-07", region: "intl", category: "模型公司", title: "OpenAI 发布 GPT-5o 多模态实时交互模型", update: "支持音频/图像/视频实时输入，端到端延迟降至300ms以内，定价较GPT-4o下降40%。同步开放Realtime API公测。", url: "https://openai.com/xxx" },
-      { name: "Google DeepMind", date: "2026-05-06", region: "intl", category: "模型公司", title: "Gemini 2.5 Ultra 上线，编程能力对标 Claude 3.7", update: "在 SWE-Bench Verified 评测中得分提升至58.3%，已集成至 Gemini Code Assist 与 Vertex AI。", url: "https://deepmind.google/xxx" },
-      { name: "NVIDIA", date: "2026-05-06", region: "intl", category: "芯片-设计", title: "NVIDIA 推出 Blackwell Ultra B300 推理优化版", update: "针对MoE模型推理优化，FP4算力达20PFLOPS，预计三季度量产，多家国内云厂商已下单。", url: "" },
-      { name: "Anthropic", date: "2026-05-05", region: "intl", category: "模型公司", title: "Claude 4 Opus 公测，长上下文能力升级至200万tokens", update: "新增 Computer Use 2.0 工具，支持在浏览器中完成复杂多步任务，已与Slack、Notion深度集成。", url: "" },
-      { name: "阿里通义", date: "2026-05-07", region: "cn", category: "模型公司", title: "通义千问 Qwen3-Max 开源，72B MoE架构", update: "在Hugging Face开源权重，中文评测C-Eval得分85.6超过GPT-4o，已上架阿里云百炼平台。", url: "" },
-      { name: "字节豆包", date: "2026-05-06", region: "cn", category: "模型公司", title: "豆包大模型1.6发布，主力模型推理价格再降50%", update: "Doubao-1.6-pro主力版本输入价格0.4元/百万tokens，进一步拉低行业定价基准；同步发布豆包视频生成模型Seedance 2.0。", url: "" },
-      { name: "DeepSeek", date: "2026-05-06", region: "cn", category: "模型公司", title: "DeepSeek-R2 推理模型开源，数学能力对标 o3", update: "R2在AIME 2025数学竞赛中得分89.4超过o3-mini，开源权重 + 完整训练论文。", url: "" },
-      { name: "月之暗面 Kimi", date: "2026-05-05", region: "cn", category: "模型公司", title: "Kimi 推出企业Agent平台「Kimi+」", update: "面向企业开放AI Agent构建能力，支持工具调用、长任务规划、私域知识库接入。", url: "" },
-      { name: "智谱AI", date: "2026-05-05", region: "cn", category: "模型公司", title: "GLM-5 旗舰模型发布，全面对标 GPT-5", update: "在MMLU-Pro得分82.1，已上线智谱清言App及bigmodel.cn API平台。", url: "" },
-      { name: "华为盘古", date: "2026-05-06", region: "cn", category: "芯片+模型", title: "盘古5.0+昇腾910C组合方案在多家政企落地", update: "联合方案在能源、政务、金融三大行业实现规模化部署，昇腾910C算力对标H100的80%。", url: "" },
-      { name: "百度文心", date: "2026-05-05", region: "cn", category: "模型公司", title: "文心大模型X2推理模型开源，思考过程可视化", update: "X2思考过程完全可见，已集成至百度搜索AI模式与文心一言App。", url: "" },
-      { name: "阿里巴巴", date: "2026-05-07", region: "cn", category: "互联网平台", title: "阿里云宣布百炼平台模型调用费用整体下调30%", update: "覆盖通义千问全系列、第三方模型，目标抢夺中小开发者市场。", url: "" },
-      { name: "字节跳动", date: "2026-05-06", region: "cn", category: "互联网平台", title: "豆包App月活突破1.2亿，居国内AI助手榜首", update: "QuestMobile数据显示豆包App 4月MAU 1.21亿，超过文心一言+Kimi+智谱清言总和。", url: "" },
-      { name: "京东", date: "2026-05-05", region: "cn", category: "互联网平台", title: "京东外卖宣布单日订单破1500万", update: "京东外卖加速扩张，对美团构成明确竞争压力。", url: "" }
-    ],
-
-    events: [
-      { name: "第四届数字中国建设峰会", time: "2026-05-23 — 05-26", location: "福州", relevance: 3, note: "腾讯参展 + 演讲（CDG市场团队牵头）" },
-      { name: "2026世界人工智能大会（WAIC）", time: "2026-07-04 — 07-07", location: "上海", relevance: 3, note: "腾讯混元主论坛+展台，PCG/CSIG联合参与" },
-      { name: "中国国际数字经济博览会", time: "2026-06-15 — 06-17", location: "南京", relevance: 2, note: "可对接江苏省经信厅+城市数字化合作" },
-      { name: "全球数字贸易博览会", time: "2026-09-25 — 09-29", location: "杭州", relevance: 2, note: "腾讯云+视频号电商出海议题对接" },
-      { name: "中国国际智能产业博览会", time: "2026-08-26 — 08-29", location: "重庆", relevance: 1, note: "行业情报跟踪" }
-    ]
-  },
-
-  /* ============== 2026-05-06（周三）— 历史归档 ============== */
+  /* ============== 2026-05-06（周三） ============== */
   "2026-05-06": {
     reportDate: "2026-05-06",
     reportWeekday: "周三",
     reportTitle: "华东区域政策日报",
-    reportSubtitle: "2026年5月6日 · 收录窗口 5月4日—5月6日（3天）",
+    reportSubtitle: "2026年5月6日 · 节后首个交易日，当日核心动态",
 
     highlights: [
-      { type: "urgent", title: "工信部印发《大模型安全测试规范（试行）》，7月1日起施行", action: "混元团队需提前对接国家级测试平台，准备红队测试材料" },
-      { type: "urgent", title: "江苏算力金三角方案出台，南京苏州无锡协同布局国家级智算中心", action: "腾讯云苏州/南京数据中心可争取专项补贴" },
-      { type: "important", title: "国务院办公厅扩大服务消费20条措施", action: "视频号电商、微信支付关注政策红利" },
-      { type: "important", title: "上海经信委发布大模型生态加速计划，提供算力券+场景券", action: "可对接AI Agent生态合作机会" },
-      { type: "important", title: "国务院任命王立国为工信部副部长", action: "GR团队建立沟通通道，关注AI产业政策走向" }
+      {
+        type: "urgent",
+        title: "国家数据局 × 上海：数据领域国际合作上海综合试点正式启动，临港/浦东/虹桥打造高水平国际数据合作示范区",
+        action: "CSIG/腾讯云华东可第一时间对接临港、浦东、虹桥数据示范区落地，争取数据出境负面清单（扩至全市）下的跨境数据服务合作"
+      },
+      {
+        type: "urgent",
+        title: "央行 5/6 开展 3000 亿元 3 个月买断式逆回购，缩量续作净回笼 5000 亿元（连续第三个月净回笼）",
+        action: "财付通/微众银行关注 5 月资金面从「极度宽松」向「中性偏松」过渡，同业存单利率可能触底回升"
+      },
+      {
+        type: "important",
+        title: "字节豆包 5/4 推出付费订阅（68/200/500 元/月三档），A 股头条 5/6 热议，国产大模型集体告别免费时代",
+        action: "腾讯元宝产品团队评估付费策略跟进窗口；混元 Hy3 preview Token 计划（28 元起）已先发占位"
+      },
+      {
+        type: "important",
+        title: "Anthropic 首届 Code with Claude 开发者大会 5/6 旧金山开幕，ARR 飙升至 440 亿美元冲刺万亿估值",
+        action: "CSIG/TEG 跟踪 Anthropic Cowork + Skills 市场、Claude Code 2.2 生态动向，对标腾讯 WorkBuddy 产品路线"
+      },
+      {
+        type: "important",
+        title: "2026「五一」全社会跨区域流动 15.25 亿人次（日均+4%），五一档票房 7.48 亿超 2025 全档",
+        action: "微信支付/视频号/腾讯文旅团队复盘五一期间核心场景数据，为 6 月消费政策窗口积累案例"
+      }
     ],
 
     entries: [
-      { region: "国家级", category: "人工智能", title: "工信部印发《大模型安全测试规范（试行）》", dept: "工业和信息化部", date: "2026-05-06", content: "明确大模型上线前需通过红队测试、价值对齐评估、内容安全过滤三项强制测试。", impact: "high", impactReason: "混元等模型迭代将受测试流程影响", url: "" },
-      { region: "国家级", category: "消费零售", title: "国务院办公厅印发《关于扩大服务消费的若干措施》", dept: "国务院办公厅", date: "2026-05-06", content: "20条措施涵盖文旅、餐饮、家政、数字消费等领域。", impact: "mid", impactReason: "视频号电商、微信支付有政策受益空间", url: "" },
-      { region: "上海", category: "人工智能", title: "上海经信委发布《模速空间·大模型生态加速计划》", dept: "上海市经济信息化委员会", date: "2026-05-06", content: "提供算力券（最高500万元）、场景券（最高200万元）。", impact: "mid", impactReason: "可关注AI Agent生态合作机会", url: "" },
-      { region: "江苏", category: "数字经济", title: "江苏省政府办公厅印发《加快推进算力一体化布局实施方案》", dept: "江苏省人民政府办公厅", date: "2026-05-06", content: "构建「南京-苏州-无锡」算力金三角，对单项目最高补贴1亿元。", impact: "high", impactReason: "腾讯云苏州/南京数据中心可争取补贴", url: "" },
-      { region: "浙江", category: "数字内容", title: "浙江网信办通报第二批生成式AI备案名单（共47款）", dept: "浙江省网信办", date: "2026-05-06", content: "47款生成式AI服务通过备案。", impact: "low", impactReason: "行业进展信息", url: "" },
-      { region: "安徽", category: "数字经济", title: "安徽省大数据局印发《公共数据资源开发利用试点方案》", dept: "安徽省大数据局", date: "2026-05-06", content: "在合肥、芜湖、滁州三市开展公共数据授权运营试点。", impact: "mid", impactReason: "腾讯云华东可对接合肥试点", url: "" },
-      { region: "福建", category: "文旅文化", title: "福建省文旅厅印发《数字文旅高质量发展实施意见》", dept: "福建省文化和旅游厅", date: "2026-05-06", content: "鼓励运用AR/VR/AIGC等技术开发数字文旅产品。", impact: "mid", impactReason: "腾讯文旅、阅文IP可对接", url: "" },
-      { region: "湖南", category: "人工智能", title: "湖南省工信厅发布《通用人工智能产业三年行动方案》", dept: "湖南省工业和信息化厅", date: "2026-05-06", content: "提出「岳麓·智算」品牌，2028年建成长沙国家级算力枢纽。", impact: "mid", impactReason: "可关注长沙算力布局", url: "" },
-      { region: "江西", category: "数字经济", title: "江西省政府办公厅印发《数字经济做优做强三年行动方案》", dept: "江西省人民政府办公厅", date: "2026-05-06", content: "重点发展VR、移动物联网、电子信息等优势产业。", impact: "mid", impactReason: "南昌VR产业基地可对接", url: "" }
+      { region: "国家级", category: "数据要素", title: "数据领域国际合作上海综合试点正式启动（面向 2030 的 6 大板块 17 项任务）", dept: "国家数据局 × 上海市", date: "2026-05-06", content: "在 2026 全球数字合作交流会暨全球数据周上宣布，上海作为首批试点，推进国际网络、跨境存算、「总对总」数据跨境服务设施建设；临港/浦东/虹桥打造高水平国际数据合作示范区；《国家服务业扩大开放综合试点地区（上海）数据出境负面清单》覆盖范围由自贸区扩展至全市。", impact: "high", impactReason: "腾讯云华东 + 微信国际版 + 游戏/音乐出海业务都可对接跨境数据服务设施与数字出海服务集群（金融科技/数字技术/数字内容/数据合规）", url: "https://www.nda.gov.cn/sjj/swdt/mtsy/0506/20260506201259547307249_pc.html" },
+      { region: "国家级", category: "货币政策", title: "央行 5/6 开展 3000 亿元 3 个月期买断式逆回购（净回笼 5000 亿元）", dept: "中国人民银行", date: "2026-05-06", content: "以固定数量、利率招标、多重价位中标方式开展 91 天买断式逆回购 3000 亿元，5 月到期 8000 亿元，实际净回笼 5000 亿元，连续第三个月缩量续作。同日还开展 260 亿元 7 天期逆回购。定性为「削峰填谷」，不代表政策基调转向。", impact: "mid", impactReason: "资金面从极度宽松向中性偏松过渡，影响腾讯金融科技业务资金成本预期", url: "https://www.news.cn/fortune/20260506/91b4bfe6b7864adfbdc9e9502b2dc5da/c.html" },
+      { region: "国家级", category: "货币政策", title: "《上证报》解读：资金面持续宽松，买断式逆回购净回笼 5000 亿元", dept: "上海证券报", date: "2026-05-06", content: "4 月 DR001 均值 1.23%（下行 8BP），1 年期 AAA 同业存单 1.47% 创历史新低；招联首经董希淼、中信首经明明均认为系常规「削峰填谷」，预计 5-6 月资金面回归中性偏松。", impact: "mid", impactReason: "对财付通/微众银行同业业务成本预判有参考价值", url: "https://paper.cnstock.com/html/2026-05/06/content_2212810.htm" },
+      { region: "国家级", category: "宏观消费", title: "「五一」假期 5/1-5/5 全社会跨区域流动 15.25 亿人次（日均 3.05 亿，同比 +4%）", dept: "交通运输部", date: "2026-05-05", content: "2026 年五一假期全社会跨区域人员流动量预计 152510.3 万人次，日均 30502.1 万人次，同比 2025 年日均增长 4%；5/5 当日预计 29003.5 万人次，同比 +8%。", impact: "mid", impactReason: "微信支付、视频号、腾讯文旅五一期间交易与内容数据可对照此权威口径", url: "https://www.chinanews.com.cn/cj/2026/05-05/10615980.shtml" },
+      { region: "国家级", category: "文旅消费", title: "文旅部：「五一」夜间客流超 8000 万人次，文旅消费多点开花", dept: "文化和旅游部", date: "2026-05-05", content: "亲子家庭出游占比明显提升，主题乐园、特色美食、潮流音乐节等应季文旅产品受追捧；文旅消费周期间各地举办约 1.37 万场次活动、发放超 2.84 亿元消费券。", impact: "mid", impactReason: "腾讯文旅、视频号演艺合作可对接下阶段文旅消费周活动", url: "https://news.cctv.cn/2026/05/05/ARTII63LmoHa12rvDVbOVwnI260505.shtml" },
+      { region: "国家级", category: "文娱消费", title: "2026 五一档总票房 7.48 亿，超越 2025 五一档最终票房（7.47 亿）", dept: "猫眼/灯塔专业版（权威第三方）", date: "2026-05-05", content: "截至 5/5 19:24 档期票房破 7.48 亿，同比 2025 年小幅增长。", impact: "low", impactReason: "视频号直播、微信小店票务数据可对照", url: "https://stock.jrj.com.cn/2026/05/06073257005326.shtml" },
+      { region: "国家级", category: "外交", title: "伊朗外长阿拉格齐 5/6 应邀访华，外长王毅与其举行会谈", dept: "外交部", date: "2026-05-06", content: "中东局势紧张背景下的重要外交活动，外交部发言人正式宣布。", impact: "low", impactReason: "宏观地缘情报，关注能源/跨境结算业务敏感度", url: "https://stock.jrj.com.cn/2026/05/06073257005326.shtml" },
+      { region: "上海", category: "消费数据", title: "上海 4/30-5/4 线上线下消费 643.0 亿元，同比 +7.7%", dept: "消费市场大数据实验室（上海）", date: "2026-05-05", content: "监测数据显示五一前四天上海线上线下消费额达 643 亿元，同比增长 7.7%，延续全年消费修复态势。", impact: "mid", impactReason: "腾讯广告/视频号/微信支付在沪商户复盘有参考", url: "https://stock.jrj.com.cn/2026/05/06073257005326.shtml" },
+      { region: "浙江", category: "AI/机器人", title: "浙江人形机器人创新中心发布 RAM 三维空间理解模型", dept: "浙江人形机器人创新中心（联合港中文、浙大）", date: "2026-05-05", content: "联合香港中文大学、浙江大学等团队提出 RAM 三维空间视觉模型，提升机器人三维空间理解与操作能力。", impact: "mid", impactReason: "腾讯 Robotics X 实验室可跟踪学术合作，混元具身智能路线有参考", url: "https://www.ncsti.gov.cn/kjdt/kjrd/rgzn_kjrd/" },
+      { region: "浙江", category: "土地/房地产", title: "滨江集团联合浙霁置业 26.09 亿元竞得杭州住宅用地", dept: "杭州市自然资源和规划局（土拍）", date: "2026-05-06", content: "公告披露滨江集团联合浙霁置业成功竞得杭州一宗住宅用地，金额 26.09 亿元。", impact: "low", impactReason: "华东区域房地产市场脉搏数据", url: "https://stock.jrj.com.cn/2026/05/06073257005326.shtml" },
+      { region: "湖南", category: "安全生产", title: "浏阳全市烟花爆竹生产企业 5/4 19:00 起全面停产整顿（5/5 新闻发布会披露）", dept: "长沙市 / 浏阳市人民政府", date: "2026-05-05", content: "因华盛烟花公司爆炸事故，浏阳全市烟花爆竹企业全面停产整顿，同步开展安全生产大排查、大整治。", impact: "low", impactReason: "地方政府安全生产强监管风向", url: "https://stock.jrj.com.cn/2026/05/06073257005326.shtml" }
     ],
 
     personnel: [
       {
-        date: "2026-05-06", source: "国务院", scope: "国务院人事任免（5月6日）",
-        appointments: [{
-          name: "王立国", newRole: "工业和信息化部副部长", prevRole: "中国电子信息产业发展研究院院长", note: "分管信息技术发展司、人工智能产业相关工作",
-          analysis: {
-            bio: "1965年生，清华大学电子工程博士，长期从事电子信息产业政策研究。",
-            leaderLink: "暂未发现明显交集。",
-            tencentLink: "其分管的人工智能产业政策与腾讯混元、AI Agent业务直接相关。",
-            impact: "中性偏利好 — 业内技术派出身，对AI产业理解深入，政策制定预计更务实。"
-          }
-        }],
-        removals: []
-      },
-      {
-        date: "2026-05-06", source: "上海市委组织部", scope: "上海市管领导干部任前公示（5月6日）",
-        appointments: [
-          { name: "陈浩", newRole: "上海市浦东新区区委书记（拟任）", prevRole: "上海市经济和信息化委员会主任", note: "公示期5月6日—5月12日" },
-          { name: "刘玉芳", newRole: "上海市黄浦区区长（拟任）", prevRole: "上海市黄浦区副区长", note: "公示期5月6日—5月12日" }
-        ],
-        removals: []
-      },
-      {
-        date: "2026-05-06", source: "安徽先锋网", scope: "安徽省地市主官任免（5月6日）",
-        appointments: [{ name: "黄海涛", newRole: "芜湖市委书记", prevRole: "安徽省委组织部副部长", note: "" }],
-        removals: [{ name: "潘明", prevRole: "芜湖市委书记", newRole: "（另有任用）", note: "" }]
+        date: "2026-05-06", source: "公开信息检索（本轮采集未获取 5/5-5/6 华东省管副部级+的权威人事公示）", scope: "5/5-5/6 人事板块说明",
+        appointments: [],
+        removals: [],
+        note: "规则手册 §2 要求每日采集副部级+及省管干部公示。本轮通过 web_search + web_fetch 在 5/5-5/6 两个工作日（5/5 劳动节假期尾日，5/6 节后首日）未从中组部、各省委组织部、人大常委会等权威源获取到副部级及以上任免或省管干部任前公示的公开信息。按「宁缺毋滥」铁律，本日人事板块留空并注明，后续如有权威渠道补录再回填。"
       }
     ],
 
     alerts: [
-      { level: 1, title: "工信部《大模型安全测试规范》7月1日施行", status: "混元下一版本上线前需通过国家测试平台三项强制测试", countdown: 56, unit: "天", deadline: "2026-07-01", url: "" },
-      { level: 2, title: "江苏消费金融机构合规整改窗口", status: "存量业务6月30日前完成整改", countdown: 55, unit: "天", deadline: "2026-06-30", url: "" },
-      { level: 3, title: "数字中国建设峰会·福州（持续跟踪）", status: "5月23—26日举办，腾讯参展+演讲", countdown: 17, unit: "天", deadline: "2026-05-23", url: "" }
+      { level: 2, title: "5 月中长期资金到期压力 2.1 万亿元（2025 年以来月度次高点）", status: "到期压力集中在 5 月下旬，财付通/同业业务密切跟踪", countdown: 14, unit: "天", deadline: "2026-05-20", url: "https://paper.cnstock.com/html/2026-05/06/content_2212810.htm" },
+      { level: 3, title: "数据领域国际合作上海综合试点实施细则（6 大板块 17 项任务落地节奏）", status: "试点 5/6 启动，后续临港/浦东/虹桥示范区实施细则值得重点跟进", countdown: 60, unit: "天", deadline: "2026-07-05", url: "https://www.nda.gov.cn/sjj/swdt/mtsy/0506/20260506201259547307249_pc.html" },
+      { level: 3, title: "Anthropic Code with Claude 开发者大会巡回（旧金山 5/6 → 伦敦 5/19 → 东京 6/10）", status: "跟踪 Sonnet 4.8、Cowork GA、Skills 市场扩展、KAIROS 持久代理等五大更新", countdown: 12, unit: "天", deadline: "2026-05-19", url: "" }
     ],
 
     tencent: [
-      { date: "2026-05-06", title: "腾讯云华东总部启动「智算江南」生态计划", content: "联合苏州、无锡、合肥三地政府，首批入驻企业30家。", url: "" }
+      {
+        date: "2026-05-06",
+        title: "（本轮采集未获取腾讯 5/6 当日官方新发布）",
+        content: "web_search + web_fetch 在腾讯官网 tencent.com/media、腾讯新闻、腾讯云等源上未找到 2026-05-06 当日的权威官方新发布条目。节前已有的邻近动态（均非 5/6 发生）：4/23 发布开源混元 Hy3 preview（2950 亿参数 MoE，256K 上下文）、4/24 Robotics X 联合混元开源 HY-Embodied-0.5-X 具身模型、4/27 Hy3 preview Token 计划（个人版 28 元/月起）。规则手册要求每日必采，但按「宁缺毋滥」铁律本日腾讯板块仅做如实说明，不回塞旧闻冒充当日新闻。",
+        url: ""
+      }
     ],
 
     competitors: [
-      { name: "Google DeepMind", date: "2026-05-06", region: "intl", category: "模型公司", title: "Gemini 2.5 Ultra 上线，编程能力对标 Claude 3.7", update: "SWE-Bench Verified 得分提升至58.3%。", url: "" },
-      { name: "NVIDIA", date: "2026-05-06", region: "intl", category: "芯片-设计", title: "NVIDIA 推出 Blackwell Ultra B300 推理优化版", update: "FP4算力达20PFLOPS，预计三季度量产。", url: "" },
-      { name: "字节豆包", date: "2026-05-06", region: "cn", category: "模型公司", title: "豆包大模型1.6发布，主力模型推理价格再降50%", update: "Doubao-1.6-pro 输入价格0.4元/百万tokens。", url: "" },
-      { name: "DeepSeek", date: "2026-05-06", region: "cn", category: "模型公司", title: "DeepSeek-R2 推理模型开源", update: "AIME 2025 得分89.4超过o3-mini。", url: "" },
-      { name: "华为盘古", date: "2026-05-06", region: "cn", category: "芯片+模型", title: "盘古5.0+昇腾910C组合方案在多家政企落地", update: "昇腾910C算力对标H100的80%。", url: "" },
-      { name: "字节跳动", date: "2026-05-06", region: "cn", category: "互联网平台", title: "豆包App月活突破1.2亿", update: "4月MAU 1.21亿，居国内AI助手榜首。", url: "" }
+      { name: "Anthropic", date: "2026-05-06", region: "intl", category: "模型公司", title: "首届「Code with Claude」开发者大会旧金山开幕", update: "预计发布五大更新：Claude Code 2.2.x、Cowork 模式 GA + Skills 市场扩展、Sonnet 4.8 GA、Mythos/Glasswing 合作扩展、KAIROS 持久代理。后续巡回伦敦 5/19、东京 6/10。", url: "https://duoke360.com/post/46211" },
+      { name: "Anthropic", date: "2026-05-06", region: "intl", category: "模型公司", title: "发布技术报告复盘 Claude Code「降智」三大 Bug（非模型退化）", update: "3/4 推理难度默认由「高」降至「中」、3/26 提示缓存漏洞清除推理历史、4/16 系统提示字数限制致代码质量降约 3%，均已修复；4/23 起重置订阅用户额度。", url: "https://duoke360.com/post/46211" },
+      { name: "Anthropic", date: "2026-05-06", region: "intl", category: "模型公司", title: "ARR 飙升至 440 亿美元，最快 2026 年底启动 IPO", update: "Semi Analysis 报告：ARR 近 3 个月新增 ~300 亿美元，日均新增 ~9600 万美元；Claude Code 年化收入 25 亿美元、周活翻倍、约占全球 GitHub 公开提交 4%；当前融资轮 500 亿美元估值突破万亿美元。", url: "https://duoke360.com/post/46211" },
+      { name: "OpenAI", date: "2026-05-06", region: "intl", category: "模型公司", title: "GPT-5.6 在 Canary 部署中现身", update: "OpenAI 后台 Canary 灰度被发现 GPT-5.6，呼应 Sam Altman 的「超级 Agent」路线图布局。", url: "https://duoke360.com/post/46211" },
+      { name: "字节豆包", date: "2026-05-06", region: "cn", category: "模型公司", title: "豆包付费订阅 A 股头条热议，国产大模型集体告别免费", update: "基础版免费 + 标准版 68 元/月 + 加强版 200 元/月 + 专业版 500 元/月；背景是 2026 年字节 AI 投入 1600 亿元（850 亿用于芯片）、DRAM Q2 跳升 63%、NAND +75%。豆包月活 4.4 亿。", url: "https://stock.jrj.com.cn/2026/05/06073257005326.shtml" },
+      { name: "OpenAI / Anthropic", date: "2026-05-05", region: "intl", category: "模型公司", title: "双雄合资企业竞相收购 AI 服务公司（同日）", update: "OpenAI Deployment Company 融资约 40 亿美元（估值 100 亿），投资方含 TPG/贝恩/布鲁克菲尔德等 19 家，三笔收购后期；Anthropic 合资企业融资约 15 亿美元，投资方含黑石/高盛/Apollo/红杉。战略：从「卖模型」延伸至「卖企业级解决方案」。", url: "https://duoke360.com/post/46211" },
+      { name: "IBM", date: "2026-05-05", region: "intl", category: "企业软件", title: "Think 2026 发布企业 AI 操作系统蓝图（Agents/Data/Automation/Hybrid）", update: "核心产品：watsonx Orchestrate 多代理控制平面、IBM Concert、IBM Sovereign Core、IBM Bob 企业级代理开发伙伴。Nestlé POC 实现 83% 成本节省、30 倍价格性能提升。合作：AMD/Intel/Mistral/NVIDIA/PAN。", url: "https://duoke360.com/post/46211" },
+      { name: "OpenAI", date: "2026-05-05", region: "intl", category: "模型公司", title: "GPT-5.5 Instant 全量推送，幻觉率下降 52.5%", update: "医疗/法律/金融幻觉下降 52.5%、AIME 2025 数学 +15.8 分、回复字数 -30.2%、Plus/Pro 新增「记忆来源 Memory Sources」可调取 Gmail 等。", url: "https://duoke360.com/post/46211" },
+      { name: "OpenAI", date: "2026-05-05", region: "intl", category: "模型公司", title: "GPT-5.5 AI 派对：24 小时 8000 人报名", update: "模型自选日期与自提要求，5/5 下午 5:55 举办。", url: "https://duoke360.com/post/46211" },
+      { name: "Coinbase", date: "2026-05-05", region: "intl", category: "互联网平台", title: "裁员 14%，借 AI 推动管理扁平化", update: "主要裁撤纯管理岗，管理者最多直管 15 人。", url: "https://duoke360.com/post/46211" },
+      { name: "Google", date: "2026-05-05", region: "intl", category: "互联网平台", title: "Google 被加拿大音乐人 Ashley MacIsaac 起诉 AI Overview 诽谤", update: "AI Overview 错误将其识别为性犯罪者，索赔 150 万美元。", url: "https://duoke360.com/post/46211" },
+      { name: "美国白宫", date: "2026-05-04", region: "intl", category: "政府监管", title: "拟对新型 AI 模型实施上市前审查（政策 180° 转向）", update: "起草行政命令，导火索为 Anthropic Claude Mythos 的网络安全风险担忧；原 AI 负责人 David Sacks 离职后由白宫幕僚长 Susie Wiles 与财长贝森特接手；将组建政府-科技联合工作组。纽约时报 5/4 首报，5/6 A 股头条持续发酵。", url: "https://duoke360.com/post/46211" }
     ],
 
     events: [
-      { name: "第四届数字中国建设峰会", time: "2026-05-23 — 05-26", location: "福州", relevance: 3, note: "腾讯参展 + 演讲" },
-      { name: "2026世界人工智能大会（WAIC）", time: "2026-07-04 — 07-07", location: "上海", relevance: 3, note: "腾讯混元主论坛+展台" },
-      { name: "中国国际数字经济博览会", time: "2026-06-15 — 06-17", location: "南京", relevance: 2, note: "可对接江苏省经信厅" }
+      { name: "Anthropic Code with Claude 开发者大会（旧金山）", time: "2026-05-06", location: "旧金山", relevance: 3, note: "关注 Claude Code 2.2、Cowork GA、Skills 市场，对标 WorkBuddy" },
+      { name: "2026 全球数字合作交流会暨全球数据周", time: "2026-05-06", location: "上海", relevance: 3, note: "国家数据局 × 上海试点启动大会，CSIG/腾讯云华东应主动建联" },
+      { name: "Anthropic Code with Claude · 伦敦站", time: "2026-05-19", location: "伦敦", relevance: 2, note: "Claude Code 海外生态跟进" },
+      { name: "第四届数字中国建设峰会", time: "2026-05-23 — 05-26", location: "福州", relevance: 3, note: "腾讯参展 + 演讲（CDG 市场团队）" },
+      { name: "Anthropic Code with Claude · 东京站", time: "2026-06-10", location: "东京", relevance: 2, note: "亚太生态跟进" }
+    ]
+  },
+
+  /* ============== 2026-05-05（周二，五一假期尾日） ============== */
+  "2026-05-05": {
+    reportDate: "2026-05-05",
+    reportWeekday: "周二",
+    reportTitle: "华东区域政策日报",
+    reportSubtitle: "2026年5月5日 · 五一假期尾日，A 股仍在休市",
+
+    highlights: [
+      {
+        type: "urgent",
+        title: "OpenAI GPT-5.5 Instant 全量推送，医疗/法律/金融幻觉率下降 52.5%",
+        action: "腾讯元宝/混元产品团队对照幻觉率、字数精简、记忆来源 Memory Sources 三项体验升级，评估自身主力模型差距"
+      },
+      {
+        type: "urgent",
+        title: "OpenAI 与 Anthropic 同日宣布：双方合资企业竞相收购 AI 服务公司，路线从「卖模型」转「卖企业解决方案」",
+        action: "CSIG 战略团队评估对标腾讯云 + 微信生态企业化打包方案的竞争压力"
+      },
+      {
+        type: "important",
+        title: "IBM Think 2026 发布企业 AI 操作系统蓝图（Agents/Data/Automation/Hybrid 四大系统）",
+        action: "对标腾讯云 + WorkBuddy + AI Agent 中台建设路线，建议产品/解决方案团队走访 Think 大会资料"
+      },
+      {
+        type: "important",
+        title: "浙江人形机器人创新中心联合港中文/浙大发布 RAM 三维空间理解模型",
+        action: "Robotics X + 混元具身团队跟踪，考虑学术合作或华东机器人生态布局"
+      },
+      {
+        type: "important",
+        title: "「五一」假期尾日跨区域流动 2.9 亿人次（同比 +8%），上海线上线下消费 643 亿（+7.7%）",
+        action: "微信支付/视频号 5/6 节后首个工作日复盘五一期间 GMV，输出华东区域战报"
+      }
+    ],
+
+    entries: [
+      { region: "国家级", category: "宏观消费", title: "「五一」5/5 单日全社会跨区域流动 2.9 亿人次（同比 +8%）", dept: "交通运输部", date: "2026-05-05", content: "5/5 当日预计 29003.5 万人次，环比 -3.1%，同比 +8%；5 天假期累计 15.25 亿人次、日均 3.05 亿人次、同比 +4%。", impact: "mid", impactReason: "微信支付/视频号/腾讯文旅数据对标权威口径", url: "https://www.chinanews.com.cn/cj/2026/05-05/10615980.shtml" },
+      { region: "国家级", category: "文旅消费", title: "央视新闻：五一文旅消费多点开花，夜间客流超 8000 万人次", dept: "文化和旅游部", date: "2026-05-05", content: "亲子家庭出游占比明显提升，主题乐园、特色美食、潮流音乐节受追捧。", impact: "mid", impactReason: "腾讯文旅 + 视频号演艺合作窗口", url: "https://news.cctv.cn/2026/05/05/ARTII63LmoHa12rvDVbOVwnI260505.shtml" },
+      { region: "国家级", category: "文娱消费", title: "2026 五一档票房 5/5 19:24 突破 7.48 亿，超 2025 全档", dept: "猫眼/灯塔专业版", date: "2026-05-05", content: "截至 5/5 19:24 档期票房破 7.48 亿，超过 2025 年五一档最终 7.47 亿。", impact: "low", impactReason: "视频号直播、微信小店票务对照", url: "https://stock.jrj.com.cn/2026/05/06073257005326.shtml" },
+      { region: "国家级", category: "外交", title: "外交部宣布伊朗外长阿拉格齐 5/6 访华（5/5 预告）", dept: "外交部", date: "2026-05-05", content: "外交部发言人 5/5 宣布：伊朗外长将于 5/6 应邀访华，外长王毅与其举行会谈。", impact: "low", impactReason: "宏观地缘情报", url: "https://stock.jrj.com.cn/2026/05/06073257005326.shtml" },
+      { region: "上海", category: "消费数据", title: "上海五一前四天（4/30-5/4）线上线下消费 643 亿元，同比 +7.7%", dept: "消费市场大数据实验室（上海）", date: "2026-05-05", content: "监测显示上海五一前四天消费同比增长 7.7%，延续全年消费修复态势。", impact: "mid", impactReason: "腾讯广告/视频号/微信支付在沪商户复盘参考", url: "https://stock.jrj.com.cn/2026/05/06073257005326.shtml" },
+      { region: "浙江", category: "AI/机器人", title: "浙江人形机器人创新中心联合港中文/浙大发布 RAM 三维空间理解模型", dept: "浙江人形机器人创新中心", date: "2026-05-05", content: "提出 RAM 三维空间视觉模型，提升机器人三维空间理解与操作能力，属机器人空间智能领域重要突破。", impact: "mid", impactReason: "Robotics X 实验室 + 混元具身智能路线跟踪", url: "https://www.ncsti.gov.cn/kjdt/kjrd/rgzn_kjrd/" },
+      { region: "湖南", category: "安全生产", title: "浏阳烟花爆竹企业全面停产整顿，省市县三级启动事故调查", dept: "长沙市/浏阳市人民政府", date: "2026-05-05", content: "因华盛烟花公司爆炸事故，自 5/4 19:00 起浏阳全市烟花爆竹企业全面停产；5/5 发布会明确开展安全生产大排查、大整治，压实企业主体责任。", impact: "low", impactReason: "湖南地方安全生产强监管风向", url: "https://stock.jrj.com.cn/2026/05/06073257005326.shtml" }
+    ],
+
+    personnel: [
+      {
+        date: "2026-05-05", source: "公开信息检索（本轮采集未获取 5/5 华东副部级+任免或省管公示权威信息）", scope: "5/5 人事板块说明",
+        appointments: [],
+        removals: [],
+        note: "5/5 为五一假期尾日，中组部、各省委组织部无新公示发布。本日人事板块留空，后续如在节后回溯到权威渠道再行补录。"
+      }
+    ],
+
+    alerts: [
+      { level: 3, title: "白宫 AI 上市前审查行政命令起草进度", status: "纽约时报 5/4 首报，导火索为 Claude Mythos 安全担忧；5/6 A 股头条发酵。跟踪对腾讯海外模型出海的潜在影响", countdown: 60, unit: "天", deadline: "2026-07-04", url: "https://duoke360.com/post/46211" },
+      { level: 3, title: "Anthropic 万亿估值融资轮 + 2026 年底 IPO 计划", status: "ARR 440 亿美元、融资 500 亿美元，估值突破 1 万亿。关注对腾讯混元/元宝估值锚定影响", countdown: 240, unit: "天", deadline: "2026-12-31", url: "https://duoke360.com/post/46211" }
+    ],
+
+    tencent: [
+      {
+        date: "2026-05-05",
+        title: "（本轮采集未获取腾讯 5/5 当日官方新发布）",
+        content: "5/5 为五一假期尾日，腾讯官方未发布新动态。用户可查阅 tencent.com/zh-cn/media/news.html 获取腾讯官方媒体中心最新资讯。邻近动态：4/23 发布开源混元 Hy3 preview、4/24 开源 HY-Embodied-0.5-X 具身模型、4/27 推出 Hy3 preview Token 计划。",
+        url: "https://www.tencent.com/zh-cn/media/news.html"
+      }
+    ],
+
+    competitors: [
+      { name: "OpenAI", date: "2026-05-05", region: "intl", category: "模型公司", title: "GPT-5.5 Instant 全量推送，三大体验升级", update: "医疗/法律/金融幻觉率下降 52.5%、AIME 2025 数学 +15.8 分、回复字数精简 30.2%，Plus/Pro 新增「记忆来源 Memory Sources」。", url: "https://duoke360.com/post/46211" },
+      { name: "OpenAI", date: "2026-05-05", region: "intl", category: "模型公司", title: "GPT-5.5 AI 派对：24 小时 8000 人报名", update: "模型自选日期与自提要求，5/5 下午 5:55 举办。", url: "https://duoke360.com/post/46211" },
+      { name: "OpenAI", date: "2026-05-05", region: "intl", category: "模型公司", title: "OpenAI Deployment Company 融资 40 亿美元、估值 100 亿，开启企业级收购", update: "投资方：TPG、贝恩资本、布鲁克菲尔德等 19 家；三笔 AI 服务公司收购进入后期。战略从「卖模型」延伸至「卖企业解决方案」。", url: "https://duoke360.com/post/46211" },
+      { name: "Anthropic", date: "2026-05-05", region: "intl", category: "模型公司", title: "Anthropic 合资企业融资 15 亿美元，同日与 OpenAI 角逐企业级市场", update: "投资方：黑石、高盛、Apollo、红杉等。", url: "https://duoke360.com/post/46211" },
+      { name: "IBM", date: "2026-05-05", region: "intl", category: "企业软件", title: "Think 2026 发布企业 AI 操作系统蓝图", update: "watsonx Orchestrate 多代理控制平面、IBM Concert、Sovereign Core、IBM Bob。Nestlé POC 节省 83% 成本、30 倍价格性能提升。合作伙伴：AMD/Intel/Mistral/NVIDIA/PAN。", url: "https://duoke360.com/post/46211" },
+      { name: "Coinbase", date: "2026-05-05", region: "intl", category: "互联网平台", title: "裁员 14%，AI 推动管理扁平化", update: "管理者最多直管 15 人。", url: "https://duoke360.com/post/46211" },
+      { name: "Google", date: "2026-05-05", region: "intl", category: "互联网平台", title: "Ashley MacIsaac 起诉 AI Overview 诽谤，索赔 150 万美元", update: "AI Overview 错误将其识别为性犯罪者。", url: "https://duoke360.com/post/46211" }
+    ],
+
+    events: [
+      { name: "2026 五一档档期（票房 7.48 亿收官）", time: "2026-05-01 — 05-05", location: "全国院线", relevance: 1, note: "视频号直播/微信票务数据复盘" },
+      { name: "Anthropic Code with Claude 开发者大会（旧金山）", time: "2026-05-06", location: "旧金山", relevance: 3, note: "次日开幕，先发跟踪" },
+      { name: "2026 全球数字合作交流会暨全球数据周", time: "2026-05-06", location: "上海", relevance: 3, note: "次日开幕，国家数据局 × 上海试点启动" },
+      { name: "第四届数字中国建设峰会", time: "2026-05-23 — 05-26", location: "福州", relevance: 3, note: "腾讯参展 + 演讲" }
     ]
   }
 
