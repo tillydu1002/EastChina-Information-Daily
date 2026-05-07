@@ -66,6 +66,8 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 .date-trigger-arrow { font-size: 10px; opacity: .8; margin-left: 2px; }
 
 /* === 日期选择弹层 === */
+/* 关键：[hidden] 必须用 !important 强制隐藏，否则会被 display:flex 覆盖 */
+.date-picker-mask[hidden] { display: none !important; }
 .date-picker-mask {
   position: fixed; inset: 0;
   z-index: 100;
@@ -124,6 +126,8 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
 }
 
 /* === Page 容器 === */
+/* 关键：[hidden] 必须用 !important 强制隐藏 */
+.page[hidden] { display: none !important; }
 .page { animation: pageEnter .2s ease-out; }
 @keyframes pageEnter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 .page-header { padding: 6px 4px 12px; }
