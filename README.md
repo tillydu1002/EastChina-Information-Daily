@@ -4,7 +4,9 @@
 
 ## 在线访问
 
-部署后访问：`https://<your-github-username>.github.io/<repo-name>/`
+🌐 **https://tillydu1002.github.io/EastChina-Information-Daily/**
+
+手机浏览器直接打开同样可访问（已做响应式适配）。
 
 ## 本地预览
 
@@ -23,18 +25,38 @@ python -m http.server 8765
 | `data.js` | **每日维护的唯一文件**（增量追加，不替换） |
 | `app.js` | 渲染逻辑（纯 JS，无构建依赖） |
 
-## 每日更新流程
+## 每日更新流程（SOP）
 
-1. 编辑 `data.js`，向对应数组追加新条目
-2. 提交并推送：
+1. 编辑 `data.js`，**向对应数组追加新条目**（v3.8 铁律：增量追加，不替换历史）
+2. 一键发布：
 
 ```powershell
+cd c:/Users/tillydu/WorkBuddy/20260506162756/h5
 git add data.js
-git commit -m "update: YYYY-MM-DD 日报数据"
-git push origin main
+git commit -m "data: 2026-MM-DD"
+git push
 ```
 
-3. GitHub Pages 自动重新部署（约 1 分钟生效）
+3. 等约 1 分钟，刷新 https://tillydu1002.github.io/EastChina-Information-Daily/ 即看到最新内容
+4. 部署状态可在 GitHub 仓库 → Actions 标签查看（绿色对勾 = 部署成功）
+
+### 回滚
+
+误推后可立刻撤回：
+
+```powershell
+git revert HEAD
+git push
+```
+
+### 数据校验清单（推送前）
+
+- [ ] 政策按省市顺序排列：国家级 → 上海 → 江苏 → 浙江 → 安徽 → 福建 → 湖南 → 江西
+- [ ] 副部级及以上人事条目含 bio / leaderLink / tencentLink / impact 四字段
+- [ ] 友商按"国外在前、国内在后"排序
+- [ ] 补录条目设置 `isBackfill: true`
+- [ ] 影响等级填了 `high` / `medium` / `low`
+- [ ] 人名链接走百度搜索，不用百科直链
 
 ## 6 大模块
 
