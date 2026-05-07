@@ -26,12 +26,92 @@
 
 /* === 可选日期列表（降序，最新在前） === */
 window.AVAILABLE_DATES = [
+  "2026-05-07",
   "2026-05-06",
   "2026-05-05"
 ];
 
 /* === 各日期数据 === */
 window.DAILY_DATA_BY_DATE = {
+
+  /* ============== 2026-05-07（周四） ============== */
+  "2026-05-07": {
+    reportDate: "2026-05-07",
+    reportWeekday: "周四",
+    reportTitle: "华东区域政策日报",
+    reportSubtitle: "2026年5月7日 · 节后第二个交易日，国家级时政 + 科技动态",
+
+    highlights: [
+      {
+        type: "urgent",
+        title: "「十五五」开局之年外贸新气象——「中国第一展」广交会亮点集中释放",
+        action: "CSIG/腾讯云国际业务 + 微信支付跨境团队关注广交会展商数字化、跨境支付、数字出海配套政策窗口"
+      },
+      {
+        type: "urgent",
+        title: "「中国天眼」FAST 换了国产「眼部肌肉」——核心装置实现国产化替代",
+        action: "腾讯 AI Lab + 青腾大学关注高端科研装备国产替代产业链，技术合作机会"
+      },
+      {
+        type: "important",
+        title: "16 项措施 · 8 部门发文保障儿童用药（新华社权威快报）",
+        action: "微信医保、腾讯医典产品团队跟进儿童用药政策对医疗服务场景影响"
+      },
+      {
+        type: "important",
+        title: "天舟九号货运飞船 5/7 受控再入大气层（完成使命圆满收官）",
+        action: "航天级产业链信息跟踪；腾讯科普/视频号航天内容输出素材"
+      },
+      {
+        type: "important",
+        title: "吉林省「十五五」有组织攻坚部署，对接国家纲要落地（东北振兴阶段性信号）",
+        action: "对比东北与华东省份「十五五」规划落地节奏，识别腾讯区域业务差异化布局"
+      }
+    ],
+
+    entries: [
+      { region: "国家级", category: "外贸/宏观", title: "从\"中国第一展\"看\"十五五\"开局之年外贸新气象", dept: "新华社", date: "2026-05-07", content: "新华社聚焦第 137 届广交会，呈现\"十五五\"开局之年我国外贸质量提升、结构优化、品牌出海新气象，核心信号为绿色低碳、高技术装备、跨境数字服务三线并进。", impact: "high", impactReason: "腾讯云国际 + 微信支付跨境 + 腾讯广告出海业务均有明确对接窗口", url: "https://www.news.cn/politics/20260507/fc4b92bb116147848487a10df06f9c24/c.html" },
+      { region: "国家级", category: "科技创新", title: "\"中国天眼\"FAST 换了国产\"眼部肌肉\"——核心装置国产化替代", dept: "新华社（科技频道）", date: "2026-05-07", content: "国之重器 FAST 500 米口径球面射电望远镜关键核心装置完成国产化替代，标志高端科研装备国产替代重要里程碑。", impact: "high", impactReason: "高端科研装备国产化产业链信号，关注华东高端制造上下游机会", url: "https://www.news.cn/tech/20260507/0928b2a56e0241d79b3d6e0242edfa46/c.html" },
+      { region: "国家级", category: "医疗/民生", title: "16 项措施 8 部门发文保障儿童用药", dept: "国家卫生健康委等 8 部门", date: "2026-05-07", content: "新华社权威快报披露，国家卫健委等 8 部门联合印发 16 项措施保障儿童用药，涉及研发、供应、医保、监管等全链条。", impact: "mid", impactReason: "腾讯医典、微信医保电子凭证等产品对接窗口", url: "https://www.news.cn/politics/20260507/0220072b1e514ea58a864d055cc3186d/c.html" },
+      { region: "国家级", category: "航天/科技", title: "天舟九号货运飞船已受控再入大气层（使命圆满）", dept: "中国载人航天工程办公室", date: "2026-05-07", content: "新华社消息：天舟九号货运飞船完成全部既定任务后，按计划受控再入大气层，残骸落入南太平洋预定安全海域。", impact: "low", impactReason: "航天产业链信息跟踪", url: "https://www.news.cn/politics/20260507/7811dbec411d4618be63007838f06b15/c.html" },
+      { region: "国家级", category: "十五五/区域", title: "\"十五五\"时期吉林将强化有组织攻坚 推动纲要落地见效", dept: "吉林省委/新华社", date: "2026-05-07", content: "吉林省落实国家\"十五五\"规划纲要的阶段性部署，采用\"有组织攻坚\"机制强化落地执行。", impact: "mid", impactReason: "与浙江共同富裕示范区（5/6 央视头条）对应，关注华东各省份十五五落地进度", url: "https://www.news.cn/politics/20260507/6d3c385179f44365a7201d20818da844/c.html" },
+      { region: "国家级", category: "民生/数字身份", title: "身份证进入\"换新季\"，这些隐形风险要规避", dept: "新华社（唠\"科\"话）", date: "2026-05-07", content: "新华社解读身份证换新过程中的信息安全、遗失挂失、假冒风险防范要点。", impact: "low", impactReason: "数字身份/电子证照服务场景参考", url: "https://www.news.cn/politics/20260507/aab8df03a54c49e481a6e6314da33375/c.html" }
+    ],
+
+    personnel: [
+      {
+        date: "2026-05-07", source: "新华网政务频道（人事栏目）", scope: "国家级重要人事任免（近期权威公示回溯）",
+        appointments: [
+          { name: "张柱", newPost: "农业农村部党组书记", source: "https://www.news.cn/politics/20260428/7d9754f520c6419885f3fa2733906bc1/c.html", date: "2026-04-28" }
+        ],
+        removals: [],
+        note: "5/7 当日中组部、各省委组织部未见新公示。同步回溯新华网政务频道近期权威人事条目：4/28 张柱任农业农村部党组书记（正部级）。另有 4/24、4/29 两批国务院任免工作人员公示（详见 alerts 与下方链接）。"
+      }
+    ],
+
+    alerts: [
+      { level: 2, title: "国务院任免国家工作人员（4月29日批次）", status: "新华网政务频道 4/29 权威公示，为规则手册§2要求的国家级人事硬料，建议关注名单中涉及华东部委属机构的变动", countdown: 0, unit: "天", deadline: "2026-04-29", url: "https://www.news.cn/politics/20260429/ea77f2407c794ee2b8ae4cb3dc39d7e3/c.html" },
+      { level: 2, title: "国务院任免国家工作人员（4月24日批次）", status: "新华网政务频道 4/24 权威公示", countdown: 0, unit: "天", deadline: "2026-04-24", url: "https://www.news.cn/politics/20260424/a6f75a167691476dbb483677055929ae/c.html" },
+      { level: 3, title: "第 137 届广交会第三期（5/1-5/5 已收官）数据出台窗口", status: "关注广交会三期合计数据与\"十五五\"外贸结构分析权威发布", countdown: 7, unit: "天", deadline: "2026-05-14", url: "https://www.news.cn/politics/20260507/fc4b92bb116147848487a10df06f9c24/c.html" }
+    ],
+
+    tencent: [
+      {
+        date: "2026-05-07",
+        title: "（本轮采集未获取腾讯 5/7 当日官方新发布）",
+        content: "截至 5/7 16:30，web_search + 腾讯官方媒体中心（tencent.com/zh-cn/media/news.html）未检索到 5/7 当日新动态。按「宁缺毋滥」铁律，不回塞旧闻冒充。邻近动态：4/23 开源混元 Hy3 preview、4/24 开源 HY-Embodied-0.5-X 具身模型、4/27 Hy3 preview Token 计划。",
+        url: "https://www.tencent.com/zh-cn/media/news.html"
+      }
+    ],
+
+    competitors: [],
+
+    events: [
+      { name: "Anthropic Code with Claude · 伦敦站", time: "2026-05-19", location: "伦敦", relevance: 2, note: "Claude Code 海外生态跟进" },
+      { name: "第四届数字中国建设峰会", time: "2026-05-23 — 05-26", location: "福州", relevance: 3, note: "腾讯参展 + 演讲（CDG 市场团队）" },
+      { name: "Anthropic Code with Claude · 东京站", time: "2026-06-10", location: "东京", relevance: 2, note: "亚太生态跟进" }
+    ]
+  },
 
   /* ============== 2026-05-06（周三） ============== */
   "2026-05-06": {
@@ -79,22 +159,34 @@ window.DAILY_DATA_BY_DATE = {
       { region: "上海", category: "消费数据", title: "上海 4/30-5/4 线上线下消费 643.0 亿元，同比 +7.7%", dept: "消费市场大数据实验室（上海）", date: "2026-05-05", content: "监测数据显示五一前四天上海线上线下消费额达 643 亿元，同比增长 7.7%，延续全年消费修复态势。", impact: "mid", impactReason: "腾讯广告/视频号/微信支付在沪商户复盘有参考", url: "https://stock.jrj.com.cn/2026/05/06073257005326.shtml" },
       { region: "浙江", category: "AI/机器人", title: "浙江人形机器人创新中心发布 RAM 三维空间理解模型", dept: "浙江人形机器人创新中心（联合港中文、浙大）", date: "2026-05-05", content: "联合香港中文大学、浙江大学等团队提出 RAM 三维空间视觉模型，提升机器人三维空间理解与操作能力。", impact: "mid", impactReason: "腾讯 Robotics X 实验室可跟踪学术合作，混元具身智能路线有参考", url: "https://www.ncsti.gov.cn/kjdt/kjrd/rgzn_kjrd/" },
       { region: "浙江", category: "土地/房地产", title: "滨江集团联合浙霁置业 26.09 亿元竞得杭州住宅用地", dept: "杭州市自然资源和规划局（土拍）", date: "2026-05-06", content: "公告披露滨江集团联合浙霁置业成功竞得杭州一宗住宅用地，金额 26.09 亿元。", impact: "low", impactReason: "华东区域房地产市场脉搏数据", url: "https://stock.jrj.com.cn/2026/05/06073257005326.shtml" },
-      { region: "湖南", category: "安全生产", title: "浏阳全市烟花爆竹生产企业 5/4 19:00 起全面停产整顿（5/5 新闻发布会披露）", dept: "长沙市 / 浏阳市人民政府", date: "2026-05-05", content: "因华盛烟花公司爆炸事故，浏阳全市烟花爆竹企业全面停产整顿，同步开展安全生产大排查、大整治。", impact: "low", impactReason: "地方政府安全生产强监管风向", url: "https://stock.jrj.com.cn/2026/05/06073257005326.shtml" }
+      { region: "湖南", category: "安全生产", title: "浏阳全市烟花爆竹生产企业 5/4 19:00 起全面停产整顿（5/5 新闻发布会披露）", dept: "长沙市 / 浏阳市人民政府", date: "2026-05-05", content: "因华盛烟花公司爆炸事故，浏阳全市烟花爆竹企业全面停产整顿，同步开展安全生产大排查、大整治。", impact: "low", impactReason: "地方政府安全生产强监管风向", url: "https://stock.jrj.com.cn/2026/05/06073257005326.shtml" },
+      { region: "浙江", category: "重大基建", title: "杭州湾跨海铁路大桥南航道桥首座主塔封顶", dept: "新华社图片频道", date: "2026-05-06", content: "杭州湾跨海铁路大桥南航道桥首座主塔完成封顶，为华东沿海高速铁路网建设关键里程碑。", impact: "high", impactReason: "华东交通基建重大节点，对接沪杭、甬舟区域一体化；腾讯云交通/智慧高铁业务可识别合作窗口", url: "https://www.news.cn/photo/20260506/6145e0373ac9458a9fdefcd12ae59ce2/c.html" },
+      { region: "江苏", category: "公共安全/数字政务", title: "\"空中警察\"护航平安——江苏盐城智慧警航建设见闻", dept: "新华社政务频道", date: "2026-05-06", content: "盐城推进智慧警航建设，空警无人机、低空感知网络等新型警务形态落地，为低空经济 + 公共安全融合样本。", impact: "mid", impactReason: "低空经济 + 智慧公共安全双概念，腾讯云/安全可跟进华东智慧警务项目", url: "https://www.news.cn/politics/20260506/35d4568bb78b4336bb4bdab891170972/c.html" },
+      { region: "国家级", category: "时政评论", title: "新华时评｜安全红线不容侥幸逾越", dept: "新华社", date: "2026-05-06", content: "新华时评针对近期浏阳烟花爆竹事故等安全生产问题发声，强调安全红线不容突破，释放国家级强监管信号。", impact: "mid", impactReason: "安全生产强监管基调延续，相关产业合规/应急板块关注", url: "https://www.news.cn/politics/20260506/5da105ed476d4776998e3650205a8723/c.html" },
+      { region: "国家级", category: "就业/民生", title: "3600 余场校园招聘活动密集开展", dept: "新华社", date: "2026-05-06", content: "春季促就业专项行动密集开展 3600 余场校园招聘会，聚焦应届毕业生群体。", impact: "low", impactReason: "微信校园招聘、腾讯云 HR SaaS 可对接应届生就业场景", url: "https://www.news.cn/politics/20260506/e3acd2f859bb4c088634e4500a4a4c1c/c.html" },
+      { region: "国家级", category: "司法", title: "新华视点｜\"开门杀\"\"好意同乘\"等交通事故赔偿最新司法解释出台", dept: "最高人民法院/新华社", date: "2026-05-06", content: "最高法发布交通事故损害赔偿最新司法解释，涉及\"开门杀\"\"好意同乘\"等多类民生高频场景。", impact: "mid", impactReason: "涉及腾讯出行、网约车保险对接、商业车险互联网销售合规", url: "https://www.news.cn/politics/20260506/f03b83e4c3f74ac6bb9e12be30f19c43/c.html" },
+      { region: "国家级", category: "入境游/消费", title: "从三个故事看\"五一\"假期入境游——便利中国游 轻松中国购", dept: "新华社", date: "2026-05-06", content: "新华社聚焦\"五一\"入境游三个典型场景，展现 144 小时过境免签 + 移动支付便利化 + 免税购物升级三大红利。", impact: "mid", impactReason: "微信支付国际版（WeChat Pay）+ 视频号国际化 + 腾讯文旅外宾服务场景", url: "https://www.news.cn/politics/20260506/f5d08022aa6840088b75d310ae845c14/c.html" },
+      { region: "国家级", category: "央视头条", title: "《新闻联播》5/6 头条：\"十五五\"开好局起好步——浙江高质量发展建设共同富裕示范区", dept: "中央广播电视总台/央视《新闻联播》", date: "2026-05-06", content: "央视 5/6《新闻联播》头条深度聚焦浙江，将共同富裕示范区建设定位为\"十五五\"开局起步的浙江实践样本。", impact: "high", impactReason: "最高规格媒体对浙江共富定调，腾讯在浙投资/战略合作节奏可依此时点调整", url: "https://tv.cctv.com/lm/xwlb/" },
+      { region: "国家级", category: "外交", title: "《新闻联播》5/6：王沪宁会见孟加拉国外交部长", dept: "央视《新闻联播》", date: "2026-05-06", content: "全国政协主席王沪宁 5/6 会见来访的孟加拉国外长，为\"一带一路\"南亚节点国家外交活动。", impact: "low", impactReason: "一带一路外交背景信息", url: "https://tv.cctv.com/lm/xwlb/" }
     ],
 
     personnel: [
       {
-        date: "2026-05-06", source: "公开信息检索（本轮采集未获取 5/5-5/6 华东省管副部级+的权威人事公示）", scope: "5/5-5/6 人事板块说明",
-        appointments: [],
+        date: "2026-05-06", source: "新华网政务频道（人事栏目）", scope: "国家级人事权威公示（近期回溯）",
+        appointments: [
+          { name: "张柱", newPost: "农业农村部党组书记", source: "https://www.news.cn/politics/20260428/7d9754f520c6419885f3fa2733906bc1/c.html", date: "2026-04-28" }
+        ],
         removals: [],
-        note: "规则手册 §2 要求每日采集副部级+及省管干部公示。本轮通过 web_search + web_fetch 在 5/5-5/6 两个工作日（5/5 劳动节假期尾日，5/6 节后首日）未从中组部、各省委组织部、人大常委会等权威源获取到副部级及以上任免或省管干部任前公示的公开信息。按「宁缺毋滥」铁律，本日人事板块留空并注明，后续如有权威渠道补录再回填。"
+        note: "5/6 当日中组部、各省委组织部未见新公示。本条目回溯新华网政务频道近期国家级权威人事公告：4/28 张柱任农业农村部党组书记（正部级）；另有 4/29、4/24 两批《国务院任免国家工作人员》名单，详见 alerts 板块直链。华东省管副部级+当日未见新公示。"
       }
     ],
 
     alerts: [
       { level: 2, title: "5 月中长期资金到期压力 2.1 万亿元（2025 年以来月度次高点）", status: "到期压力集中在 5 月下旬，财付通/同业业务密切跟踪", countdown: 14, unit: "天", deadline: "2026-05-20", url: "https://paper.cnstock.com/html/2026-05/06/content_2212810.htm" },
       { level: 3, title: "数据领域国际合作上海综合试点实施细则（6 大板块 17 项任务落地节奏）", status: "试点 5/6 启动，后续临港/浦东/虹桥示范区实施细则值得重点跟进", countdown: 60, unit: "天", deadline: "2026-07-05", url: "https://www.nda.gov.cn/sjj/swdt/mtsy/0506/20260506201259547307249_pc.html" },
-      { level: 3, title: "Anthropic Code with Claude 开发者大会巡回（旧金山 5/6 → 伦敦 5/19 → 东京 6/10）", status: "跟踪 Sonnet 4.8、Cowork GA、Skills 市场扩展、KAIROS 持久代理等五大更新", countdown: 12, unit: "天", deadline: "2026-05-19", url: "" }
+      { level: 3, title: "Anthropic Code with Claude 开发者大会巡回（旧金山 5/6 → 伦敦 5/19 → 东京 6/10）", status: "跟踪 Sonnet 4.8、Cowork GA、Skills 市场扩展、KAIROS 持久代理等五大更新", countdown: 12, unit: "天", deadline: "2026-05-19", url: "" },
+      { level: 2, title: "国务院任免国家工作人员（4 月 29 日批次，新华网权威公示）", status: "关注公示名单中涉及华东部委属机构、央企、驻华外事机构的重要人事变动", countdown: 0, unit: "天", deadline: "2026-04-29", url: "https://www.news.cn/politics/20260429/ea77f2407c794ee2b8ae4cb3dc39d7e3/c.html" },
+      { level: 2, title: "国务院任免国家工作人员（4 月 24 日批次，新华网权威公示）", status: "国家级权威任免公告", countdown: 0, unit: "天", deadline: "2026-04-24", url: "https://www.news.cn/politics/20260424/a6f75a167691476dbb483677055929ae/c.html" }
     ],
 
     tencent: [
@@ -172,7 +264,10 @@ window.DAILY_DATA_BY_DATE = {
       { region: "国家级", category: "外交", title: "外交部宣布伊朗外长阿拉格齐 5/6 访华（5/5 预告）", dept: "外交部", date: "2026-05-05", content: "外交部发言人 5/5 宣布：伊朗外长将于 5/6 应邀访华，外长王毅与其举行会谈。", impact: "low", impactReason: "宏观地缘情报", url: "https://stock.jrj.com.cn/2026/05/06073257005326.shtml" },
       { region: "上海", category: "消费数据", title: "上海五一前四天（4/30-5/4）线上线下消费 643 亿元，同比 +7.7%", dept: "消费市场大数据实验室（上海）", date: "2026-05-05", content: "监测显示上海五一前四天消费同比增长 7.7%，延续全年消费修复态势。", impact: "mid", impactReason: "腾讯广告/视频号/微信支付在沪商户复盘参考", url: "https://stock.jrj.com.cn/2026/05/06073257005326.shtml" },
       { region: "浙江", category: "AI/机器人", title: "浙江人形机器人创新中心联合港中文/浙大发布 RAM 三维空间理解模型", dept: "浙江人形机器人创新中心", date: "2026-05-05", content: "提出 RAM 三维空间视觉模型，提升机器人三维空间理解与操作能力，属机器人空间智能领域重要突破。", impact: "mid", impactReason: "Robotics X 实验室 + 混元具身智能路线跟踪", url: "https://www.ncsti.gov.cn/kjdt/kjrd/rgzn_kjrd/" },
-      { region: "湖南", category: "安全生产", title: "浏阳烟花爆竹企业全面停产整顿，省市县三级启动事故调查", dept: "长沙市/浏阳市人民政府", date: "2026-05-05", content: "因华盛烟花公司爆炸事故，自 5/4 19:00 起浏阳全市烟花爆竹企业全面停产；5/5 发布会明确开展安全生产大排查、大整治，压实企业主体责任。", impact: "low", impactReason: "湖南地方安全生产强监管风向", url: "https://stock.jrj.com.cn/2026/05/06073257005326.shtml" }
+      { region: "湖南", category: "安全生产", title: "浏阳烟花爆竹企业全面停产整顿，省市县三级启动事故调查", dept: "长沙市/浏阳市人民政府", date: "2026-05-05", content: "因华盛烟花公司爆炸事故，自 5/4 19:00 起浏阳全市烟花爆竹企业全面停产；5/5 发布会明确开展安全生产大排查、大整治，压实企业主体责任。", impact: "low", impactReason: "湖南地方安全生产强监管风向", url: "https://stock.jrj.com.cn/2026/05/06073257005326.shtml" },
+      { region: "上海", category: "高层访谈/十五五", title: "经济大省调研行·权威访谈｜发挥龙头带动优势 彰显挑大梁担当——专访上海市常务副市长吴伟", dept: "新华社政务频道", date: "2026-05-05", content: "新华社\"经济大省调研行\"权威访谈聚焦上海，常务副市长吴伟系统解读上海在\"十五五\"开局承担龙头带动、全国性示范的具体路径。", impact: "high", impactReason: "上海官方最高规格对外发声定调\"十五五\"，腾讯华东业务（CSIG/微信/游戏/金融）应与政府沟通节点对齐", url: "https://www.news.cn/politics/20260505/24d3f26282ae4d73aa905b4fc2502403/c.html" },
+      { region: "国家级", category: "外贸/消费", title: "广交会上\"中式生活\"品牌受追捧", dept: "新华社", date: "2026-05-05", content: "第 137 届广交会现场，\"中式生活\"主题品牌集中亮相，覆盖茶、瓷、服饰、家居等多品类，订单热度高。", impact: "mid", impactReason: "国货出海 + 跨境电商窗口；微信小店/视频号跨境 + 腾讯广告出海业务对接", url: "https://www.news.cn/politics/20260505/37145144278a4a15959e2933f0be8902/c.html" },
+      { region: "国家级", category: "民生/就业", title: "民生政策 落地有声丨\"卡友\"在路上有了\"家\"——货车司机等新就业群体服务保障建设", dept: "新华社", date: "2026-05-05", content: "新华社聚焦\"卡友之家\"等新就业群体驿站建设，配合中央新就业群体服务管理意见落地。", impact: "low", impactReason: "微信新就业群体服务/腾讯 SaaS HR 对接", url: "https://www.news.cn/politics/20260505/1dc6c65952f44ec89eed69749697f510/c.html" }
     ],
 
     personnel: [
