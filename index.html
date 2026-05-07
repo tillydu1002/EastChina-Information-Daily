@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>华东区域政策日报</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-logo">🧭</span>
+        <div class="brand-text">
+          <h1 id="report-title">华东区域政策日报</h1>
+          <p id="report-meta">加载中…</p>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button id="btn-date" class="chip">📅 <span id="report-date">--</span></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 本日重点关注事项（置顶） -->
+  <section class="highlight-section" id="highlight-section">
+    <div class="section-head">
+      <h2>本日重点关注事项</h2>
+      <span class="section-sub">前 2 条紧急 · 后 3 条重要</span>
+    </div>
+    <div class="highlight-list" id="highlight-list"><!-- JS 注入 --></div>
+  </section>
+
+  <!-- Tab 导航 -->
+  <nav class="tabs" id="tabs">
+    <button class="tab-btn active" data-tab="alerts">⚠️ 预警 <span class="badge" id="badge-alerts">0</span></button>
+    <button class="tab-btn" data-tab="entries">📄 政策 <span class="badge" id="badge-entries">0</span></button>
+    <button class="tab-btn" data-tab="personnel">👤 人事 <span class="badge" id="badge-personnel">0</span></button>
+    <button class="tab-btn" data-tab="tencent">🐧 腾讯 <span class="badge" id="badge-tencent">0</span></button>
+    <button class="tab-btn" data-tab="competitors">🏢 友商 <span class="badge" id="badge-competitors">0</span></button>
+    <button class="tab-btn" data-tab="events">📅 活动 <span class="badge" id="badge-events">0</span></button>
+  </nav>
+
+  <!-- 各 Tab 内容容器 -->
+  <main class="content">
+    <section class="tab-pane active" id="pane-alerts"></section>
+    <section class="tab-pane" id="pane-entries"></section>
+    <section class="tab-pane" id="pane-personnel"></section>
+    <section class="tab-pane" id="pane-tencent"></section>
+    <section class="tab-pane" id="pane-competitors"></section>
+    <section class="tab-pane" id="pane-events"></section>
+  </main>
+
+  <footer class="foot">
+    <p>华东区域政策日报 · 内部参考资料 · 生成规则 v3.8</p>
+    <p class="foot-sub">监测范围：六省一市（沪苏浙皖闽赣湘）｜ 不含山东</p>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
