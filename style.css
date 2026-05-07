@@ -430,3 +430,35 @@ h1, h2, h3, h4 { margin: 0; font-weight: 600; }
   .app-header { box-shadow: 0 2px 12px rgba(0,0,0,.1); }
   .app-main { background: #f4f6f9; min-height: calc(100vh - var(--header-h) - var(--tabbar-h)); }
 }
+
+/* === 可点击卡片（整张卡变成 <a>） === */
+a.card,
+a.highlight-card {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+  position: relative;
+  -webkit-tap-highlight-color: rgba(0,0,0,.04);
+}
+a.card:active,
+a.highlight-card:active {
+  transform: scale(0.997);
+  background: #fafbfc;
+}
+.card-link-arrow {
+  display: inline-block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: #1a3a6c;
+  font-weight: 500;
+}
+a.highlight-card.urgent .card-link-arrow { color: #cc0000; }
+a.highlight-card.important .card-link-arrow { color: #003399; }
+
+/* 腾讯卡片：腾讯蓝徽标 */
+.competitor-card.tencent .competitor-name {
+  background: #1a73e8;
+  color: #fff;
+}
+.competitor-card.tencent .card-title { color: #1a3a6c; }
+

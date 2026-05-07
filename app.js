@@ -27,6 +27,15 @@
     var q = encodeURIComponent((name || '') + ' ' + (role || ''));
     return 'https://www.baidu.com/s?wd=' + q;
   }
+  // 兜底：没有 url 时，用标题去百度搜索，保证"每条都可点击跳转"
+  function fallbackSearchLink(title, extra) {
+    var q = encodeURIComponent((title || '') + (extra ? ' ' + extra : ''));
+    return 'https://www.baidu.com/s?wd=' + q;
+  }
+  function resolveLink(item, extraKeyword) {
+    if (item && item.url) return item.url;
+    return fallbackSearchLink(item && (item.title || item.name) || '', extraKeyword || '');
+  }
   function getWeekday(dateStr) {
     var d = new Date(dateStr);
     if (isNaN(d.getTime())) return '';
@@ -34,18 +43,20 @@
     return wk[d.getDay()];
   }
 
-  /* ===== 渲染：本日重点关注 ===== */
+  /* ===== 渲染：本日导读 ===== */
   function renderHighlights(data) {
     var list = data.highlights || [];
-    if (!list.length) return '<div class="empty">本日暂无重点关注事项</div>';
+    if (!list.length) return '<div class="empty">本日暂无导读事项</div>';
     return list.map(function (h) {
       var flag = h.type === 'urgent' ? '🚨 紧急' : '⭐ 重要';
+      var href = resolveLink(h);
       return (
-        '<div class="highlight-card ' + escapeHtml(h.type) + '">' +
+        '<a class="highlight-card ' + escapeHtml(h.type) + '" href="' + escapeHtml(href) + '" target="_blank" rel="noopener">' +
         '<span class="highlight-flag">' + flag + '</span>' +
         '<div class="highlight-title">' + escapeHtml(h.title) + '</div>' +
         (h.action ? '<div class="highlight-action">💡 ' + escapeHtml(h.action) + '</div>' : '') +
-        '</div>'
+        '<span class="card-link-arrow">查看原文 ›</span>' +
+        '</a>'
       );
     }).join('');
   }
@@ -59,9 +70,8 @@
     if (!list.length) return '<div class="empty">本日暂无预警事项</div>';
     return list.map(function (al) {
       var icon = al.level === 1 ? '🚨' : (al.level === 2 ? '⚠️' : '🔔');
-      var titleHtml = al.url
-        ? '<a href="' + escapeHtml(al.url) + '" target="_blank" rel="noopener">' + escapeHtml(al.title) + '</a>'
-        : escapeHtml(al.title);
+      var href = resolveLink(al);
+      var titleHtml = '<a href="' + escapeHtml(href) + '" target="_blank" rel="noopener">' + escapeHtml(al.title) + '</a>';
       return (
         '<div class="alert-card level-' + al.level + '">' +
         '<div class="alert-countdown">' +
@@ -100,9 +110,8 @@
         html += '<div class="region-header"><span>' + escapeHtml(region) + '</span><span class="region-count">' + arr.length + ' 条</span></div>';
         html += '<div class="region-body">';
         arr.forEach(function (e) {
-          var titleHtml = e.url
-            ? '<a href="' + escapeHtml(e.url) + '" target="_blank" rel="noopener">' + escapeHtml(e.title) + '</a>'
-            : escapeHtml(e.title);
+          var href = resolveLink(e, e.dept || '');
+          var titleHtml = '<a href="' + escapeHtml(href) + '" target="_blank" rel="noopener">' + escapeHtml(e.title) + '</a>';
           html += '<div class="entry-card' + (e.isBackfill ? ' backfill' : '') + '">';
           html += '<div class="entry-title">';
           if (e.isBackfill) html += '<span class="backfill-tag">📌 补录</span>';
@@ -163,31 +172,18 @@
     return html;
   }
 
-  /* ===== 渲染：腾讯动态 ===== */
-  function renderTencent(data) {
-    var list = data.tencent || [];
-    if (!list.length) return '<div class="empty">本日暂无腾讯动态</div>';
-    return list.map(function (t) {
-      var titleHtml = t.url
-        ? '<a href="' + escapeHtml(t.url) + '" target="_blank" rel="noopener">' + escapeHtml(t.title) + '</a>'
-        : escapeHtml(t.title);
-      return (
-        '<div class="card">' +
-        '<div class="card-title">' + titleHtml + '</div>' +
-        '<div class="card-meta"><span class="card-meta-item">' + escapeHtml(t.date) + '</span></div>' +
-        (t.content ? '<div class="card-content">' + escapeHtml(t.content) + '</div>' : '') +
-        '</div>'
-      );
-    }).join('');
-  }
-
-  /* ===== 渲染：友商（国外在前 国内在后） ===== */
+  /* ===== 渲染：行业（腾讯 + 国外友商 + 国内友商） ===== */
   function renderCompetitors(data) {
-    var list = data.competitors || [];
-    if (!list.length) return '<div class="empty">本日暂无友商动态</div>';
-    var intl = list.filter(function (c) { return c.region === 'intl'; });
-    var cn = list.filter(function (c) { return c.region !== 'intl'; });
+    var competitors = data.competitors || [];
+    var tencent = data.tencent || [];
+    if (!competitors.length && !tencent.length) return '<div class="empty">本日暂无行业动态</div>';
+    var intl = competitors.filter(function (c) { return c.region === 'intl'; });
+    var cn = competitors.filter(function (c) { return c.region !== 'intl'; });
     var html = '';
+    if (tencent.length) {
+      html += '<div class="competitor-section"><div class="competitor-section-title">🐧 腾讯动态（' + tencent.length + '）</div></div>';
+      html += tencent.map(tencentCard).join('');
+    }
     if (intl.length) {
       html += '<div class="competitor-section"><div class="competitor-section-title">🌍 国外友商（' + intl.length + '）</div></div>';
       html += intl.map(competitorCard).join('');
@@ -198,22 +194,37 @@
     }
     return html;
   }
-  function competitorCard(c) {
-    var titleHtml = c.url
-      ? '<a href="' + escapeHtml(c.url) + '" target="_blank" rel="noopener">' + escapeHtml(c.title) + '</a>'
-      : escapeHtml(c.title);
+  function tencentCard(t) {
+    var href = resolveLink(t, '腾讯');
     return (
-      '<div class="card competitor-card ' + (c.region === 'intl' ? 'intl' : 'cn') + '">' +
+      '<a class="card competitor-card tencent" href="' + escapeHtml(href) + '" target="_blank" rel="noopener">' +
+      '<div class="card-title">' +
+      '<span class="competitor-name">腾讯</span>' +
+      escapeHtml(t.title) +
+      '</div>' +
+      '<div class="card-meta">' +
+      '<span class="card-meta-item">' + escapeHtml(t.date || '') + '</span>' +
+      '</div>' +
+      (t.content ? '<div class="card-content">' + escapeHtml(t.content) + '</div>' : '') +
+      '<span class="card-link-arrow">查看原文 ›</span>' +
+      '</a>'
+    );
+  }
+  function competitorCard(c) {
+    var href = resolveLink(c, c.name || '');
+    return (
+      '<a class="card competitor-card ' + (c.region === 'intl' ? 'intl' : 'cn') + '" href="' + escapeHtml(href) + '" target="_blank" rel="noopener">' +
       '<div class="card-title">' +
       '<span class="competitor-name">' + escapeHtml(c.name) + '</span>' +
-      titleHtml +
+      escapeHtml(c.title) +
       '</div>' +
       '<div class="card-meta">' +
       '<span class="card-meta-item">' + escapeHtml(c.date) + '</span>' +
       (c.category ? '<span class="card-meta-item">' + escapeHtml(c.category) + '</span>' : '') +
       '</div>' +
       (c.update ? '<div class="card-content">' + escapeHtml(c.update) + '</div>' : '') +
-      '</div>'
+      '<span class="card-link-arrow">查看原文 ›</span>' +
+      '</a>'
     );
   }
 
@@ -223,15 +234,17 @@
     if (!list.length) return '<div class="empty">暂无活动</div>';
     return list.map(function (e) {
       var stars = '⭐'.repeat(e.relevance || 1);
+      var href = resolveLink({ url: e.url, title: e.name, name: e.name }, e.location || '');
       return (
-        '<div class="card event-card">' +
+        '<a class="card event-card" href="' + escapeHtml(href) + '" target="_blank" rel="noopener">' +
         '<div class="card-title">' + escapeHtml(e.name) + '<span class="event-relevance">' + stars + '</span></div>' +
         '<div class="card-meta">' +
         '<span class="card-meta-item">📅 ' + escapeHtml(e.time) + '</span>' +
         (e.location ? '<span class="card-meta-item">📍 ' + escapeHtml(e.location) + '</span>' : '') +
         '</div>' +
         (e.note ? '<div class="card-content">' + escapeHtml(e.note) + '</div>' : '') +
-        '</div>'
+        '<span class="card-link-arrow">查看详情 ›</span>' +
+        '</a>'
       );
     }).join('');
   }
@@ -251,7 +264,6 @@
     document.getElementById('alertsBody').innerHTML = renderAlerts(data);
     document.getElementById('entriesBody').innerHTML = renderEntries(data);
     document.getElementById('personnelBody').innerHTML = renderPersonnel(data);
-    document.getElementById('tencentBody').innerHTML = renderTencent(data);
     document.getElementById('competitorsBody').innerHTML = renderCompetitors(data);
     document.getElementById('eventsBody').innerHTML = renderEvents(data);
   }
