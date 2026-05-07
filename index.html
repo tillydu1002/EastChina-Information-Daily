@@ -8,7 +8,7 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="theme-color" content="#1a3a6c" />
   <title>华东政策日报</title>
-  <link rel="stylesheet" href="style.css?v=20260507b" />
+  <link rel="stylesheet" href="style.css?v=20260507c" />
 </head>
 <body>
 
@@ -19,7 +19,7 @@
         <span class="app-title-main" id="reportTitle">华东政策日报</span>
         <span class="app-title-sub" id="reportSubtitle"></span>
       </div>
-      <button class="date-trigger" id="dateTrigger" aria-label="选择日期">
+      <button class="date-trigger" id="dateTrigger" type="button">
         <span class="date-trigger-icon">📅</span>
         <span class="date-trigger-text" id="dateTriggerText">2026-05-07</span>
         <span class="date-trigger-arrow">▼</span>
@@ -27,12 +27,12 @@
     </div>
   </header>
 
-  <!-- ===== 日期选择弹层 ===== -->
+  <!-- ===== 日期切换弹层 ===== -->
   <div class="date-picker-mask" id="datePickerMask" hidden>
     <div class="date-picker">
       <div class="date-picker-header">
-        <span>选择日期</span>
-        <button class="date-picker-close" id="datePickerClose" aria-label="关闭">×</button>
+        <span>切换日期</span>
+        <button class="date-picker-close" id="datePickerClose" type="button">×</button>
       </div>
       <div class="date-picker-list" id="datePickerList">
         <!-- 由 JS 渲染日期项 -->
@@ -133,7 +133,7 @@
     </button>
   </nav>
 
-  <script src="data.js?v=20260507b"></script>
-  <script src="app.js?v=20260507b"></script>
+  <script src="data.js?v=20260507c"></script>
+  <script src="app.js?v=20260507c"></script>
 </body>
 </html>
