@@ -1,289 +1,337 @@
 /* ============================================================
- * 华东区域政策日报 H5 渲染逻辑
- * 规则：v3.8
+ * 华东政策日报 H5 渲染逻辑（v2 多日 + 底部 Tab）
  * ============================================================ */
+
 (function () {
-  const D = window.DAILY_DATA || {};
+  'use strict';
 
-  /* === 工具函数 === */
-  const $ = (sel) => document.querySelector(sel);
-  const $$ = (sel) => Array.from(document.querySelectorAll(sel));
-  const esc = (s) => String(s == null ? "" : s)
-    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;");
+  /* ===== 状态 ===== */
+  var state = {
+    currentDate: window.AVAILABLE_DATES[0],
+    currentTab: 'highlights'
+  };
 
-  const impactLabel = { high: "高", mid: "中", low: "低" };
-  const impactClass = { high: "impact-high", mid: "impact-mid", low: "impact-low" };
-
-  /* === 顶部信息 === */
-  function renderHeader() {
-    if (D.reportTitle) $("#report-title").textContent = D.reportTitle;
-    $("#report-meta").textContent = D.reportSubtitle || "";
-    $("#report-date").textContent = (D.reportDate || "") + (D.reportWeekday ? " · " + D.reportWeekday : "");
+  /* ===== 工具函数 ===== */
+  function escapeHtml(s) {
+    if (s == null) return '';
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+  function impactChip(level) {
+    var map = { high: ['chip-high', '高影响'], mid: ['chip-mid', '中影响'], low: ['chip-low', '低影响'] };
+    var v = map[level] || map.mid;
+    return '<span class="chip ' + v[0] + '">' + v[1] + '</span>';
+  }
+  function nameSearchLink(name, role) {
+    var q = encodeURIComponent((name || '') + ' ' + (role || ''));
+    return 'https://www.baidu.com/s?wd=' + q;
+  }
+  function getWeekday(dateStr) {
+    var d = new Date(dateStr);
+    if (isNaN(d.getTime())) return '';
+    var wk = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+    return wk[d.getDay()];
   }
 
-  /* === 本日重点关注事项 === */
-  function renderHighlights() {
-    const list = D.highlights || [];
-    const box = $("#highlight-list");
-    if (!list.length) {
-      box.innerHTML = '<div class="empty">本日暂无重点关注事项</div>';
-      return;
-    }
-    box.innerHTML = list.map((h, i) => {
-      const cls = h.type === "urgent" ? "urgent" : "important";
-      const tag = h.type === "urgent" ? "🔴 紧急" : "🔵 重要";
-      return `
-        <div class="highlight-item ${cls}">
-          <div class="h-title">${tag} · ${esc(h.title)}</div>
-          ${h.action ? `<div class="h-action">▶ 行动建议：${esc(h.action)}</div>` : ""}
-        </div>`;
-    }).join("");
+  /* ===== 渲染：本日重点关注 ===== */
+  function renderHighlights(data) {
+    var list = data.highlights || [];
+    if (!list.length) return '<div class="empty">本日暂无重点关注事项</div>';
+    return list.map(function (h) {
+      var flag = h.type === 'urgent' ? '🚨 紧急' : '⭐ 重要';
+      return (
+        '<div class="highlight-card ' + escapeHtml(h.type) + '">' +
+        '<span class="highlight-flag">' + flag + '</span>' +
+        '<div class="highlight-title">' + escapeHtml(h.title) + '</div>' +
+        (h.action ? '<div class="highlight-action">💡 ' + escapeHtml(h.action) + '</div>' : '') +
+        '</div>'
+      );
+    }).join('');
   }
 
-  /* === 政策 Tab === */
-  function renderEntries() {
-    const list = (D.entries || []).slice();
-    const order = ["国家级", "上海", "江苏", "浙江", "安徽", "福建", "湖南", "江西"];
-    const groups = {};
-    order.forEach(r => groups[r] = []);
-    list.forEach(e => {
-      const r = e.region || "其他";
+  /* ===== 渲染：预警 ===== */
+  function renderAlerts(data) {
+    var list = (data.alerts || []).slice().sort(function (a, b) {
+      if (a.level !== b.level) return a.level - b.level;
+      return (a.countdown || 0) - (b.countdown || 0);
+    });
+    if (!list.length) return '<div class="empty">本日暂无预警事项</div>';
+    return list.map(function (al) {
+      var icon = al.level === 1 ? '🚨' : (al.level === 2 ? '⚠️' : '🔔');
+      var titleHtml = al.url
+        ? '<a href="' + escapeHtml(al.url) + '" target="_blank" rel="noopener">' + escapeHtml(al.title) + '</a>'
+        : escapeHtml(al.title);
+      return (
+        '<div class="alert-card level-' + al.level + '">' +
+        '<div class="alert-countdown">' +
+        '<span class="alert-icon">' + icon + '</span>' +
+        '<span class="alert-num">' + (al.countdown != null ? al.countdown : '-') + '</span>' +
+        '<span class="alert-unit">' + escapeHtml(al.unit || '天') + '</span>' +
+        '</div>' +
+        '<div class="alert-body">' +
+        '<div class="alert-title">' + titleHtml + '</div>' +
+        (al.status ? '<div class="alert-status">' + escapeHtml(al.status) + '</div>' : '') +
+        (al.deadline ? '<div class="alert-deadline">截止 ' + escapeHtml(al.deadline) + '</div>' : '') +
+        '</div>' +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  /* ===== 渲染：政策（按地区分组） ===== */
+  function renderEntries(data) {
+    var entries = data.entries || [];
+    if (!entries.length) return '<div class="empty">本日暂无政策动态</div>';
+    var REGION_ORDER = ['国家级', '上海', '江苏', '浙江', '安徽', '福建', '湖南', '江西'];
+    var groups = {};
+    entries.forEach(function (e) {
+      var r = e.region || '其他';
       if (!groups[r]) groups[r] = [];
       groups[r].push(e);
     });
-
-    const html = order.filter(r => groups[r] && groups[r].length).map(r => {
-      const items = groups[r].map(e => renderEntryCard(e)).join("");
-      return `
-        <div class="region-block">
-          <div class="region-head">📍 ${esc(r)} <span class="count">（${groups[r].length} 条）</span></div>
-          ${items}
-        </div>`;
-    }).join("");
-
-    $("#pane-entries").innerHTML = html || emptyHtml("📄", "本日无新增政策");
-    $("#badge-entries").textContent = list.length;
+    // 按规则手册顺序渲染
+    var html = '';
+    REGION_ORDER.concat(Object.keys(groups).filter(function (r) { return REGION_ORDER.indexOf(r) === -1; }))
+      .forEach(function (region) {
+        var arr = groups[region];
+        if (!arr || !arr.length) return;
+        html += '<div class="region-group">';
+        html += '<div class="region-header"><span>' + escapeHtml(region) + '</span><span class="region-count">' + arr.length + ' 条</span></div>';
+        html += '<div class="region-body">';
+        arr.forEach(function (e) {
+          var titleHtml = e.url
+            ? '<a href="' + escapeHtml(e.url) + '" target="_blank" rel="noopener">' + escapeHtml(e.title) + '</a>'
+            : escapeHtml(e.title);
+          html += '<div class="entry-card' + (e.isBackfill ? ' backfill' : '') + '">';
+          html += '<div class="entry-title">';
+          if (e.isBackfill) html += '<span class="backfill-tag">📌 补录</span>';
+          html += titleHtml + '</div>';
+          html += '<div class="entry-meta">';
+          if (e.dept) html += '<span class="card-meta-item">' + escapeHtml(e.dept) + '</span>';
+          if (e.date) html += '<span class="card-meta-item">' + escapeHtml(e.date) + '</span>';
+          if (e.category) html += '<span class="card-meta-item">' + escapeHtml(e.category) + '</span>';
+          html += impactChip(e.impact);
+          html += '</div>';
+          if (e.content) html += '<div class="entry-content">' + escapeHtml(e.content) + '</div>';
+          if (e.impactReason) html += '<div class="entry-reason">📊 影响：' + escapeHtml(e.impactReason) + '</div>';
+          html += '</div>';
+        });
+        html += '</div></div>';
+      });
+    return html;
   }
 
-  function renderEntryCard(e) {
-    const cls = "card" + (e.isBackfill ? " backfill" : "");
-    const impCls = impactClass[e.impact] || "impact-mid";
-    const impLab = impactLabel[e.impact] || "中";
-    const link = e.url ? `<a class="card-link" href="${esc(e.url)}" target="_blank" rel="noopener">查看原文 →</a>` : "";
-    return `
-      <div class="${cls}">
-        <div class="card-title">${e.url ? `<a href="${esc(e.url)}" target="_blank" rel="noopener">${esc(e.title)}</a>` : esc(e.title)}</div>
-        <div class="card-meta">
-          <span>🏛 ${esc(e.dept || "—")}</span>
-          <span>📅 ${esc(e.date || "—")}</span>
-          ${e.category ? `<span>🏷 ${esc(e.category)}</span>` : ""}
-          <span class="impact ${impCls}">影响：${impLab}</span>
-        </div>
-        <div class="card-content">${esc(e.content || "")}</div>
-        ${e.impactReason ? `<div class="card-content" style="margin-top:6px;color:#5b6470;font-size:12.5px;">▸ ${esc(e.impactReason)}</div>` : ""}
-        ${link}
-      </div>`;
+  /* ===== 渲染：人事 ===== */
+  function renderPersonnel(data) {
+    var groups = data.personnel || [];
+    if (!groups.length) return '<div class="empty">本日暂无人事变动</div>';
+    return groups.map(function (g) {
+      var html = '<div class="personnel-group">';
+      html += '<div class="personnel-header">' + escapeHtml(g.scope || '') + '<span class="personnel-source">来源：' + escapeHtml(g.source || '') + '</span></div>';
+      (g.appointments || []).forEach(function (p) {
+        html += renderPerson(p, 'appoint');
+      });
+      (g.removals || []).forEach(function (p) {
+        html += renderPerson(p, 'remove');
+      });
+      html += '</div>';
+      return html;
+    }).join('');
   }
-
-  /* === 人事 Tab === */
-  function renderPersonnel() {
-    const list = D.personnel || [];
-    if (!list.length) {
-      $("#pane-personnel").innerHTML = emptyHtml("👤", "本日无人事变动");
-      $("#badge-personnel").textContent = 0;
-      return;
+  function renderPerson(p, kind) {
+    var typeLabel = kind === 'appoint' ? '✅ 任命' : '⛔ 免职';
+    var html = '<div class="appoint-block">';
+    html += '<span class="appoint-type ' + kind + '">' + typeLabel + '</span>';
+    html += '<div class="appoint-name"><a href="' + nameSearchLink(p.name, p.newRole || p.prevRole) + '" target="_blank" rel="noopener">' + escapeHtml(p.name) + '</a></div>';
+    var roles = '';
+    if (p.prevRole) roles += '<span>' + escapeHtml(p.prevRole) + '</span>';
+    if (p.prevRole && p.newRole) roles += '<span class="arrow">→</span>';
+    if (p.newRole) roles += '<span>' + escapeHtml(p.newRole) + '</span>';
+    if (roles) html += '<div class="appoint-roles">' + roles + '</div>';
+    if (p.note) html += '<div class="appoint-note">' + escapeHtml(p.note) + '</div>';
+    if (p.analysis) {
+      var a = p.analysis;
+      html += '<div class="analysis">';
+      if (a.bio) html += '<div class="analysis-row"><span class="analysis-label">人物履历</span>' + escapeHtml(a.bio) + '</div>';
+      if (a.leaderLink) html += '<div class="analysis-row"><span class="analysis-label">与领导关联</span>' + escapeHtml(a.leaderLink) + '</div>';
+      if (a.tencentLink) html += '<div class="analysis-row"><span class="analysis-label">与腾讯关联</span>' + escapeHtml(a.tencentLink) + '</div>';
+      if (a.impact) html += '<div class="analysis-row impact"><span class="analysis-label">对腾讯影响</span>' + escapeHtml(a.impact) + '</div>';
+      html += '</div>';
     }
-    let count = 0;
-    const html = list.map(p => {
-      const apps = (p.appointments || []);
-      const rms = (p.removals || []);
-      count += apps.length + rms.length;
-      // 跳过完全空的批次
-      if (!apps.length && !rms.length) return "";
-      const allItems = [
-        ...apps.map(a => renderPerson(a, "appoint")),
-        ...rms.map(r => renderPerson(r, "remove"))
-      ].join("");
-      return `
-        <div class="personnel-batch">
-          <div class="personnel-head">${esc(p.scope || "人事任免")}<span class="personnel-source">来源：${esc(p.source || "—")}</span></div>
-          ${allItems}
-        </div>`;
-    }).join("");
-    $("#pane-personnel").innerHTML = html;
-    $("#badge-personnel").textContent = count;
+    html += '</div>';
+    return html;
   }
 
-  function renderPerson(person, action) {
-    const actLab = action === "appoint" ? "✅ 任命" : "❌ 免职";
-    const actCls = action === "appoint" ? "appoint" : "remove";
-    const baiduUrl = `https://www.baidu.com/s?wd=${encodeURIComponent((person.name || "") + " " + (person.newRole || person.prevRole || ""))}`;
-
-    let analysisHtml = "";
-    if (person.analysis) {
-      const a = person.analysis;
-      analysisHtml = `
-        <dl class="person-analysis">
-          ${a.bio ? `<dt>📋 基本履历</dt><dd>${esc(a.bio)}</dd>` : ""}
-          ${a.leaderLink ? `<dt>🔗 高层交集</dt><dd>${esc(a.leaderLink)}</dd>` : ""}
-          ${a.tencentLink ? `<dt>🐧 腾讯交集</dt><dd>${esc(a.tencentLink)}</dd>` : ""}
-          ${a.impact ? `<dt>📊 影响研判</dt><dd class="impact-tag">${esc(a.impact)}</dd>` : ""}
-        </dl>`;
-    }
-    return `
-      <div class="person-card">
-        <div class="person-row">
-          <span class="person-name">${esc(person.name || "—")}</span>
-          <span class="person-action ${actCls}">${actLab}</span>
-          <a class="card-link" href="${baiduUrl}" target="_blank" rel="noopener">百度搜索</a>
-        </div>
-        <div class="person-role">→ ${esc(person.newRole || "—")}</div>
-        ${person.prevRole ? `<div class="person-prev">原任：${esc(person.prevRole)}</div>` : ""}
-        ${person.note ? `<div class="person-prev">备注：${esc(person.note)}</div>` : ""}
-        ${analysisHtml}
-      </div>`;
+  /* ===== 渲染：腾讯动态 ===== */
+  function renderTencent(data) {
+    var list = data.tencent || [];
+    if (!list.length) return '<div class="empty">本日暂无腾讯动态</div>';
+    return list.map(function (t) {
+      var titleHtml = t.url
+        ? '<a href="' + escapeHtml(t.url) + '" target="_blank" rel="noopener">' + escapeHtml(t.title) + '</a>'
+        : escapeHtml(t.title);
+      return (
+        '<div class="card">' +
+        '<div class="card-title">' + titleHtml + '</div>' +
+        '<div class="card-meta"><span class="card-meta-item">' + escapeHtml(t.date) + '</span></div>' +
+        (t.content ? '<div class="card-content">' + escapeHtml(t.content) + '</div>' : '') +
+        '</div>'
+      );
+    }).join('');
   }
 
-  /* === 预警 Tab === */
-  function renderAlerts() {
-    const list = D.alerts || [];
-    if (!list.length) {
-      $("#pane-alerts").innerHTML = emptyHtml("⚠️", "本日无预警事项");
-      $("#badge-alerts").textContent = 0;
-      return;
-    }
-    const sorted = list.slice().sort((a, b) => (a.level || 9) - (b.level || 9));
-    const html = sorted.map(a => {
-      const lv = a.level || 3;
-      return `
-        <div class="alert-card level-${lv}">
-          <div class="alert-countdown">
-            <span class="num">${a.countdown != null ? a.countdown : "—"}</span>
-            <span class="unit">${esc(a.unit || "天")}</span>
-          </div>
-          <div class="alert-body">
-            <div class="alert-title">${esc(a.title || "")}</div>
-            <div class="alert-status">${esc(a.status || "")}</div>
-            ${a.deadline ? `<div class="alert-status">📌 截止：${esc(a.deadline)}</div>` : ""}
-            ${a.url ? `<a class="card-link" href="${esc(a.url)}" target="_blank" rel="noopener">查看详情 →</a>` : ""}
-          </div>
-        </div>`;
-    }).join("");
-    $("#pane-alerts").innerHTML = html;
-    $("#badge-alerts").textContent = list.length;
-  }
-
-  /* === 腾讯 Tab === */
-  function renderTencent() {
-    const list = D.tencent || [];
-    if (!list.length) {
-      $("#pane-tencent").innerHTML = emptyHtml("🐧", "本日无腾讯动态");
-      $("#badge-tencent").textContent = 0;
-      return;
-    }
-    const html = list.map(t => `
-      <div class="card" style="border-left-color:#1a3a6c;">
-        <div class="card-title">${t.url ? `<a href="${esc(t.url)}" target="_blank" rel="noopener">${esc(t.title)}</a>` : esc(t.title)}</div>
-        <div class="card-meta"><span>📅 ${esc(t.date || "")}</span></div>
-        <div class="card-content">${esc(t.content || "")}</div>
-        ${t.url ? `<a class="card-link" href="${esc(t.url)}" target="_blank" rel="noopener">查看详情 →</a>` : ""}
-      </div>
-    `).join("");
-    $("#pane-tencent").innerHTML = html;
-    $("#badge-tencent").textContent = list.length;
-  }
-
-  /* === 友商 Tab（国外在前·国内在后） === */
-  function renderCompetitors() {
-    const list = D.competitors || [];
-    if (!list.length) {
-      $("#pane-competitors").innerHTML = emptyHtml("🏢", "本日无友商动态");
-      $("#badge-competitors").textContent = 0;
-      return;
-    }
-    const intl = list.filter(c => c.region === "intl");
-    const cn = list.filter(c => c.region !== "intl");
-
-    const renderOne = (c) => `
-      <div class="competitor-card">
-        <div class="competitor-name">${esc(c.name || "—")}${c.category ? ` · <span style="color:#8a8a8a;font-weight:400;">${esc(c.category)}</span>` : ""}</div>
-        <div class="competitor-title">${c.url ? `<a href="${esc(c.url)}" target="_blank" rel="noopener">${esc(c.title || "")}</a>` : esc(c.title || "")}</div>
-        <div class="competitor-update">${esc(c.update || "")}</div>
-        <div class="competitor-meta">📅 ${esc(c.date || "")}</div>
-      </div>`;
-
-    let html = "";
+  /* ===== 渲染：友商（国外在前 国内在后） ===== */
+  function renderCompetitors(data) {
+    var list = data.competitors || [];
+    if (!list.length) return '<div class="empty">本日暂无友商动态</div>';
+    var intl = list.filter(function (c) { return c.region === 'intl'; });
+    var cn = list.filter(function (c) { return c.region !== 'intl'; });
+    var html = '';
     if (intl.length) {
-      html += `<div class="competitor-group">
-        <div class="competitor-head">🌐 国际企业 <span style="color:#8a8a8a;font-weight:400;">（${intl.length}）</span></div>
-        ${intl.map(renderOne).join("")}
-      </div>`;
+      html += '<div class="competitor-section"><div class="competitor-section-title">🌍 国外友商（' + intl.length + '）</div></div>';
+      html += intl.map(competitorCard).join('');
     }
     if (cn.length) {
-      html += `<div class="competitor-group">
-        <div class="competitor-head">🇨🇳 国内企业 <span style="color:#8a8a8a;font-weight:400;">（${cn.length}）</span></div>
-        ${cn.map(renderOne).join("")}
-      </div>`;
+      html += '<div class="competitor-section"><div class="competitor-section-title">🇨🇳 国内友商（' + cn.length + '）</div></div>';
+      html += cn.map(competitorCard).join('');
     }
-    $("#pane-competitors").innerHTML = html;
-    $("#badge-competitors").textContent = list.length;
+    return html;
+  }
+  function competitorCard(c) {
+    var titleHtml = c.url
+      ? '<a href="' + escapeHtml(c.url) + '" target="_blank" rel="noopener">' + escapeHtml(c.title) + '</a>'
+      : escapeHtml(c.title);
+    return (
+      '<div class="card competitor-card ' + (c.region === 'intl' ? 'intl' : 'cn') + '">' +
+      '<div class="card-title">' +
+      '<span class="competitor-name">' + escapeHtml(c.name) + '</span>' +
+      titleHtml +
+      '</div>' +
+      '<div class="card-meta">' +
+      '<span class="card-meta-item">' + escapeHtml(c.date) + '</span>' +
+      (c.category ? '<span class="card-meta-item">' + escapeHtml(c.category) + '</span>' : '') +
+      '</div>' +
+      (c.update ? '<div class="card-content">' + escapeHtml(c.update) + '</div>' : '') +
+      '</div>'
+    );
   }
 
-  /* === 活动 Tab === */
-  function renderEvents() {
-    const list = D.events || [];
-    if (!list.length) {
-      $("#pane-events").innerHTML = emptyHtml("📅", "近期无活动");
-      $("#badge-events").textContent = 0;
+  /* ===== 渲染：活动 ===== */
+  function renderEvents(data) {
+    var list = (data.events || []).slice().sort(function (a, b) { return (b.relevance || 0) - (a.relevance || 0); });
+    if (!list.length) return '<div class="empty">暂无活动</div>';
+    return list.map(function (e) {
+      var stars = '⭐'.repeat(e.relevance || 1);
+      return (
+        '<div class="card event-card">' +
+        '<div class="card-title">' + escapeHtml(e.name) + '<span class="event-relevance">' + stars + '</span></div>' +
+        '<div class="card-meta">' +
+        '<span class="card-meta-item">📅 ' + escapeHtml(e.time) + '</span>' +
+        (e.location ? '<span class="card-meta-item">📍 ' + escapeHtml(e.location) + '</span>' : '') +
+        '</div>' +
+        (e.note ? '<div class="card-content">' + escapeHtml(e.note) + '</div>' : '') +
+        '</div>'
+      );
+    }).join('');
+  }
+
+  /* ===== 整体渲染 ===== */
+  function renderAll() {
+    var data = window.DAILY_DATA_BY_DATE[state.currentDate];
+    if (!data) {
+      console.warn('No data for date:', state.currentDate);
       return;
     }
-    const rows = list.map(e => {
-      const stars = "⭐".repeat(e.relevance || 1);
-      const relLab = e.relevance === 3 ? "高" : e.relevance === 2 ? "中" : "低";
-      return `
-        <tr>
-          <td><strong>${esc(e.name || "")}</strong>${e.note ? `<div style="color:#5b6470;font-size:12px;margin-top:4px;">${esc(e.note)}</div>` : ""}</td>
-          <td>${esc(e.time || "")}</td>
-          <td>${esc(e.location || "")}</td>
-          <td class="relevance relevance-${e.relevance || 1}">${stars} ${relLab}</td>
-        </tr>`;
-    }).join("");
-    $("#pane-events").innerHTML = `
-      <table class="event-table">
-        <thead><tr><th>会议/活动</th><th>时间</th><th>地点</th><th>关联度</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>`;
-    $("#badge-events").textContent = list.length;
+    document.getElementById('reportTitle').textContent = data.reportTitle || '华东政策日报';
+    document.getElementById('reportSubtitle').textContent = data.reportSubtitle || '';
+    document.getElementById('dateTriggerText').textContent = state.currentDate;
+
+    document.getElementById('highlightsBody').innerHTML = renderHighlights(data);
+    document.getElementById('alertsBody').innerHTML = renderAlerts(data);
+    document.getElementById('entriesBody').innerHTML = renderEntries(data);
+    document.getElementById('personnelBody').innerHTML = renderPersonnel(data);
+    document.getElementById('tencentBody').innerHTML = renderTencent(data);
+    document.getElementById('competitorsBody').innerHTML = renderCompetitors(data);
+    document.getElementById('eventsBody').innerHTML = renderEvents(data);
   }
 
-  /* === 空状态 === */
-  function emptyHtml(emoji, msg) {
-    return `<div class="empty"><span class="empty-emoji">${emoji}</span>${msg}</div>`;
+  /* ===== Tab 切换 ===== */
+  function switchTab(tabName) {
+    state.currentTab = tabName;
+    var tabs = document.querySelectorAll('.tab-bar .tab-item');
+    tabs.forEach(function (t) {
+      t.classList.toggle('active', t.getAttribute('data-tab') === tabName);
+    });
+    var pages = document.querySelectorAll('.page');
+    pages.forEach(function (p) {
+      p.hidden = p.getAttribute('data-page') !== tabName;
+    });
+    // 切 tab 后滚回顶部
+    window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
   }
 
-  /* === Tab 切换 === */
-  function bindTabs() {
-    $$("#tabs .tab-btn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const tab = btn.dataset.tab;
-        $$("#tabs .tab-btn").forEach(b => b.classList.toggle("active", b === btn));
-        $$(".tab-pane").forEach(p => p.classList.toggle("active", p.id === "pane-" + tab));
-        window.scrollTo({ top: 0, behavior: "smooth" });
+  /* ===== 日期选择器 ===== */
+  function openDatePicker() {
+    var mask = document.getElementById('datePickerMask');
+    var listEl = document.getElementById('datePickerList');
+    var html = window.AVAILABLE_DATES.map(function (d) {
+      var isActive = d === state.currentDate;
+      var weekday = getWeekday(d);
+      return (
+        '<button class="date-picker-item' + (isActive ? ' active' : '') + '" data-date="' + d + '">' +
+        '<span>' + d + '<span class="date-picker-weekday">' + weekday + '</span></span>' +
+        (isActive ? '<span class="date-picker-check">✓</span>' : '') +
+        '</button>'
+      );
+    }).join('');
+    listEl.innerHTML = html;
+    mask.hidden = false;
+  }
+  function closeDatePicker() {
+    document.getElementById('datePickerMask').hidden = true;
+  }
+  function selectDate(date) {
+    if (!window.DAILY_DATA_BY_DATE[date]) return;
+    state.currentDate = date;
+    closeDatePicker();
+    renderAll();
+    // 切日期后回到"重点"页
+    switchTab('highlights');
+  }
+
+  /* ===== 事件绑定 ===== */
+  function bindEvents() {
+    document.querySelectorAll('.tab-bar .tab-item').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        switchTab(btn.getAttribute('data-tab'));
       });
+    });
+    document.getElementById('dateTrigger').addEventListener('click', openDatePicker);
+    document.getElementById('datePickerClose').addEventListener('click', closeDatePicker);
+    document.getElementById('datePickerMask').addEventListener('click', function (e) {
+      if (e.target === e.currentTarget) closeDatePicker();
+    });
+    document.getElementById('datePickerList').addEventListener('click', function (e) {
+      var btn = e.target.closest('.date-picker-item');
+      if (btn) selectDate(btn.getAttribute('data-date'));
     });
   }
 
-  /* === 初始化 === */
-  document.addEventListener("DOMContentLoaded", () => {
-    renderHeader();
-    renderHighlights();
-    renderAlerts();
-    renderEntries();
-    renderPersonnel();
-    renderTencent();
-    renderCompetitors();
-    renderEvents();
-    bindTabs();
-  });
+  /* ===== 启动 ===== */
+  function init() {
+    if (!window.DAILY_DATA_BY_DATE || !window.AVAILABLE_DATES || !window.AVAILABLE_DATES.length) {
+      document.body.innerHTML = '<div style="padding:40px;text-align:center;color:#999">数据未加载</div>';
+      return;
+    }
+    bindEvents();
+    renderAll();
+    switchTab('highlights');
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();
