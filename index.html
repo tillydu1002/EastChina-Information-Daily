@@ -43,13 +43,13 @@
     </div>
   </div>
 
-  <!-- ===== 主内容区（每个 page 是一个 tab 的内容） ===== -->
+  <!-- ===== 主内容区（六栏目视图） ===== -->
   <main class="app-main" id="appMain">
 
     <section class="page" data-page="highlights" id="page-highlights">
       <div class="page-header">
         <h2>📌 本日导读</h2>
-        <p class="page-desc">前 2 条紧急事项 · 后续为重要事项 · 点击卡片查看原文</p>
+        <p class="page-desc">高影响/置顶条目 · 点击卡片查看原文</p>
       </div>
       <div class="page-body" id="highlightsBody"></div>
     </section>
@@ -57,46 +57,46 @@
     <section class="page" data-page="alerts" id="page-alerts" hidden>
       <div class="page-header">
         <h2>⚠️ 预警提示</h2>
-        <p class="page-desc">紧急（红） · 重要（蓝） · 关注（绿）</p>
+        <p class="page-desc">有明确截止日/生效日的倒计时条目 · 紧急（红） 重要（蓝） 关注（绿）</p>
       </div>
       <div class="page-body" id="alertsBody"></div>
     </section>
 
-    <section class="page" data-page="entries" id="page-entries" hidden>
+    <section class="page" data-page="policy" id="page-policy" hidden>
       <div class="page-header">
-        <h2>📄 重点政策动态</h2>
-        <p class="page-desc">国家级 · 上海 · 江苏 · 浙江 · 安徽 · 福建 · 湖南 · 江西</p>
+        <h2>📄 政策</h2>
+        <p class="page-desc">政府发文/法规/规划/司法解释 · 按地区分组</p>
       </div>
-      <div class="page-body" id="entriesBody"></div>
+      <div class="page-body" id="policyBody"></div>
+    </section>
+
+    <section class="page" data-page="industry" id="page-industry" hidden>
+      <div class="page-header">
+        <h2>🏭 行业</h2>
+        <p class="page-desc">产业动态 · 市场信号 · 腾讯 &amp; 友商</p>
+      </div>
+      <div class="page-body" id="industryBody"></div>
     </section>
 
     <section class="page" data-page="personnel" id="page-personnel" hidden>
       <div class="page-header">
-        <h2>👤 人事变动</h2>
-        <p class="page-desc">副部级及以上含四维分析卡片</p>
+        <h2>👤 人事</h2>
+        <p class="page-desc">副部级及以上任免公示</p>
       </div>
       <div class="page-body" id="personnelBody"></div>
     </section>
 
-    <section class="page" data-page="competitors" id="page-competitors" hidden>
-      <div class="page-header">
-        <h2>🏢 行业动态</h2>
-        <p class="page-desc">腾讯 · 国外友商 · 国内友商 · 点击卡片查看原文</p>
-      </div>
-      <div class="page-body" id="competitorsBody"></div>
-    </section>
-
     <section class="page" data-page="events" id="page-events" hidden>
       <div class="page-header">
-        <h2>📅 区域重要活动</h2>
-        <p class="page-desc">关联度评级：⭐⭐⭐ 高 / ⭐⭐ 中 / ⭐ 低</p>
+        <h2>📅 活动</h2>
+        <p class="page-desc">会议/展会/发布会 · 关联度评级 ⭐⭐⭐ 高 / ⭐⭐ 中 / ⭐ 低</p>
       </div>
       <div class="page-body" id="eventsBody"></div>
     </section>
 
   </main>
 
-  <!-- ===== 底部固定 Tab Bar ===== -->
+  <!-- ===== 底部固定 Tab Bar（六栏目，对齐 liulawrance/policy-daily） ===== -->
   <nav class="tab-bar" id="tabBar" role="tablist">
     <button class="tab-item active" data-tab="highlights" role="tab">
       <span class="tab-icon">📌</span>
@@ -106,17 +106,17 @@
       <span class="tab-icon">⚠️</span>
       <span class="tab-label">预警</span>
     </button>
-    <button class="tab-item" data-tab="entries" role="tab">
+    <button class="tab-item" data-tab="policy" role="tab">
       <span class="tab-icon">📄</span>
       <span class="tab-label">政策</span>
+    </button>
+    <button class="tab-item" data-tab="industry" role="tab">
+      <span class="tab-icon">🏭</span>
+      <span class="tab-label">行业</span>
     </button>
     <button class="tab-item" data-tab="personnel" role="tab">
       <span class="tab-icon">👤</span>
       <span class="tab-label">人事</span>
-    </button>
-    <button class="tab-item" data-tab="competitors" role="tab">
-      <span class="tab-icon">🏢</span>
-      <span class="tab-label">行业</span>
     </button>
     <button class="tab-item" data-tab="events" role="tab">
       <span class="tab-icon">📅</span>

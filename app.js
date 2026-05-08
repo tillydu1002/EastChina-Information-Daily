@@ -1,5 +1,13 @@
 /* ============================================================
- * 华东政策日报 H5 渲染逻辑（v2 多日 + 底部 Tab）
+ * 华东政策日报 H5 渲染逻辑 · v4（三池 + 六视图）
+ *
+ * 架构：从 entries/personnel/competitors 三池筛出 6 栏目
+ *   导读 = entries.filter(isTop)
+ *   预警 = entries.filter(level && deadline)
+ *   政策 = entries.filter(category ∈ POLICY_CATS)
+ *   行业 = entries.filter(category ∈ INDUSTRY_CATS) + competitors
+ *   人事 = personnel（直出）
+ *   活动 = entries.filter(category === '活动')
  * ============================================================ */
 
 (function () {
@@ -27,7 +35,6 @@
     var q = encodeURIComponent((name || '') + ' ' + (role || ''));
     return 'https://www.baidu.com/s?wd=' + q;
   }
-  // 兜底：没有 url 时，用标题去百度搜索，保证"每条都可点击跳转"
   function fallbackSearchLink(title, extra) {
     var q = encodeURIComponent((title || '') + (extra ? ' ' + extra : ''));
     return 'https://www.baidu.com/s?wd=' + q;
@@ -43,17 +50,44 @@
     return wk[d.getDay()];
   }
 
-  /* ===== 渲染：本日导读 ===== */
+  /* ===== 视图筛选函数（从三池 → 六栏目） ===== */
+  function getHighlights(data) {
+    return (data.entries || []).filter(function (e) { return e.isTop; });
+  }
+  function getAlerts(data) {
+    return (data.entries || []).filter(function (e) { return e.level && e.deadline; })
+      .slice()
+      .sort(function (a, b) {
+        if (a.level !== b.level) return a.level - b.level;
+        return (a.countdown || 0) - (b.countdown || 0);
+      });
+  }
+  function getPolicy(data) {
+    var cats = window.POLICY_CATS || [];
+    return (data.entries || []).filter(function (e) { return cats.indexOf(e.category) !== -1; });
+  }
+  function getIndustryEntries(data) {
+    var cats = window.INDUSTRY_CATS || [];
+    return (data.entries || []).filter(function (e) { return cats.indexOf(e.category) !== -1; });
+  }
+  function getEvents(data) {
+    return (data.entries || []).filter(function (e) { return e.category === '活动'; })
+      .slice()
+      .sort(function (a, b) { return (b.relevance || 0) - (a.relevance || 0); });
+  }
+
+  /* ===== 渲染：导读 ===== */
   function renderHighlights(data) {
-    var list = data.highlights || [];
+    var list = getHighlights(data);
     if (!list.length) return '<div class="empty">本日暂无导读事项</div>';
     return list.map(function (h) {
-      var flag = h.type === 'urgent' ? '🚨 紧急' : '⭐ 重要';
+      var flag = h.impact === 'high' ? '🚨 重点' : '⭐ 关注';
       var href = resolveLink(h);
       return (
-        '<a class="highlight-card ' + escapeHtml(h.type) + '" href="' + escapeHtml(href) + '" target="_blank" rel="noopener">' +
+        '<a class="highlight-card ' + (h.impact === 'high' ? 'urgent' : 'important') + '" href="' + escapeHtml(href) + '" target="_blank" rel="noopener">' +
         '<span class="highlight-flag">' + flag + '</span>' +
         '<div class="highlight-title">' + escapeHtml(h.title) + '</div>' +
+        (h.headline ? '<div class="highlight-headline">' + escapeHtml(h.headline) + '</div>' : '') +
         (h.action ? '<div class="highlight-action">💡 ' + escapeHtml(h.action) + '</div>' : '') +
         '<span class="card-link-arrow">查看原文 ›</span>' +
         '</a>'
@@ -63,10 +97,7 @@
 
   /* ===== 渲染：预警 ===== */
   function renderAlerts(data) {
-    var list = (data.alerts || []).slice().sort(function (a, b) {
-      if (a.level !== b.level) return a.level - b.level;
-      return (a.countdown || 0) - (b.countdown || 0);
-    });
+    var list = getAlerts(data);
     if (!list.length) return '<div class="empty">本日暂无预警事项</div>';
     return list.map(function (al) {
       var icon = al.level === 1 ? '🚨' : (al.level === 2 ? '⚠️' : '🔔');
@@ -77,11 +108,12 @@
         '<div class="alert-countdown">' +
         '<span class="alert-icon">' + icon + '</span>' +
         '<span class="alert-num">' + (al.countdown != null ? al.countdown : '-') + '</span>' +
-        '<span class="alert-unit">' + escapeHtml(al.unit || '天') + '</span>' +
+        '<span class="alert-unit">天</span>' +
         '</div>' +
         '<div class="alert-body">' +
         '<div class="alert-title">' + titleHtml + '</div>' +
         (al.status ? '<div class="alert-status">' + escapeHtml(al.status) + '</div>' : '') +
+        (al.content ? '<div class="alert-status">' + escapeHtml(al.content) + '</div>' : '') +
         (al.deadline ? '<div class="alert-deadline">截止 ' + escapeHtml(al.deadline) + '</div>' : '') +
         '</div>' +
         '</div>'
@@ -89,18 +121,16 @@
     }).join('');
   }
 
-  /* ===== 渲染：政策（按地区分组） ===== */
-  function renderEntries(data) {
-    var entries = data.entries || [];
-    if (!entries.length) return '<div class="empty">本日暂无政策动态</div>';
-    var REGION_ORDER = ['国家级', '上海', '江苏', '浙江', '安徽', '福建', '湖南', '江西'];
+  /* ===== 渲染：政策 / 行业（共用，按地区分组 entry 卡） ===== */
+  function renderEntryList(list, emptyText) {
+    if (!list.length) return '<div class="empty">' + emptyText + '</div>';
+    var REGION_ORDER = ['国家级', '上海', '江苏', '浙江', '安徽', '福建', '湖南', '江西', '全国', '国际', '其他'];
     var groups = {};
-    entries.forEach(function (e) {
+    list.forEach(function (e) {
       var r = e.region || '其他';
       if (!groups[r]) groups[r] = [];
       groups[r].push(e);
     });
-    // 按规则手册顺序渲染
     var html = '';
     REGION_ORDER.concat(Object.keys(groups).filter(function (r) { return REGION_ORDER.indexOf(r) === -1; }))
       .forEach(function (region) {
@@ -112,23 +142,88 @@
         arr.forEach(function (e) {
           var href = resolveLink(e, e.dept || '');
           var titleHtml = '<a href="' + escapeHtml(href) + '" target="_blank" rel="noopener">' + escapeHtml(e.title) + '</a>';
-          html += '<div class="entry-card' + (e.isBackfill ? ' backfill' : '') + '">';
+          html += '<div class="entry-card' + (e.isBackfill ? ' backfill' : '') + (e.isTop ? ' top' : '') + '">';
           html += '<div class="entry-title">';
+          if (e.isTop) html += '<span class="backfill-tag" style="background:#fff3cd;color:#856404">📌 导读</span>';
           if (e.isBackfill) html += '<span class="backfill-tag">📌 补录</span>';
           html += titleHtml + '</div>';
+          if (e.headline) html += '<div class="entry-headline" style="font-size:13px;color:#666;margin:4px 0">' + escapeHtml(e.headline) + '</div>';
           html += '<div class="entry-meta">';
           if (e.dept) html += '<span class="card-meta-item">' + escapeHtml(e.dept) + '</span>';
+          if (e.source && e.source !== e.dept) html += '<span class="card-meta-item">源：' + escapeHtml(e.source) + '</span>';
           if (e.date) html += '<span class="card-meta-item">' + escapeHtml(e.date) + '</span>';
           if (e.category) html += '<span class="card-meta-item">' + escapeHtml(e.category) + '</span>';
           html += impactChip(e.impact);
           html += '</div>';
           if (e.content) html += '<div class="entry-content">' + escapeHtml(e.content) + '</div>';
           if (e.impactReason) html += '<div class="entry-reason">📊 影响：' + escapeHtml(e.impactReason) + '</div>';
+          if (e.action) html += '<div class="entry-reason" style="background:#fff8e1;color:#5d4037">💡 行动：' + escapeHtml(e.action) + '</div>';
           html += '</div>';
         });
         html += '</div></div>';
       });
     return html;
+  }
+
+  function renderPolicy(data) {
+    return renderEntryList(getPolicy(data), '本日暂无政策发文');
+  }
+
+  /* ===== 渲染：行业（产业 entries + competitors） ===== */
+  function renderIndustry(data) {
+    var industryEntries = getIndustryEntries(data);
+    var competitors = data.competitors || [];
+    var tencent = competitors.filter(function (c) { return c.isTencent; });
+    var intl = competitors.filter(function (c) { return !c.isTencent && c.region === 'intl'; });
+    var cn = competitors.filter(function (c) { return !c.isTencent && c.region !== 'intl'; });
+
+    var html = '';
+
+    // 1) 产业动态（entries 里 INDUSTRY_CATS）
+    if (industryEntries.length) {
+      html += '<div class="competitor-section"><div class="competitor-section-title">📈 产业动态（' + industryEntries.length + '）</div></div>';
+      html += renderEntryList(industryEntries, '暂无产业动态');
+    }
+
+    // 2) 腾讯
+    if (tencent.length) {
+      html += '<div class="competitor-section"><div class="competitor-section-title">🐧 腾讯动态（' + tencent.length + '）</div></div>';
+      html += tencent.map(competitorCard).join('');
+    }
+
+    // 3) 国外友商
+    if (intl.length) {
+      html += '<div class="competitor-section"><div class="competitor-section-title">🌍 国外友商（' + intl.length + '）</div></div>';
+      html += intl.map(competitorCard).join('');
+    }
+
+    // 4) 国内友商
+    if (cn.length) {
+      html += '<div class="competitor-section"><div class="competitor-section-title">🇨🇳 国内友商（' + cn.length + '）</div></div>';
+      html += cn.map(competitorCard).join('');
+    }
+
+    if (!html) return '<div class="empty">本日暂无行业动态</div>';
+    return html;
+  }
+
+  function competitorCard(c) {
+    var href = resolveLink(c, c.name || '');
+    var cls = c.isTencent ? 'tencent' : (c.region === 'intl' ? 'intl' : 'cn');
+    return (
+      '<a class="card competitor-card ' + cls + '" href="' + escapeHtml(href) + '" target="_blank" rel="noopener">' +
+      '<div class="card-title">' +
+      '<span class="competitor-name">' + escapeHtml(c.name) + '</span>' +
+      escapeHtml(c.title) +
+      '</div>' +
+      '<div class="card-meta">' +
+      '<span class="card-meta-item">' + escapeHtml(c.date || '') + '</span>' +
+      (c.category ? '<span class="card-meta-item">' + escapeHtml(c.category) + '</span>' : '') +
+      '</div>' +
+      (c.update ? '<div class="card-content">' + escapeHtml(c.update) + '</div>' : '') +
+      '<span class="card-link-arrow">查看原文 ›</span>' +
+      '</a>'
+    );
   }
 
   /* ===== 渲染：人事 ===== */
@@ -144,15 +239,17 @@
       (g.removals || []).forEach(function (p) {
         html += renderPerson(p, 'remove');
       });
+      if (g.note) html += '<div class="entry-content" style="padding:8px 12px;color:#666;font-size:13px;">ℹ️ ' + escapeHtml(g.note) + '</div>';
       html += '</div>';
       return html;
     }).join('');
   }
   function renderPerson(p, kind) {
     var typeLabel = kind === 'appoint' ? '✅ 任命' : '⛔ 免职';
+    var href = p.url ? p.url : nameSearchLink(p.name, p.newRole || p.prevRole);
     var html = '<div class="appoint-block">';
     html += '<span class="appoint-type ' + kind + '">' + typeLabel + '</span>';
-    html += '<div class="appoint-name"><a href="' + nameSearchLink(p.name, p.newRole || p.prevRole) + '" target="_blank" rel="noopener">' + escapeHtml(p.name) + '</a></div>';
+    html += '<div class="appoint-name"><a href="' + escapeHtml(href) + '" target="_blank" rel="noopener">' + escapeHtml(p.name) + '</a>' + (p.level ? '<span style="margin-left:8px;font-size:12px;color:#999">（' + escapeHtml(p.level) + '）</span>' : '') + '</div>';
     var roles = '';
     if (p.prevRole) roles += '<span>' + escapeHtml(p.prevRole) + '</span>';
     if (p.prevRole && p.newRole) roles += '<span class="arrow">→</span>';
@@ -172,77 +269,23 @@
     return html;
   }
 
-  /* ===== 渲染：行业（腾讯 + 国外友商 + 国内友商） ===== */
-  function renderCompetitors(data) {
-    var competitors = data.competitors || [];
-    var tencent = data.tencent || [];
-    if (!competitors.length && !tencent.length) return '<div class="empty">本日暂无行业动态</div>';
-    var intl = competitors.filter(function (c) { return c.region === 'intl'; });
-    var cn = competitors.filter(function (c) { return c.region !== 'intl'; });
-    var html = '';
-    if (tencent.length) {
-      html += '<div class="competitor-section"><div class="competitor-section-title">🐧 腾讯动态（' + tencent.length + '）</div></div>';
-      html += tencent.map(tencentCard).join('');
-    }
-    if (intl.length) {
-      html += '<div class="competitor-section"><div class="competitor-section-title">🌍 国外友商（' + intl.length + '）</div></div>';
-      html += intl.map(competitorCard).join('');
-    }
-    if (cn.length) {
-      html += '<div class="competitor-section"><div class="competitor-section-title">🇨🇳 国内友商（' + cn.length + '）</div></div>';
-      html += cn.map(competitorCard).join('');
-    }
-    return html;
-  }
-  function tencentCard(t) {
-    var href = resolveLink(t, '腾讯');
-    return (
-      '<a class="card competitor-card tencent" href="' + escapeHtml(href) + '" target="_blank" rel="noopener">' +
-      '<div class="card-title">' +
-      '<span class="competitor-name">腾讯</span>' +
-      escapeHtml(t.title) +
-      '</div>' +
-      '<div class="card-meta">' +
-      '<span class="card-meta-item">' + escapeHtml(t.date || '') + '</span>' +
-      '</div>' +
-      (t.content ? '<div class="card-content">' + escapeHtml(t.content) + '</div>' : '') +
-      '<span class="card-link-arrow">查看原文 ›</span>' +
-      '</a>'
-    );
-  }
-  function competitorCard(c) {
-    var href = resolveLink(c, c.name || '');
-    return (
-      '<a class="card competitor-card ' + (c.region === 'intl' ? 'intl' : 'cn') + '" href="' + escapeHtml(href) + '" target="_blank" rel="noopener">' +
-      '<div class="card-title">' +
-      '<span class="competitor-name">' + escapeHtml(c.name) + '</span>' +
-      escapeHtml(c.title) +
-      '</div>' +
-      '<div class="card-meta">' +
-      '<span class="card-meta-item">' + escapeHtml(c.date) + '</span>' +
-      (c.category ? '<span class="card-meta-item">' + escapeHtml(c.category) + '</span>' : '') +
-      '</div>' +
-      (c.update ? '<div class="card-content">' + escapeHtml(c.update) + '</div>' : '') +
-      '<span class="card-link-arrow">查看原文 ›</span>' +
-      '</a>'
-    );
-  }
-
   /* ===== 渲染：活动 ===== */
   function renderEvents(data) {
-    var list = (data.events || []).slice().sort(function (a, b) { return (b.relevance || 0) - (a.relevance || 0); });
+    var list = getEvents(data);
     if (!list.length) return '<div class="empty">暂无活动</div>';
     return list.map(function (e) {
       var stars = '⭐'.repeat(e.relevance || 1);
-      var href = resolveLink({ url: e.url, title: e.name, name: e.name }, e.location || '');
+      var href = resolveLink({ url: e.url, title: e.title, name: e.title }, e.location || '');
       return (
         '<a class="card event-card" href="' + escapeHtml(href) + '" target="_blank" rel="noopener">' +
-        '<div class="card-title">' + escapeHtml(e.name) + '<span class="event-relevance">' + stars + '</span></div>' +
+        '<div class="card-title">' + escapeHtml(e.title) + '<span class="event-relevance">' + stars + '</span></div>' +
         '<div class="card-meta">' +
-        '<span class="card-meta-item">📅 ' + escapeHtml(e.time) + '</span>' +
+        '<span class="card-meta-item">📅 ' + escapeHtml(e.eventTime || e.date || '') + '</span>' +
         (e.location ? '<span class="card-meta-item">📍 ' + escapeHtml(e.location) + '</span>' : '') +
+        (e.dept ? '<span class="card-meta-item">' + escapeHtml(e.dept) + '</span>' : '') +
         '</div>' +
-        (e.note ? '<div class="card-content">' + escapeHtml(e.note) + '</div>' : '') +
+        (e.content ? '<div class="card-content">' + escapeHtml(e.content) + '</div>' : '') +
+        (e.impactReason ? '<div class="entry-reason">📊 ' + escapeHtml(e.impactReason) + '</div>' : '') +
         '<span class="card-link-arrow">查看详情 ›</span>' +
         '</a>'
       );
@@ -262,9 +305,9 @@
 
     document.getElementById('highlightsBody').innerHTML = renderHighlights(data);
     document.getElementById('alertsBody').innerHTML = renderAlerts(data);
-    document.getElementById('entriesBody').innerHTML = renderEntries(data);
+    document.getElementById('policyBody').innerHTML = renderPolicy(data);
+    document.getElementById('industryBody').innerHTML = renderIndustry(data);
     document.getElementById('personnelBody').innerHTML = renderPersonnel(data);
-    document.getElementById('competitorsBody').innerHTML = renderCompetitors(data);
     document.getElementById('eventsBody').innerHTML = renderEvents(data);
   }
 
@@ -279,7 +322,6 @@
     pages.forEach(function (p) {
       p.hidden = p.getAttribute('data-page') !== tabName;
     });
-    // 切 tab 后滚回顶部
     window.scrollTo({ top: 0, behavior: 'instant' in window ? 'instant' : 'auto' });
   }
 
@@ -308,7 +350,6 @@
     state.currentDate = date;
     closeDatePicker();
     renderAll();
-    // 切日期后回到"重点"页
     switchTab('highlights');
   }
 
