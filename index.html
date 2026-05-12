@@ -1,130 +1,1465 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="format-detection" content="telephone=no" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="theme-color" content="#1a3a6c" />
-  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-  <meta http-equiv="Pragma" content="no-cache" />
-  <meta http-equiv="Expires" content="0" />
-  <title>华东政策日报</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0052D9">
+<title>华东区域政策日报 · 2026年5月6日—5月10日</title>
+<style>
+  /* ============ 设计系统 · 腾讯蓝（TDesign Brand） ============ */
+  :root {
+    --brand-1: #F2F6FF;     /* 极浅底 */
+    --brand-2: #E0EAFF;     /* 浅蓝 chip */
+    --brand-5: #366EF4;     /* 次主色 */
+    --brand-6: #0052D9;     /* 主色 */
+    --brand-7: #0034B5;     /* 深主色（hover/active） */
+    --brand-8: #001F73;     /* 深蓝（强对比文字） */
+    --ink-0:   #0B1426;     /* 一级标题 */
+    --ink-1:   #1F2937;     /* 正文 */
+    --ink-2:   #3A4458;     /* 次级正文 */
+    --ink-3:   #6B7280;     /* 辅助 */
+    --ink-4:   #9CA3AF;     /* 弱化 */
+    --ink-5:   #C7CCD3;
+    --line:    #ECEEF2;     /* 分隔线 */
+    --line-2:  #F2F4F7;     /* 极浅分隔 */
+    --bg:      #F4F6FA;     /* 页面底 */
+    --surface: #FFFFFF;
+    --danger:  #E5341C;
+    --warn:    #F08200;
+    --ok:      #11874E;
+    --shadow-1: 0 1px 2px rgba(15,30,80,0.04), 0 1px 8px rgba(15,30,80,0.04);
+    --shadow-2: 0 6px 24px -8px rgba(0,82,217,0.18);
+    --r-sm: 6px; --r-md: 10px; --r-lg: 14px; --r-pill: 999px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { height: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg); color: var(--ink-1);
+    font-size: 14.5px; line-height: 1.65; overflow: hidden;
+    -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: "tnum" on, "ss01" on;
+  }
+  a { color: var(--brand-6); text-decoration: none; }
+
+  /* ============ 顶部 ============ */
+  .header {
+    position: fixed; top: 0; left: 0; right: 0; height: 96px;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    color: var(--ink-0);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    border-bottom: 1px solid var(--line);
+    z-index: 100; padding: 6px 16px;
+  }
+  .header::after {
+    content: ""; position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+    width: 3px; height: 28px; background: var(--brand-6); border-radius: 2px;
+    display: none;
+  }
+  .header .title {
+    font-size: 16.5px; font-weight: 600; letter-spacing: 0.2px;
+    color: var(--ink-0);
+  }
+  .header .title::before {
+    content: ""; display: inline-block;
+    width: 4px; height: 14px; background: var(--brand-6);
+    border-radius: 2px; margin-right: 8px; vertical-align: -1px;
+  }
+  .header .sub {
+    font-size: 11px; color: var(--ink-3); margin-top: 4px;
+    letter-spacing: 0.3px;
+  }
+  .header .date-picker {
+    margin-top: 8px; display: inline-flex; align-items: center;
+    background: var(--brand-1);
+    border: 1px solid var(--brand-2);
+    color: var(--brand-7);
+    border-radius: var(--r-pill); padding: 3px 12px; font-size: 12px;
+    font-weight: 500; cursor: pointer; user-select: none;
+    transition: all 0.2s ease;
+  }
+  .date-picker:active { background: var(--brand-2); }
+  .date-picker .arrow { margin-left: 6px; font-size: 9px; opacity: 0.7; }
+
+  .date-modal {
+    position: fixed; inset: 0; background: rgba(11,20,38,0.42);
+    z-index: 300; display: none;
+    align-items: flex-end; justify-content: center;
+    backdrop-filter: blur(2px);
+  }
+  .date-modal.show { display: flex; }
+  .date-modal .sheet {
+    width: 100%; max-width: 480px;
+    background: var(--surface); border-radius: 16px 16px 0 0;
+    padding: 12px 12px calc(20px + env(safe-area-inset-bottom, 0px));
+    animation: slideUp 0.24s cubic-bezier(.2,.8,.2,1);
+  }
+  @keyframes slideUp { from { transform: translateY(100%); } to { transform: none; } }
+  .date-modal .sheet .ttl {
+    font-size: 14px; font-weight: 600; color: var(--ink-0);
+    text-align: center; padding: 10px 0 12px;
+    border-bottom: 1px solid var(--line-2);
+  }
+  .date-modal .sheet .opt {
+    padding: 13px 14px; font-size: 14px; color: var(--ink-1);
+    border-bottom: 1px solid var(--line-2);
+    display: flex; justify-content: space-between; align-items: center;
+    cursor: pointer;
+  }
+  .date-modal .sheet .opt:last-of-type { border-bottom: 0; }
+  .date-modal .sheet .opt:active { background: var(--brand-1); }
+  .date-modal .sheet .opt.cur { color: var(--brand-6); font-weight: 600; }
+  .date-modal .sheet .opt.cur::after { content: "✓"; color: var(--brand-6); font-weight: 700; }
+  .date-modal .sheet .opt .sub { font-size: 11px; color: var(--ink-4); margin-left: 8px; font-weight: normal; }
+  .date-modal .sheet .cancel {
+    margin-top: 10px; padding: 13px; text-align: center;
+    background: var(--bg); border-radius: var(--r-md);
+    font-size: 14px; color: var(--ink-2); cursor: pointer;
+    font-weight: 500;
+  }
+
+  /* ============ 内容滚动区 ============ */
+  .content {
+    position: fixed; top: 96px; left: 0; right: 0;
+    bottom: calc(56px + env(safe-area-inset-bottom, 0px));
+    overflow-y: auto; -webkit-overflow-scrolling: touch;
+    padding: 14px 14px 24px;
+  }
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeIn 0.28s cubic-bezier(.2,.8,.2,1); }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: none;} }
+
+  /* ============ 分区标题 ============ */
+  .section-title {
+    display: flex; align-items: center; margin: 18px 2px 12px;
+    font-size: 15.5px; font-weight: 600; color: var(--ink-0);
+    letter-spacing: 0.2px;
+  }
+  .section-title:first-child { margin-top: 4px; }
+  .section-title::before {
+    content: ""; width: 3px; height: 16px;
+    background: var(--brand-6);
+    margin-right: 9px; border-radius: 2px;
+  }
+  .section-count {
+    margin-left: 10px; font-size: 11px; font-weight: 600;
+    color: var(--brand-6);
+    background: var(--brand-1);
+    padding: 1px 9px; border-radius: var(--r-pill);
+    font-feature-settings: "tnum" on;
+  }
+  .sub-title {
+    font-size: 13px; font-weight: 600; color: var(--ink-2);
+    margin: 14px 2px 8px;
+    padding: 3px 10px;
+    background: var(--line-2);
+    border-radius: var(--r-sm);
+    display: inline-block;
+    letter-spacing: 0.2px;
+  }
+
+  /* ============ 通用卡片 ============ */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 14px 14px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow-1);
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+  }
+  .card:active { transform: translateY(1px); }
+  .card .meta {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 6px;
+    margin-bottom: 9px;
+  }
+  .tag {
+    display: inline-block; padding: 2px 8px; border-radius: var(--r-sm);
+    font-size: 11px; font-weight: 500; letter-spacing: 0.2px;
+    font-feature-settings: "tnum" on;
+  }
+  .tag-date    { background: var(--brand-1); color: var(--brand-7); }
+  .tag-region  { background: var(--brand-1); color: var(--brand-6); }
+  .tag-cat     { background: #ECF7F1; color: #11874E; }
+  .tag-impact-h { background: #FDECE9; color: var(--danger); }
+  .tag-impact-m { background: #FEF3E0; color: #B36100; }
+  .tag-impact-l { background: var(--brand-1); color: var(--brand-6); }
+
+  .card .title-line {
+    font-size: 14.5px; font-weight: 600; color: var(--ink-0);
+    line-height: 1.55; margin-bottom: 8px;
+    letter-spacing: 0.1px;
+  }
+  .card .interp {
+    font-size: 13px; color: var(--ink-2); line-height: 1.72;
+    background: var(--brand-1);
+    border-left: 3px solid var(--brand-6);
+    padding: 9px 12px; border-radius: 0 var(--r-sm) var(--r-sm) 0;
+    margin-bottom: 9px;
+  }
+  .card .source {
+    font-size: 12px; color: var(--ink-3);
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 4px;
+    padding-top: 4px;
+  }
+  .card .source a { color: var(--brand-6); font-weight: 500; }
+  .card .source a:active { color: var(--brand-7); }
+
+  /* ============ 重点关注 ============ */
+  .focus-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--ink-5);
+    border-radius: var(--r-md);
+    padding: 13px 14px;
+    margin-bottom: 9px;
+    box-shadow: var(--shadow-1);
+  }
+  .focus-item.urgent { border-left-color: var(--danger); }
+  .focus-item.important { border-left-color: var(--brand-6); }
+  .focus-item .head {
+    font-size: 14px; font-weight: 600; line-height: 1.55;
+    color: var(--ink-0); margin-bottom: 6px;
+    letter-spacing: 0.1px;
+  }
+  .focus-item.urgent .head { color: var(--ink-0); }
+  .focus-item.urgent .head::before {
+    content: ""; display: inline-block; width: 6px; height: 6px;
+    background: var(--danger); border-radius: 50%;
+    margin-right: 6px; vertical-align: 3px;
+  }
+  .focus-item.important .head::before {
+    content: ""; display: inline-block; width: 6px; height: 6px;
+    background: var(--brand-6); border-radius: 50%;
+    margin-right: 6px; vertical-align: 3px;
+  }
+  .focus-item .action {
+    font-size: 12.5px; color: var(--ink-2); line-height: 1.7;
+    padding-left: 12px;
+    border-left: 2px solid var(--line);
+    margin-left: 1px;
+  }
+
+  /* ============ 人事四维分析 ============ */
+  .analysis {
+    background: var(--brand-1);
+    border: 1px solid var(--brand-2);
+    border-radius: var(--r-md);
+    padding: 10px 12px; margin-top: 10px;
+    font-size: 12.5px; line-height: 1.7;
+  }
+  .analysis .row { margin-bottom: 5px; }
+  .analysis .row:last-child { margin-bottom: 0; }
+  .analysis .key {
+    display: inline-block; min-width: 56px;
+    color: var(--brand-7); font-weight: 600; font-size: 11.5px;
+    letter-spacing: 0.3px;
+  }
+  .analysis .val { color: var(--ink-2); }
+
+  /* ============ 预警三级（旧 row 兼容） ============ */
+  .alert-row {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 11px 12px;
+    margin-bottom: 8px;
+    box-shadow: var(--shadow-1);
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .alert-row.lv1 { border-left: 3px solid var(--danger); }
+  .alert-row.lv2 { border-left: 3px solid var(--warn); }
+  .alert-row.lv3 { border-left: 3px solid var(--brand-6); }
+  .alert-row .lv-tag {
+    flex: 0 0 auto;
+    font-size: 11px; font-weight: 600;
+    padding: 2px 7px; border-radius: var(--r-sm);
+    margin-top: 1px; letter-spacing: 0.2px;
+  }
+  .alert-row.lv1 .lv-tag { background: #FDECE9; color: var(--danger); }
+  .alert-row.lv2 .lv-tag { background: #FEF3E0; color: #B36100; }
+  .alert-row.lv3 .lv-tag { background: var(--brand-1); color: var(--brand-6); }
+  .alert-row .body { flex: 1; font-size: 13px; color: var(--ink-1); line-height: 1.6; }
+  .alert-row .body .countdown {
+    color: var(--danger); font-weight: 600; font-size: 12px;
+    margin-top: 4px;
+  }
+
+  /* ============ 友商表格 ============ */
+  .comp-table {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-1);
+    margin-bottom: 12px;
+  }
+  .comp-row {
+    display: flex; padding: 11px 12px;
+    border-bottom: 1px solid var(--line-2);
+    align-items: flex-start; gap: 8px;
+  }
+  .comp-row:last-child { border-bottom: 0; }
+  .comp-row .comp-name {
+    flex: 0 0 84px; font-weight: 600;
+    color: var(--brand-7); font-size: 13px; line-height: 1.55;
+  }
+  .comp-row .comp-body { flex: 1; font-size: 12.5px; color: var(--ink-2); line-height: 1.65; }
+  .comp-row .comp-body .d { color: var(--ink-4); font-size: 11px; margin-right: 6px; font-feature-settings: "tnum" on; }
+
+  /* ============ 活动旧 row（保留兼容） ============ */
+  .event-row {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 11px 12px;
+    margin-bottom: 8px;
+    box-shadow: var(--shadow-1);
+    font-size: 13px; line-height: 1.65;
+  }
+  .event-row .e-name { font-weight: 600; color: var(--ink-0); margin-bottom: 4px; }
+  .event-row .e-meta { color: var(--ink-3); font-size: 12px; }
+  .event-row .e-rel { color: var(--brand-6); font-weight: 500; font-size: 12px; margin-top: 2px; }
+
+  /* ============ 导读 banner（白底极简风） ============ */
+  .digest-banner {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    padding: 18px 18px 16px;
+    margin-bottom: 14px;
+    box-shadow: var(--shadow-1);
+    position: relative; overflow: hidden;
+  }
+  .digest-banner::before {
+    content: ""; position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--brand-6), var(--brand-5));
+  }
+  .digest-banner::after {
+    content: ""; position: absolute;
+    top: -50px; right: -50px; width: 180px; height: 180px;
+    background: radial-gradient(circle, rgba(0,82,217,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .digest-banner .label {
+    font-size: 10.5px; letter-spacing: 1.6px;
+    color: var(--brand-6); font-weight: 600;
+    text-transform: uppercase;
+  }
+  .digest-banner .date-big {
+    font-size: 26px; font-weight: 700;
+    color: var(--ink-0);
+    margin: 6px 0 8px;
+    letter-spacing: 0.5px;
+    font-feature-settings: "tnum" on;
+  }
+  .digest-banner .summary {
+    font-size: 13px; line-height: 1.75;
+    color: var(--ink-2);
+  }
+
+  .stat-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+    margin-bottom: 16px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 12px 4px;
+    text-align: center;
+    box-shadow: var(--shadow-1);
+    transition: transform 0.18s ease;
+  }
+  .stat-card:active { transform: scale(0.98); }
+  .stat-card .num {
+    font-size: 22px; font-weight: 700;
+    color: var(--brand-6);
+    line-height: 1.1;
+    font-feature-settings: "tnum" on;
+    letter-spacing: -0.5px;
+  }
+  .stat-card .lbl {
+    font-size: 10.5px; color: var(--ink-3);
+    margin-top: 5px; letter-spacing: 0.3px;
+  }
+
+  /* ============ 底部 Tab ============ */
+  .tabbar {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    height: calc(56px + env(safe-area-inset-bottom, 0px));
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-top: 1px solid var(--line);
+    display: flex; overflow-x: auto;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    z-index: 200;
+    scrollbar-width: none;
+  }
+  .tabbar::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex: 1 1 0;
+    min-width: 0;
+    position: relative;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    color: var(--ink-4); font-size: 10.5px; font-weight: 500;
+    gap: 3px; padding: 0 2px;
+    transition: color 0.18s ease;
+    cursor: pointer; user-select: none;
+    -webkit-user-select: none;
+    background: transparent; border: 0; outline: 0;
+    letter-spacing: 0.3px;
+  }
+  .tab-btn::before {
+    content: ""; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+    width: 0; height: 2px; background: var(--brand-6);
+    border-radius: 0 0 2px 2px; transition: width 0.22s cubic-bezier(.2,.8,.2,1);
+  }
+  .tab-btn:active { color: var(--brand-7); }
+  .tab-btn.active { color: var(--brand-6); }
+  .tab-btn.active::before { width: 22px; }
+  .tab-btn .ic { font-size: 0; line-height: 0; pointer-events: none; }
+  .tab-btn .ic svg {
+    width: 21px; height: 21px;
+    pointer-events: none; display: block;
+    transition: transform 0.22s cubic-bezier(.2,.8,.2,1);
+  }
+  .tab-btn.active .ic svg { transform: scale(1.06); }
+
+  .empty {
+    text-align: center; padding: 48px 20px; color: var(--ink-4);
+    background: var(--surface);
+    border: 1px dashed var(--line);
+    border-radius: var(--r-md);
+  }
+  .empty .icon { font-size: 32px; margin-bottom: 10px; opacity: 0.5; }
+  .empty .text { font-size: 13px; }
+
+  .meta-line {
+    font-size: 12px; color: var(--ink-3);
+    margin-bottom: 5px; line-height: 1.65;
+  }
+  .meta-line .k { color: var(--ink-2); font-weight: 500; }
+
+  /* ============ 政策：左影响色条 ============ */
+  .impact-card { position: relative; padding-left: 18px; }
+  .impact-card::before {
+    content: ""; position: absolute; left: 0; top: 14px; bottom: 14px;
+    width: 3px; border-radius: 2px;
+  }
+  .impact-card.h::before { background: var(--danger); }
+  .impact-card.m::before { background: var(--warn); }
+  .impact-card.l::before { background: var(--brand-6); }
+
+  /* ============ 政策：地区 chip 横滚 ============ */
+  .chip-bar {
+    display: flex; gap: 6px; overflow-x: auto;
+    padding: 4px 2px 12px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .chip-bar::-webkit-scrollbar { display: none; }
+  .chip {
+    flex: 0 0 auto;
+    padding: 6px 14px; border-radius: var(--r-pill);
+    font-size: 12.5px; color: var(--ink-2);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    cursor: pointer; user-select: none;
+    transition: all 0.18s ease;
+    font-weight: 500;
+  }
+  .chip:active { transform: scale(0.96); }
+  .chip.active {
+    background: var(--brand-6); color: #fff;
+    border-color: var(--brand-6);
+    box-shadow: 0 2px 10px rgba(0,82,217,0.25);
+  }
+
+  /* ============ 政策：4 格统计卡 ============ */
+  .stat-grid-policy {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+    margin-bottom: 10px;
+  }
+  .stat-card-mini {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 11px 4px;
+    text-align: center;
+    box-shadow: var(--shadow-1);
+  }
+  .stat-card-mini .num {
+    font-size: 20px; font-weight: 700; line-height: 1.1;
+    font-feature-settings: "tnum" on; letter-spacing: -0.4px;
+  }
+  .stat-card-mini.total .num { color: var(--brand-6); }
+  .stat-card-mini.high .num  { color: var(--danger); }
+  .stat-card-mini.mid .num   { color: var(--warn); }
+  .stat-card-mini.low .num   { color: var(--brand-5); }
+  .stat-card-mini .lbl {
+    font-size: 10.5px; color: var(--ink-3);
+    margin-top: 5px; letter-spacing: 0.3px;
+  }
+
+  /* ============ 政策：影响等级分组小标 ============ */
+  .impact-group-title {
+    display: flex; align-items: center; gap: 7px;
+    margin: 16px 2px 9px; font-size: 13.5px; font-weight: 600;
+    letter-spacing: 0.2px;
+  }
+  .impact-group-title .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .impact-group-title.h { color: var(--ink-0); }
+  .impact-group-title.h .dot { background: var(--danger); box-shadow: 0 0 0 3px rgba(229,52,28,0.12); }
+  .impact-group-title.m { color: var(--ink-0); }
+  .impact-group-title.m .dot { background: var(--warn); box-shadow: 0 0 0 3px rgba(240,130,0,0.12); }
+  .impact-group-title.l { color: var(--ink-0); }
+  .impact-group-title.l .dot { background: var(--brand-6); box-shadow: 0 0 0 3px rgba(0,82,217,0.12); }
+  .impact-group-title .badge {
+    margin-left: auto;
+    font-size: 11px; color: var(--ink-3); font-weight: 500;
+    background: var(--line-2);
+    padding: 2px 9px; border-radius: var(--r-pill);
+    font-feature-settings: "tnum" on;
+  }
+
+  /* ============ 预警卡 ============ */
+  .alert-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 13px 14px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow-1);
+    display: flex; gap: 12px; align-items: stretch;
+  }
+  .alert-card .lv-pill { flex: 0 0 auto; width: 4px; align-self: stretch; border-radius: 2px; }
+  .alert-card.lv1 .lv-pill { background: var(--danger); }
+  .alert-card.lv2 .lv-pill { background: var(--warn); }
+  .alert-card.lv3 .lv-pill { background: var(--brand-6); }
+  .alert-card .body { flex: 1; min-width: 0; }
+  .alert-card .head-row {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .alert-card .lv-tag {
+    font-size: 10.5px; font-weight: 700;
+    padding: 2px 8px; border-radius: var(--r-pill);
+    letter-spacing: 0.3px;
+  }
+  .alert-card.lv1 .lv-tag { background: #FDECE9; color: var(--danger); }
+  .alert-card.lv2 .lv-tag { background: #FEF3E0; color: #B36100; }
+  .alert-card.lv3 .lv-tag { background: var(--brand-1); color: var(--brand-6); }
+  .alert-card .countdown {
+    font-size: 12px; font-weight: 600;
+    font-feature-settings: "tnum" on;
+  }
+  .alert-card.lv1 .countdown { color: var(--danger); }
+  .alert-card.lv2 .countdown { color: #B36100; }
+  .alert-card.lv3 .countdown { color: var(--brand-6); }
+  .alert-card .a-title {
+    font-size: 14px; font-weight: 600; color: var(--ink-0);
+    line-height: 1.55; margin-bottom: 5px;
+  }
+  .alert-card .a-detail {
+    font-size: 12.5px; color: var(--ink-2);
+    line-height: 1.7;
+  }
+  .alert-card .a-link {
+    margin-top: 8px; font-size: 12px; font-weight: 500;
+  }
+  .alert-card .a-link a { color: var(--brand-6); }
+
+  /* ============ 人事卡（白底品牌色 header） ============ */
+  .rs-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-1);
+    margin-bottom: 12px;
+  }
+  .rs-head {
+    background: linear-gradient(135deg, #F2F6FF 0%, #E0EAFF 100%);
+    color: var(--brand-8);
+    padding: 13px 15px;
+    border-bottom: 1px solid var(--brand-2);
+    position: relative;
+  }
+  .rs-head::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--brand-6);
+  }
+  .rs-head .row1 {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px; flex-wrap: wrap;
+  }
+  .rs-head .h-title {
+    font-size: 14.5px; font-weight: 600;
+    color: var(--brand-8); letter-spacing: 0.1px;
+  }
+  .rs-head .h-loc {
+    font-size: 11.5px; color: var(--brand-7);
+    background: rgba(255,255,255,0.7);
+    padding: 2px 9px; border-radius: var(--r-pill);
+    font-weight: 500;
+  }
+  .rs-head .h-stat {
+    margin-top: 6px; font-size: 11.5px; color: var(--brand-7);
+    font-feature-settings: "tnum" on;
+  }
+  .rs-head .h-stat .b { font-weight: 700; color: var(--brand-8); }
+  .rs-section { padding: 4px 14px 12px; }
+  .rs-section .group-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; font-weight: 600;
+    padding: 3px 11px; border-radius: var(--r-pill);
+    margin: 12px 0 8px;
+    letter-spacing: 0.2px;
+  }
+  .rs-section .group-tag.app { background: #ECF7F1; color: #11874E; }
+  .rs-section .group-tag.rem { background: #FDECE9; color: var(--danger); }
+  .rs-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .rs-table th, .rs-table td {
+    padding: 9px 6px; text-align: left;
+    border-bottom: 1px solid var(--line-2);
+    vertical-align: top; line-height: 1.55;
+  }
+  .rs-table th {
+    font-size: 11px; color: var(--ink-3); font-weight: 500;
+    background: var(--bg);
+    letter-spacing: 0.3px;
+  }
+  .rs-table .name {
+    font-weight: 600; color: var(--brand-7);
+    border-bottom: 1px dotted var(--brand-5);
+  }
+  .rs-table .role-new { color: #11874E; }
+  .rs-table .role-old { color: var(--ink-3); }
+  .rs-table .empty-cell { color: var(--ink-5); }
+  .rs-source {
+    margin: 8px 14px 14px;
+    font-size: 11.5px; color: var(--ink-3);
+    display: flex; justify-content: space-between; gap: 6px;
+    flex-wrap: wrap;
+    padding-top: 8px;
+    border-top: 1px dashed var(--line);
+  }
+  .rs-source a { color: var(--brand-6); font-weight: 500; }
+
+  /* ============ 活动卡 ============ */
+  .ev-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 13px 14px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow-1);
+    display: flex; gap: 12px; align-items: stretch;
+  }
+  .ev-date {
+    flex: 0 0 88px;
+    background: linear-gradient(135deg, var(--brand-1) 0%, var(--brand-2) 100%);
+    color: var(--brand-7);
+    border-radius: var(--r-md);
+    padding: 10px 6px; text-align: center;
+    display: flex; flex-direction: column; justify-content: center;
+    border: 1px solid var(--brand-2);
+  }
+  .ev-date .big {
+    font-size: 13px; font-weight: 700; line-height: 1.3;
+    color: var(--brand-8);
+    font-feature-settings: "tnum" on;
+  }
+  .ev-date .city {
+    margin-top: 5px; font-size: 11px;
+    color: var(--brand-6); opacity: 0.92;
+  }
+  .ev-body { flex: 1; min-width: 0; }
+  .ev-body .ev-name {
+    font-size: 14px; font-weight: 600; color: var(--ink-0);
+    line-height: 1.55; margin-bottom: 6px;
+  }
+  .ev-body .ev-meta {
+    font-size: 12px; color: var(--ink-3);
+    line-height: 1.6; margin-bottom: 4px;
+  }
+  .ev-body .ev-rel {
+    font-size: 12px; color: var(--brand-6); font-weight: 500;
+    line-height: 1.6;
+  }
+</style>
 </head>
 <body>
 
-  <!-- ===== 顶部头：标题 + 日期选择器 ===== -->
-  <header class="app-header">
-    <div class="app-header-row">
-      <div class="app-title">
-        <span class="app-title-main" id="reportTitle">华东政策日报</span>
-        <span class="app-title-sub" id="reportSubtitle"></span>
-      </div>
-      <button class="date-trigger" id="dateTrigger" type="button">
-        <span class="date-trigger-icon">📅</span>
-        <span class="date-trigger-text" id="dateTriggerText">2026-05-07</span>
-        <span class="date-trigger-arrow">▼</span>
-      </button>
-    </div>
-  </header>
-
-  <!-- ===== 日期切换弹层 ===== -->
-  <div class="date-picker-mask" id="datePickerMask" hidden>
-    <div class="date-picker">
-      <div class="date-picker-header">
-        <span>切换日期</span>
-        <button class="date-picker-close" id="datePickerClose" type="button">×</button>
-      </div>
-      <div class="date-picker-list" id="datePickerList">
-        <!-- 由 JS 渲染日期项 -->
-      </div>
-    </div>
+<div class="header">
+  <div class="title">华东区域政策日报</div>
+  <div class="sub">江浙沪皖闽赣湘</div>
+  <div class="date-picker" id="datePicker">
+    <span id="datePickerText">5月10日 · 今日</span>
+    <span class="arrow">▼</span>
   </div>
+</div>
 
-  <!-- ===== 主内容区（六栏目视图） ===== -->
-  <main class="app-main" id="appMain">
+<div class="date-modal" id="dateModal">
+  <div class="sheet">
+    <div class="ttl">选择日期</div>
+    <div class="opt" data-date="all">所有<span class="sub">5月6日—5月10日 全量</span></div>
+    <div class="opt" data-date="2026-05-06">5月6日<span class="sub">周三</span></div>
+    <div class="opt" data-date="2026-05-07">5月7日<span class="sub">周四</span></div>
+    <div class="opt" data-date="2026-05-08">5月8日<span class="sub">周五</span></div>
+    <div class="opt" data-date="2026-05-09">5月9日<span class="sub">周六</span></div>
+    <div class="opt cur" data-date="2026-05-10">5月10日<span class="sub">今日 · 周日</span></div>
+    <div class="cancel" id="dateCancel">取消</div>
+  </div>
+</div>
 
-    <section class="page" data-page="highlights" id="page-highlights">
-      <div class="page-header">
-        <h2>📌 本日导读</h2>
-        <p class="page-desc">高影响/置顶条目 · 点击卡片查看原文</p>
-      </div>
-      <div class="page-body" id="highlightsBody"></div>
-    </section>
+<div class="content" id="content">
 
-    <section class="page" data-page="alerts" id="page-alerts" hidden>
-      <div class="page-header">
-        <h2>⚠️ 预警提示</h2>
-        <p class="page-desc">有明确截止日/生效日的倒计时条目 · 紧急（红） 重要（蓝） 关注（绿）</p>
-      </div>
-      <div class="page-body" id="alertsBody"></div>
-    </section>
+  <!-- 1. 导读 -->
+  <div class="panel active" data-panel="digest"><div id="digest-body"></div></div>
 
-    <section class="page" data-page="policy" id="page-policy" hidden>
-      <div class="page-header">
-        <h2>📄 政策</h2>
-        <p class="page-desc">政府发文/法规/规划/司法解释 · 按地区分组</p>
-      </div>
-      <div class="page-body" id="policyBody"></div>
-    </section>
+  <!-- 2. 预警（监管已并入） -->
+  <div class="panel" data-panel="alert"><div id="alert-body"></div></div>
 
-    <section class="page" data-page="industry" id="page-industry" hidden>
-      <div class="page-header">
-        <h2>🏭 行业</h2>
-        <p class="page-desc">产业动态 · 市场信号 · 腾讯 &amp; 友商</p>
-      </div>
-      <div class="page-body" id="industryBody"></div>
-    </section>
+  <!-- 3. 政策动态 -->
+  <div class="panel" data-panel="policy"><div id="policy-body"></div></div>
 
-    <section class="page" data-page="personnel" id="page-personnel" hidden>
-      <div class="page-header">
-        <h2>👤 人事</h2>
-        <p class="page-desc">副部级及以上任免公示</p>
-      </div>
-      <div class="page-body" id="personnelBody"></div>
-    </section>
+  <!-- 4. 人事变动 -->
+  <div class="panel" data-panel="rs"><div id="rs-body"></div></div>
 
-    <section class="page" data-page="events" id="page-events" hidden>
-      <div class="page-header">
-        <h2>📅 活动</h2>
-        <p class="page-desc">会议/展会/发布会 · 关联度评级 ⭐⭐⭐ 高 / ⭐⭐ 中 / ⭐ 低</p>
-      </div>
-      <div class="page-body" id="eventsBody"></div>
-    </section>
+  <!-- 5. 动态（腾讯+友商合并） -->
+  <div class="panel" data-panel="tx"><div id="tx-body"></div></div>
 
-  </main>
+  <!-- 6. 区域重要活动 -->
+  <div class="panel" data-panel="event"><div id="event-body"></div></div>
 
-  <!-- ===== 底部固定 Tab Bar（六栏目，对齐 liulawrance/policy-daily） ===== -->
-  <nav class="tab-bar" id="tabBar" role="tablist">
-    <button class="tab-item active" data-tab="highlights" role="tab">
-      <span class="tab-icon">📌</span>
-      <span class="tab-label">导读</span>
-    </button>
-    <button class="tab-item" data-tab="alerts" role="tab">
-      <span class="tab-icon">⚠️</span>
-      <span class="tab-label">预警</span>
-    </button>
-    <button class="tab-item" data-tab="policy" role="tab">
-      <span class="tab-icon">📄</span>
-      <span class="tab-label">政策</span>
-    </button>
-    <button class="tab-item" data-tab="industry" role="tab">
-      <span class="tab-icon">🏭</span>
-      <span class="tab-label">行业</span>
-    </button>
-    <button class="tab-item" data-tab="personnel" role="tab">
-      <span class="tab-icon">👤</span>
-      <span class="tab-label">人事</span>
-    </button>
-    <button class="tab-item" data-tab="events" role="tab">
-      <span class="tab-icon">📅</span>
-      <span class="tab-label">活动</span>
-    </button>
-  </nav>
+</div>
 
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+<div class="tabbar">
+  <div class="tab-btn active" data-tab="digest" onclick="switchTab('digest')">
+    <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l2-2 4 4 8-8 4 4"/><path d="M3 20h18"/></svg></span>
+    导读
+  </div>
+  <div class="tab-btn" data-tab="alert" onclick="switchTab('alert')">
+    <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg></span>
+    预警
+  </div>
+  <div class="tab-btn" data-tab="policy" onclick="switchTab('policy')">
+    <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V9z"/><path d="M14 3v6h6"/><path d="M8 13h8M8 17h6"/></svg></span>
+    政策
+  </div>
+  <div class="tab-btn" data-tab="rs" onclick="switchTab('rs')">
+    <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a8 8 0 0116 0v1"/></svg></span>
+    人事
+  </div>
+  <div class="tab-btn" data-tab="tx" onclick="switchTab('tx')">
+    <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 17l6-6 4 4 8-8"/><path d="M14 7h7v7"/></svg></span>
+    动态
+  </div>
+  <div class="tab-btn" data-tab="event" onclick="switchTab('event')">
+    <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span>
+    活动
+  </div>
+</div>
+
+<script>
+function switchTab(t) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === t));
+  document.querySelectorAll('.panel').forEach(p => p.classList.toggle('active', p.dataset.panel === t));
+  var c = document.getElementById('content');
+  if (c) c.scrollTop = 0;
+}
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+/* ============== 数据：2026年5月6日—5月10日 五日合并 ============== */
+
+/* 重点关注（5条） */
+const FOCUS = [
+  {date: '2026-05-08', level: 'urgent', title: '5月8日 国家网信办、国家发改委、工信部联合印发《智能体规范应用与创新发展实施意见》',
+   action: '行动建议：腾讯混元、元宝、企微AI智能体相关业务线即刻对照"夯实底座、守牢安全底线、应用落地、治理体系"四方面拆条；产品和合规线协同出对接清单。'},
+  {date: '2026-05-07', level: 'urgent', title: '5月7日 上海公布2026年优化营商环境十大攻坚突破任务',
+   action: '行动建议：腾讯华东BD梳理涉企检查、招投标、网络营商三项与上海各委办的对接窗口；视频号商家、小程序商家受益面较大，可提前介入服务说明。'},
+  {date: '2026-05-07', level: 'important', title: '5月7日 浙江四部门印发新场景建设应用行动方案（2026—2027）',
+   action: '行动建议：方案聚焦人工智能、脑机接口、全空间无人体系等24个领域，年开放150+场景。腾讯云、混元、智慧交通线可对接浙江省发改委场景清单申报。'},
+  {date: '2026-05-06', level: 'important', title: '5月6日 江苏省发改委印发促进民间投资若干举措14条（苏发改投资发〔2026〕383号，落款4月23日、5月6日上网）',
+   action: '行动建议：明确支持民营企业投资虚拟电厂、充电基础设施、智能算力等新业态，腾讯产业互联网团队可同步跟进江苏数字基建机会。'},
+  {date: '2026-05-09', level: 'important', title: '5月9日 安徽印发制造业中试平台建设实施方案（皖政办秘〔2026〕15号）',
+   action: '行动建议：方案给予设备投入20%奖补、最高500万；国家级培育平台再奖200万。腾讯云工业互联网与合肥、芜湖中试服务商有合作空间。'}
+];
+
+/* 政策（按"国家级 → 上海 → 江苏 → 浙江 → 安徽 → 福建 → 湖南 → 江西"排序） */
+const POLICY = [
+  {region: '国家级', date: '2026-05-08',
+   title: '国家网信办、国家发改委、工信部联合印发《智能体规范应用与创新发展实施意见》',
+   dept: '国家网信办、国家发改委、工业和信息化部',
+   cat: 'AI治理',
+   impact: '高',
+   impactReason: '直接划定智能体产品边界与安全责任，影响腾讯混元、元宝及企微AI智能体备案合规节奏。',
+   summary: '文件落实国务院《关于深入实施"人工智能+"行动的意见》，明确智能体定义为具备自主感知、记忆、决策、交互与执行能力的智能系统，提出四方面举措：夯实发展基础、完善技术底座、构建标准协议；守牢安全底线，明确产品边界与责任义务；推动应用落地、赋能重点行业；构建治理体系，强化协同联动。',
+   source: '中央网信办 / 新华社 / 人民日报',
+   url: 'https://www.cac.gov.cn/'},
+
+  {region: '上海', date: '2026-05-07',
+   title: '上海公布2026年优化营商环境十大攻坚突破任务',
+   dept: '上海市人民政府新闻发布会（市发改委主任刘健介绍）',
+   cat: '营商环境',
+   impact: '中',
+   impactReason: '直接覆盖网络营商、招投标、中小企业融资等领域，腾讯视频号商家、小程序商城、企业微信SMB链路受益面较大。',
+   summary: '上海市政府举行新闻发布会，市政府副秘书长、市发改委主任刘健介绍2026年优化营商环境十大攻坚突破任务，重点包括：优化惠企政策服务、规范涉企行政检查、优化中小企业融资服务、规范招投标和政府采购、优化网络营商环境、强化办理破产府院联动等。延续2025年十项重点事项工作机制，针对企业需求迫切、协同推进要求高的领域加力突破。',
+   source: '上海证券报 / 中新网（市政府发布会）',
+   url: 'https://paper.cnstock.com/html/2026-05/08/content_2213636.htm'},
+
+  {region: '上海', date: '2026-05-07',
+   title: '上海市政府办公厅印发《2026年上海市推进政府职能转变和行政审批制度改革工作要点》',
+   dept: '上海市人民政府办公厅',
+   cat: '行政改革',
+   impact: '中',
+   impactReason: '推进"放管服"与一网通办深化，腾讯电子政务、企业微信政务侧合作有空间。',
+   summary: '5月7日上海市信用门户刊载市政府办公厅文件，要求以整体政府理念健全完善政府职能转变和行政审批制度改革工作机制，推动营商环境优化、行政效能提升、治理体系完善等重点任务有机融合，持续夯实有为政府基础。',
+   source: '上海信用门户（市发改委信用网）',
+   url: 'http://credit.fgw.sh.gov.cn/sjdt/20260507/af20717dec9a44aca8a66ec71cf03d1d.html'},
+
+  {region: '江苏', date: '2026-05-06',
+   title: '江苏省发改委印发《关于进一步促进民间投资发展的若干举措》14条（苏发改投资发〔2026〕383号）',
+   dept: '江苏省发展和改革委员会',
+   cat: '民间投资',
+   impact: '中',
+   impactReason: '14条举措明确支持民营企业投资虚拟电厂、充电基础设施、智能算力等新业态，并支持民营中试平台建设、低空经济、商业航天等，与腾讯云、产业互联网、智慧能源、SMB链路均直接相关。',
+   summary: '为贯彻落实国务院办公厅《关于进一步促进民间投资发展的若干措施》（国办发〔2025〕38号），经省政府同意，江苏省发改委于4月23日落款印发，5月6日通过国家信息中心投资项目在线审批监管平台对外公开。涵盖国家审批重点领域、省级审批项目、低空经济与商业航天、民营科技创新、服务业、招投标、政府采购、网络型基础设施、数字化赋能、政策性资金、金融与上市融资、民营中试平台等14条。',
+   source: '国家信息中心投资项目在线审批监管平台',
+   url: 'https://new.tzxm.gov.cn/zckd/gfxwj/202605/t20260507_1405086.shtml'},
+
+  {region: '江苏', date: '2026-05-09',
+   title: '江苏省住建厅印发《2026年住房和城乡建设工作要点》（5月9日印发，5月10日现代快报报道）',
+   dept: '江苏省住房和城乡建设厅',
+   cat: '住建',
+   impact: '低',
+   impactReason: '与腾讯主业弱相关，但涉及"一网通办""跨省通办"，腾讯政务云、企业微信政务侧有间接对接面。',
+   summary: '5月9日江苏省住建厅发布2026年住房和城乡建设工作要点。提出因城施策"控增量、去库存、优供给"，深化住房公积金"一网通办""跨省通办"，推进灵活就业人员参加公积金制度；新开工改造老旧小区约300个，加装电梯1500台以上，更新老旧电梯15000台以上；新增公共停车泊位3万个、共享停车泊位0.5万个，新增污水处理能力70万立方米/日。',
+   source: '现代快报（5月10日报道）',
+   url: 'https://news.qq.com/rain/a/20260510A06E4T00'},
+
+  {region: '浙江', date: '2026-05-07',
+   title: '浙江四部门印发《浙江省加快新场景建设应用 推动科技和产业高质量发展行动方案（2026—2027年）》（浙发改体改〔2026〕90号）',
+   dept: '浙江省发改委、省经信厅、省科技厅、省国资委（联合印发）',
+   cat: '场景应用',
+   impact: '高',
+   impactReason: '24个重点领域涵盖人工智能、脑机接口、全空间无人体系、海洋经济等，腾讯云、混元、自动驾驶、智慧交通线均有场景对接机会。',
+   summary: '为落实国办发〔2025〕37号《关于加快场景培育和开放 推动新场景大规模应用的实施意见》，浙江省发改委、经信厅、科技厅、国资委2026年4月29日联合印发，5月7日由省发改委公开发布。方案聚焦前沿科技创新、产业转型升级、行业智慧监管、高效社会治理、普惠民生服务5大方面，在人工智能、脑机接口、全空间无人体系、海洋经济等24个重点领域，每年开放150个以上综合性重大场景、行业领域集成式场景、高价值小切口场景；到2027年培育100家以上场景创新标杆企业，带动有效投资3000亿元以上。',
+   source: '浙江省发改委官网（含5月9日新浪/腾讯新闻报道）',
+   url: 'https://fzggw.zj.gov.cn/col/col1229123366/art/2026/art_1625db93310b4e2aaa79c39eb7013c75.html'},
+
+  {region: '安徽', date: '2026-05-09',
+   title: '安徽省政府办公厅印发《安徽省制造业中试平台建设实施方案》（皖政办秘〔2026〕15号）',
+   dept: '安徽省人民政府办公厅',
+   cat: '制造业',
+   impact: '中',
+   impactReason: '重点产业含人工智能、机器人、智能家居等，腾讯云工业互联网及AI推理算力可对接合肥、芜湖中试平台建设。',
+   summary: '皖政办秘〔2026〕15号文件提出，到2028年培育省级制造业中试平台30家左右，并争创国家级。重点产业覆盖智能网联新能源汽车、新一代信息技术、人工智能、高端装备、机器人等；未来产业含量子科技、生物制造、脑机接口、具身智能、6G。激励力度：设备投入20%奖补，最高500万；列入国家重点培育平台再奖200万一次性奖补；公共服务平台年补助最高100万。',
+   source: '安徽省政府 / 新浪财经',
+   url: 'https://finance.sina.com.cn/wm/2026-05-09/doc-inhxhzaz6709173.shtml'},
+
+  {region: '安徽', date: '2026-05-06',
+   title: '中共安徽省委宣传部、安徽省司法厅印发《2026年"民法典宣传月"工作方案》',
+   dept: '中共安徽省委宣传部、安徽省司法厅',
+   cat: '普法',
+   impact: '低',
+   impactReason: '弱关联。腾讯新闻、腾讯视频、QQ等内容生态可承载相关公益普法内容。',
+   summary: '部署全省2026年5月"民法典宣传月"系列宣传教育活动，重点开展民法典进企业专项活动等三项工作，以民法典实施成效服务保障全省高质量发展。',
+   source: '腾讯新闻 / 新浪财经',
+   url: 'https://news.qq.com/rain/a/20260506A05T4U00'},
+
+  {region: '福建', date: '2026-05-07',
+   title: '福建省科技厅、省财政厅联合印发《福建省企业研发经费投入奖补实施细则》（闽科规〔2026〕3号）',
+   dept: '福建省科技厅、福建省财政厅',
+   cat: '科技创新',
+   impact: '中',
+   impactReason: '省、市、县三级财政按比例分担，单企业单年度最高补助600万元，腾讯云在闽AI研发型客户、SaaS研发投入主体均有受益空间。',
+   summary: '细则于5月7日通过省财政厅网站对外发布。明确对年度研发经费支出高于200万元、且较上年增长100万元以上的科技型企业，按其研发经费支出较上年增量的6%给予奖励补助，单个企业单年度最高补助600万元；资金由省、市、县三级财政预算按比例分担。享受奖补的科技型企业须满足省内独立税务登记、独立核算、健全财务管理等四项条件。',
+   source: '福建省财政厅官网 / 福建日报',
+   url: 'https://czt.fujian.gov.cn/zwgk/czxw/202605/t20260507_7145001.htm'},
+
+  {region: '湖南', date: '2026-05-06',
+   title: '湖南省政府办公厅印发《关于2026年推动高质量发展大抓落实督查激励二十条的通知》',
+   dept: '湖南省人民政府办公厅',
+   cat: '督查激励',
+   impact: '低',
+   impactReason: '湖南"十五五"开局督查激励基调，与腾讯主业弱相关；激励对象涉及数字经济、产业转型、"人工智能+先进制造"等，腾讯云政企/产业互联网线可作为间接利好跟踪。',
+   summary: '湖南日报新湖南客户端5月6日讯首发，5月7日新浪财经转载长沙晚报报道。二十条围绕打造"三个高地"、现代化产业体系（含"人工智能+先进制造"）、长株潭一体化、湘中南融入粤港澳大湾区、营商环境、民生十大实事、安全底线等方面展开。',
+   source: '湖南日报新湖南客户端（5月6日首发）/ 长沙晚报 / 新浪财经（5月7日转载）',
+   url: 'https://finance.sina.com.cn/jjxw/2026-05-07/doc-inhwzmmn7828570.shtml'}
+];
+
+/* 行业监管（独立成章） */
+const REGULATION = [
+  {date: '2026-05-09', title: '《网络交易平台规则监督管理办法》施行倒计时跟踪',
+   dept: '国家市场监督管理总局、国家互联网信息办公室（市场监管总局令第116号）',
+   summary: '该办法已于2026年2月1日起施行，至5月9日已运行超3个月，腾讯视频号、小程序商家、QQ购物等平台均在监管覆盖范围。本期未见新执法案例，但持续跟踪中。',
+   source: '国家市场监管总局',
+   url: 'https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2026/art_85b474fc5a08494bb60ca6a280b98d7d.html',
+   relevance: '直接关联：腾讯视频号小店、小程序商城、QQ购物等电商平台合规'},
+  {date: '2026-05-08', title: '"清朗·整治AI应用乱象"专项行动持续推进',
+   dept: '中央网信办',
+   summary: '中央网信办年初部署的"清朗·整治AI应用乱象"专项行动持续推进，本期窗口内尚未见新一批通报，但与5月8日国家三部门智能体新规形成监管合力。建议腾讯混元产品线、元宝、AI Lab对照专项行动重点开展自查。',
+   source: '中央网信办 / 金融界',
+   url: 'https://stock.jrj.com.cn/2026/05/01073856959630.shtml',
+   relevance: '直接关联：腾讯混元、元宝、AI产品自查与备案'}
+];
+
+/* 预警（合并形态：原 ALERTS + REGULATION，每条带 date/url） */
+const ALERTS = [
+  {date: '2026-05-08', level: 1, title: '《智能体规范应用与创新发展实施意见》执行响应窗口',
+   detail: '5月8日三部门联合印发，文件未明确施行日，建议产品和合规口径一周内完成自查清单与对外口径。',
+   countdown: '本周内出口径',
+   url: 'https://www.cac.gov.cn/'},
+  {date: '2026-05-07', level: 1, title: '上海"网络营商环境"专项',
+   detail: '5月7日发布会列入十大攻坚任务之一，腾讯华东BD与上海各委办对接窗口需在5月内打通。',
+   countdown: '本月内推进',
+   url: 'https://paper.cnstock.com/html/2026-05/08/content_2213636.htm'},
+  {date: '2026-05-07', level: 2, title: '浙江新场景建设应用方案场景申报',
+   detail: '24个领域、年开放150+场景，建议腾讯云、混元、智慧交通线在5月底前梳理可申报场景清单提交浙江省发改委。',
+   countdown: '5月底前梳理',
+   url: 'https://fzggw.zj.gov.cn/col/col1229123366/art/2026/art_1625db93310b4e2aaa79c39eb7013c75.html'},
+  {date: '2026-05-09', level: 2, title: '安徽中试平台奖补窗口',
+   detail: '设备投入20%奖补政策执行至2027年12月31日；国家级培育额外200万奖励。腾讯云工业互联网与合肥、芜湖产业园对接可在Q2启动。',
+   countdown: 'Q2启动对接',
+   url: 'https://finance.sina.com.cn/wm/2026-05-09/doc-inhxhzaz6709173.shtml'},
+  {date: '2026-05-09', level: 3, title: '《网络交易平台规则监督管理办法》合规持续期',
+   detail: '市场监管总局令第116号，2026年2月1日起施行，已运行3个月+。腾讯视频号、小程序商家、QQ购物等持续合规跟进。',
+   countdown: '长期跟进',
+   url: 'https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2026/art_85b474fc5a08494bb60ca6a280b98d7d.html'},
+  {date: '2026-05-08', level: 3, title: '"清朗·整治AI应用乱象"专项行动',
+   detail: '中央网信办年初部署的专项行动持续推进，本期窗口内尚未见新一批通报；与5月8日国家三部门智能体新规形成监管合力。腾讯混元产品线、元宝、AI Lab需对照重点自查。',
+   countdown: '长期跟进',
+   url: 'https://stock.jrj.com.cn/2026/05/01073856959630.shtml'},
+  {date: '2026-05-07', level: 3, title: '福建企业研发经费投入奖补细则',
+   detail: '5月7日闽科规〔2026〕3号已发布。门槛：年研发支出>200万且较上年增长>100万；奖补：增量×6%，单企单年度上限600万。腾讯云在闽客户Q2可摸排可申报名单。',
+   countdown: 'Q2摸排申报',
+   url: 'https://czt.fujian.gov.cn/zwgk/czxw/202605/t20260507_7145001.htm'}
+];
+
+/* 行业动态（按日收集，覆盖国内主要大模型/AI厂商，每条均附权威首发来源） */
+const INDUSTRY = [
+  {date: '2026-05-06', company: '字节跳动·豆包',
+   title: 'Doubao-Seed-2.0-lite 升级为豆包家族首款全模态理解模型',
+   summary: '5月6日火山引擎宣布，Doubao-Seed-2.0-lite 升级新版本，支持视频、图像、音频、文本原生统一理解，Agent、Coding、GUI 能力同步升级，对标企业大规模批量化部署全模态推理任务的性价比方案。',
+   source: 'IT之家 / 火山引擎官方',
+   url: 'https://www.ithome.com/0/947/010.htm'},
+
+  {date: '2026-05-06', company: '月之暗面·Kimi',
+   title: '月之暗面完成约 20 亿美元 D 轮融资，估值突破 200 亿美元',
+   summary: '5月6日《晚点 LatePost》独家披露，Kimi 即将完成新一轮 20 亿美元融资，由美团龙珠领投，水木资本、中国移动、CPE 源峰等参投，仅龙珠出手就超 2 亿美元；半年内月之暗面累计融资超 39 亿美元，估值翻 4 倍。K2.5 模型 ARR 在 3 月已破 1 亿美元。',
+   source: '腾讯新闻·晚点 LatePost / 每日经济新闻',
+   url: 'https://news.qq.com/rain/a/20260506A06DBT00'},
+
+  {date: '2026-05-07', company: '腾讯·混元（行业侧）',
+   title: '混元 Hy3 preview 上线 OpenRouter 周榜，Token 调用量超 Hy2 十倍',
+   summary: '5月7日 OpenRouter 公布周榜，腾讯最新语言模型混元 Hy3 进入头部；同日腾讯混元披露，自上线以来 Hy3 preview 总 Token 调用量已超过上一代 Hy2 的 10 倍。该条作为行业排位赛侧面信息收录，腾讯一手公告见后侧"公司动态"。',
+   source: '新浪财经 / 搜狐财经',
+   url: 'https://finance.sina.com.cn/roll/2026-05-08/doc-inhxcqkv4412952.shtml'},
+
+  {date: '2026-05-08', company: 'DeepSeek',
+   title: 'DeepSeek 完成首轮约 500 亿元融资，V4.1 定档 6 月',
+   summary: '5月8日多家媒体披露，DeepSeek 完成首轮约 500 亿元融资，估值由 200 亿美元上调至 450 亿美元，21 天估值翻 5 倍；其中梁文锋个人出资最高达 200 亿元，占总额 40%。V4.1 版本定档 6 月发布。',
+   source: '新浪财经（快科技）/ The Information',
+   url: 'https://finance.sina.com.cn/jjxw/2026-05-09/doc-inhxhcxm1652527.shtml'},
+
+  {date: '2026-05-09', company: '百度·文心',
+   title: '百度发布文心大模型 5.1，预训练成本仅业界同规模 6%',
+   summary: '5月9日百度正式发布新一代基础大模型文心 5.1，采用"多维弹性预训练"技术，仅以业界同规模模型约 6% 的预训练成本实现基础效果领先，登上 LMArena 搜索榜国内第一、全球第四，并通过分离式全异步强化学习与规模化智能体后训练，在 Agent、推理、创作维度全面升级。',
+   source: '百度 ERNIE 官方博客 / 新浪财经',
+   url: 'https://ernie.baidu.com/blog/zh/posts/ernie-5.1-0508-release/'}
+];
+
+/* 腾讯公司动态（一手发布或权威首发，按日，五日窗口内） */
+const TENCENT = [
+  {date: '2026-05-07', title: '腾讯混元 Hy3 preview Token 调用量超 Hy2 十倍（混元官方披露）',
+   summary: '5月7日腾讯混元官方披露，自4月23日Hy3 preview 上线以来，Token 调用量持续增长，目前总量已超过上一代 Hy2 的 10 倍——该数据由腾讯混元一手公布，是混元团队 2026 年 2 月重建预训练与强化学习基础设施后的首批量化指标。',
+   source: '腾讯新闻 / 搜狐财经',
+   url: 'https://www.sohu.com/a/1019981275_99970452'},
+
+  {date: '2026-05-09', title: '腾讯混元在《2026 中国 AI 大模型平台排行榜·4 月》中位列头部（参考性收录）',
+   summary: '5月9日腾讯新闻发布的《2026 中国 AI 大模型平台排行榜·4 月》将腾讯混元与豆包、DeepSeek、智谱并列为 C 端产品商业化新周期头部玩家。本条为媒体盘点性质，非腾讯一手公告，作为本期参考性收录。',
+   source: '腾讯新闻 / AI 大模型工场',
+   url: 'https://news.qq.com/rain/a/20260509A0798F00'}
+];
+
+/* 人事变动（按层级：国务院 → 上海 → 各省） */
+const PERSONNEL = [
+  {date: '2026-05-08', region: '国务院', loc: '北京', titleHead: '国务院人事任免（5月8日）',
+   appointments: [
+    {name: '贺勇', newRole: '国家自然资源副总督察（专职）', oldRole: '自然资源部耕地保护监督司司长（2022年9月起）', isViceMin: true,
+     personSource: '新浪财经 / 百度百科',
+     personUrl: 'https://finance.sina.com.cn/jjxw/2026-05-08/doc-inhxerwc2206242.shtml',
+     analysis: {
+       bio: '长期在自然资源部工作，曾任该部耕地保护监督司副司长等职，2022年9月起任耕地保护监督司司长，主管耕地保护、督察、用途管制等核心职能；2026年5月8日经国务院任命为国家自然资源副总督察（专职），跻身副部级序列。',
+       leaderLink: '暂未发现与现任政治局委员/常委级别公开报道的工作交集；耕地保护与"严守18亿亩耕地红线"为本届中央反复强调议题，主管督察身份贴近高层政策核心关注。',
+       tencentLink: '自然资源副总督察主管督察、自然资源调查监测、规划用途管制督察等，与腾讯主业直接关联度较低；与腾讯云时空大数据、腾讯地图、政企客户的不动产/国土数字化项目（如\'国土三调\'、耕地动态监测）存在间接对接面。',
+       impact: '中性 — 对腾讯主业影响中性偏弱。可作为腾讯云政企线在自然资源系统的人脉储备节点跟踪，尤其耕地保护数字化、卫星遥感监测方向。'
+     }},
+    {name: '陈东明', newRole: '黄河水利委员会主任（兼党组书记）', oldRole: '水利部河湖管理司司长（2023年起）', isViceMin: true,
+     personSource: '澎湃新闻 / 搜狐财经',
+     personUrl: 'https://m.thepaper.cn/newsDetail_forward_33122584',
+     analysis: {
+       bio: '1970年1月生，汉族，山东昌邑人，中共党员，长期任职水利系统。曾任中国水利水电出版传媒集团副总经理（正局级）、水利部政策法规司副司长（正司级）；2023年任水利部河湖管理司司长；2026年4月24日上任黄河水利委员会党组书记，5月8日由国务院正式任命为主任。',
+       leaderLink: '暂未发现与现任政治局委员/常委级别有公开报道的工作交集。',
+       tencentLink: '黄委职能聚焦黄河流域水资源管理、防汛抗旱、生态保护，与腾讯主业关联度较低；腾讯云在水利系统有"智慧水利"项目历史合作，可作为间接接触面。',
+       impact: '中性 — 主业影响中性，可作为腾讯云政企水利线的人脉储备节点。'
+     }}
+  ],
+  removals: [],
+  source: '中国政府网（一级）/ 新华网（二级）',
+  url: 'https://www.gov.cn/yaowen/liebiao/202605/content_7068110.htm',
+  urlAlt: 'https://www.news.cn/politics/20260508/12e294bbc42445869992450bdc3b72c0/c.html',
+  urlAltLabel: '新华网原文'},
+
+  {date: '2026-05-06', region: '上海', loc: '上海', titleHead: '上海市政府人事任免（5月6日）',
+   appointments: [
+     {name: '魏陆', newRole: '上海市发展和改革委员会副主任', oldRole: '上海市发展和改革委员会总经济师'},
+     {name: '江丹', newRole: '上海市住房和城乡建设管理委员会副主任', oldRole: '履历未公开（百度百科未披露）'},
+     {name: '王虎', newRole: '上海市检验检测认证有限公司总裁', oldRole: '上海市检验检测认证有限公司党委副书记、副总裁'},
+     {name: '施伟东', newRole: '上海公安学院副院长', oldRole: '上海市法学会党组副书记、专职副会长'},
+     {name: '俞清', newRole: '上海科学院副院长', oldRole: '上海市科学技术委员会二级巡视员（曾任发展规划处处长等）'}
+   ],
+   removals: [
+     {name: '潘敏', oldRole: '上海市电影局局长'},
+     {name: '陈国忠', oldRole: '上海市发展和改革委员会副主任、上海市域外农场管理办公室主任'},
+     {name: '刘千伟', oldRole: '上海市住建委总工程师'},
+     {name: '赵健', oldRole: '上海市生物医药技术研究院院长'},
+     {name: '胡斌勇', oldRole: '上海市公安局经济犯罪侦查总队总队长'}
+   ],
+  source: '上海一网通办总门户（原始）/ 腾讯新闻（聚合）',
+  url: 'https://news.qq.com/rain/a/20260506A070GA00',
+  urlAlt: 'https://finance.sina.com.cn/wm/2026-05-06/doc-inhwyixy8221903.shtml',
+  urlAltLabel: '新浪财经原稿',
+  note: '本批次均为厅局级以下，按规则不需做四维分析。原始信源为\'上海一网通办总门户\'微信公众号；市发改委副主任魏陆与腾讯华东数字经济业务对接面较直接，建议BD建立沟通通路。'}
+];
+
+/* 区域活动 */
+const EVENTS = [
+  {name: 'CIPSE 2026 中国（杭州）国际数字安防及人工智能博览会',
+   bigDate: '5月13—15日', city: '杭州',
+   time: '2026年5月13日—15日', loc: '杭州国际博览中心',
+   rel: '⭐⭐⭐ 高（腾讯安全、混元、腾讯云可参展/演讲）',
+   source: 'CIPSE 杭州数字安博会官网',
+   url: 'http://www.cipse.com.cn/newsxx.aspx?newsid=564&style=1'},
+  {name: '2026 杭州国际人工智能终端产业博览会（AIEXPO）',
+   bigDate: '5月14—16日', city: '杭州',
+   time: '2026年5月14日—16日', loc: '杭州大会展中心',
+   rel: '⭐⭐ 中（腾讯AI硬件生态合作机会）',
+   source: 'AI-FAIR 官网（高登会展集团）',
+   url: 'https://www.ai-fair.cn/'},
+  {name: '2026 CDIE 数字化创新博览会·上海站',
+   bigDate: '4月—5月', city: '上海',
+   time: '2026年4月—5月（持续）', loc: '上海',
+   rel: '⭐⭐ 中（腾讯产业互联网/SaaS生态可对接）',
+   source: 'CDIE 数字化创新博览会官网',
+   url: 'https://www.cdie.cn/'}
+];
+
+/* ============== 渲染 ============== */
+
+const REGION_ORDER = ['国家级','上海','江苏','浙江','安徽','福建','湖南','江西'];
+const ALL_REGIONS = ['全部','国家级','上海','江苏','浙江','安徽','福建','湖南','江西'];
+
+let CURRENT_DATE = '2026-05-10';
+let CURRENT_REGION = '全部';
+
+function escapeHtml(s){
+  return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+function impactTag(level){
+  if (level === '高') return '<span class="tag tag-impact-h">影响高</span>';
+  if (level === '中') return '<span class="tag tag-impact-m">影响中</span>';
+  return '<span class="tag tag-impact-l">影响低</span>';
+}
+
+function impactClass(level){
+  if (level === '高') return 'h';
+  if (level === '中') return 'm';
+  return 'l';
+}
+
+function fmtDate(d){
+  const parts = d.split('-');
+  return parseInt(parts[1]) + '/' + parseInt(parts[2]);
+}
+
+function dateMatch(item){
+  if (CURRENT_DATE === 'all') return true;
+  return item.date === CURRENT_DATE;
+}
+
+/* 导读 */
+function renderDigest(){
+  const wrap = document.getElementById('digest-body');
+  const policies = POLICY.filter(dateMatch);
+  const personnel = PERSONNEL.filter(dateMatch);
+  const alerts = ALERTS.filter(dateMatch);
+  const tencent = TENCENT.filter(dateMatch);
+  const industry = INDUSTRY.filter(dateMatch);
+  const focus = FOCUS.filter(dateMatch);
+
+  const isAll = CURRENT_DATE === 'all';
+  const isToday = CURRENT_DATE === '2026-05-10';
+  const dateLabel = isAll ? '2026年5月6日—5月10日' : (function(){
+    const d = CURRENT_DATE.split('-');
+    return '2026年' + parseInt(d[1]) + '月' + parseInt(d[2]) + '日';
+  })();
+  const labelTag = isAll ? '五日全量' : (isToday ? '今日视图' : '历史单日');
+
+  let summary;
+  if (isAll){
+    summary = '全量视图（5月6日至5月10日），覆盖江浙沪皖闽赣湘六省一市。重点命中——5月8日国家网信办、发改委、工信部联合印发《智能体规范应用与创新发展实施意见》；5月8日国务院任免国家工作人员（贺勇、陈东明）；5月7日上海公布2026年优化营商环境十大攻坚突破任务；5月7日浙江四部门印发新场景建设应用行动方案；5月6日江苏省发改委印发促进民间投资若干举措14条；5月9日安徽印发制造业中试平台建设实施方案。';
+  } else if (isToday){
+    summary = '今日（5月10日，周日）按规则原本应跳过，本期为五日合并版的最后一日，已豁免。当日命中：' +
+      (policies.length ? policies.length + '条政策、' : '') +
+      (personnel.length ? personnel.length + '条人事、' : '') +
+      (alerts.length ? alerts.length + '条预警、' : '') +
+      (industry.length ? industry.length + '条行业动态、' : '') +
+      (tencent.length ? tencent.length + '条腾讯动态' : '') +
+      '。如需查看完整窗口，请在顶部切换"所有"。';
+  } else {
+    summary = '仅显示 ' + dateLabel + ' 当日命中条目，已切换到历史单日视图。如需查看完整窗口，请在顶部切换"所有"。';
+  }
+
+  let html = '<div class="digest-banner">' +
+    '<div class="label">DAILY DIGEST · ' + labelTag + '</div>' +
+    '<div class="date-big">' + dateLabel + '</div>' +
+    '<div class="summary">' + summary + '</div>' +
+    '</div>' +
+    '<div class="stat-grid">' +
+    '<div class="stat-card"><div class="num">' + policies.length + '</div><div class="lbl">政策动态</div></div>' +
+    '<div class="stat-card"><div class="num">' + personnel.length + '</div><div class="lbl">人事条目</div></div>' +
+    '<div class="stat-card"><div class="num">' + alerts.length + '</div><div class="lbl">预警·监管</div></div>' +
+    '<div class="stat-card"><div class="num">' + (industry.length + tencent.length) + '</div><div class="lbl">行业·公司</div></div>' +
+    '</div>';
+
+  html += '<div class="section-title">' + (isAll ? '本期重点关注事项' : '当日重点关注') + '</div>';
+  if (focus.length === 0){
+    html += '<div class="empty"><div class="text">' + (isToday ? '今日无重点关注事项' : '该日无重点关注事项') + '</div></div>';
+  } else {
+    focus.forEach(function(f){
+      html += '<div class="focus-item ' + f.level + '">' +
+        '<div class="head">' + escapeHtml(f.title) + '</div>' +
+        '<div class="action">' + escapeHtml(f.action) + '</div>' +
+        '</div>';
+    });
+  }
+
+  html += '<div class="section-title">使用说明</div>' +
+    '<div class="card"><div class="interp" style="margin-bottom:0;">' +
+    '本日报六个板块：导读、预警（监管已并入）、政策、人事（副部级以上含四维分析）、动态（行业+腾讯公司）、活动。导读默认展示"今日（5月10日）"命中条目；顶部下拉可切到"所有"或回看5月6日—5月9日任一日。条目均按规则信源四级优先级，未命中口径的省份按规则注明"该省本期无新发布"。' +
+    '</div></div>';
+
+  wrap.innerHTML = html;
+}
+
+/* 预警（监管已并入） */
+function renderAlert(){
+  const wrap = document.getElementById('alert-body');
+  const items = ALERTS.filter(dateMatch);
+  let html = '<div class="section-title">预警与监管<span class="section-count">' + items.length + '</span></div>';
+  if (items.length === 0){
+    html += '<div class="empty"><div class="text">该日无预警事项</div></div>';
+    wrap.innerHTML = html;
+    return;
+  }
+  const lvText = function(lv){ return lv === 1 ? '一级紧急' : (lv === 2 ? '二级重要' : '三级关注'); };
+  items.forEach(function(a){
+    html += '<div class="alert-card lv' + a.level + '">' +
+      '<div class="lv-pill"></div>' +
+      '<div class="body">' +
+        '<div class="head-row">' +
+          '<span class="lv-tag">' + lvText(a.level) + '</span>' +
+          '<span class="countdown">⚠ ' + escapeHtml(a.countdown) + '</span>' +
+        '</div>' +
+        '<div class="a-title">' + escapeHtml(a.title) + '</div>' +
+        '<div class="a-detail">' + escapeHtml(a.detail) + '</div>' +
+        (a.url && a.url !== '#' ? '<div class="a-link"><a href="' + a.url + '" target="_blank">点击查看详情 ›</a></div>' : '') +
+      '</div>' +
+    '</div>';
+  });
+  wrap.innerHTML = html;
+}
+
+/* 政策 */
+function renderPolicy(){
+  const wrap = document.getElementById('policy-body');
+  const dateItems = POLICY.filter(dateMatch);
+  const items = CURRENT_REGION === '全部' ? dateItems : dateItems.filter(function(p){ return p.region === CURRENT_REGION; });
+
+  const cntH = items.filter(function(p){ return p.impact === '高'; }).length;
+  const cntM = items.filter(function(p){ return p.impact === '中'; }).length;
+  const cntL = items.filter(function(p){ return p.impact === '低'; }).length;
+
+  let html = '<div class="chip-bar" id="chipBar">';
+  ALL_REGIONS.forEach(function(r){
+    const cls = r === CURRENT_REGION ? 'chip active' : 'chip';
+    html += '<div class="' + cls + '" data-region="' + r + '">' + r + '</div>';
+  });
+  html += '</div>';
+
+  html += '<div class="stat-grid-policy">' +
+    '<div class="stat-card-mini total"><div class="num">' + items.length + '</div><div class="lbl">总条目</div></div>' +
+    '<div class="stat-card-mini high"><div class="num">' + cntH + '</div><div class="lbl">高影响</div></div>' +
+    '<div class="stat-card-mini mid"><div class="num">' + cntM + '</div><div class="lbl">中影响</div></div>' +
+    '<div class="stat-card-mini low"><div class="num">' + cntL + '</div><div class="lbl">低影响</div></div>' +
+    '</div>';
+
+  const groups = [
+    {key: '高', cls: 'h', label: '高影响政策', list: items.filter(function(p){ return p.impact === '高'; })},
+    {key: '中', cls: 'm', label: '中影响政策', list: items.filter(function(p){ return p.impact === '中'; })},
+    {key: '低', cls: 'l', label: '低影响政策', list: items.filter(function(p){ return p.impact === '低'; })}
+  ];
+
+  if (items.length === 0){
+    html += '<div class="empty"><div class="text">当前筛选条件下无政策条目</div></div>';
+  } else {
+    groups.forEach(function(g){
+      if (g.list.length === 0) return;
+      html += '<div class="impact-group-title ' + g.cls + '"><span class="dot"></span>' + g.label + '<span class="badge">' + g.list.length + '条</span></div>';
+      g.list.forEach(function(p){
+        html += '<div class="card impact-card ' + g.cls + '">' +
+          '<div class="meta">' +
+            '<span class="tag tag-date">' + fmtDate(p.date) + '</span>' +
+            '<span class="tag tag-region">' + escapeHtml(p.region) + '</span>' +
+            '<span class="tag tag-cat">' + escapeHtml(p.cat) + '</span>' +
+            impactTag(p.impact) +
+          '</div>' +
+          '<div class="title-line">' + escapeHtml(p.title) + '</div>' +
+          '<div class="meta-line"><span class="k">发布部门：</span>' + escapeHtml(p.dept) + '</div>' +
+          '<div class="meta-line"><span class="k">影响研判：</span>' + escapeHtml(p.impactReason) + '</div>' +
+          '<div class="interp">' + escapeHtml(p.summary) + '</div>' +
+          '<div class="source">' +
+            '<span>来源：' + escapeHtml(p.source) + '</span>' +
+            '<a href="' + p.url + '" target="_blank">查看原文 ›</a>' +
+          '</div>' +
+        '</div>';
+      });
+    });
+  }
+
+  wrap.innerHTML = html;
+
+  wrap.querySelectorAll('.chip').forEach(function(c){
+    c.addEventListener('click', function(){
+      CURRENT_REGION = c.dataset.region;
+      renderPolicy();
+    });
+  });
+}
+
+/* 人事 */
+function renderRs(){
+  const wrap = document.getElementById('rs-body');
+  const items = PERSONNEL.filter(dateMatch);
+  let html = '<div class="section-title">人事变动<span class="section-count">' + items.length + '</span></div>';
+  if (items.length === 0){
+    html += '<div class="empty"><div class="text">该日无人事条目</div></div>';
+    wrap.innerHTML = html;
+    return;
+  }
+
+  items.forEach(function(g){
+    const apN = (g.appointments || []).length;
+    const rmN = (g.removals || []).length;
+    html += '<div class="rs-card">' +
+      '<div class="rs-head">' +
+        '<div class="row1">' +
+          '<div class="h-title">' + escapeHtml(g.titleHead) + '</div>' +
+          '<div class="h-loc">📍 ' + escapeHtml(g.loc || g.region) + '</div>' +
+        '</div>' +
+        '<div class="h-stat">本批次：<span class="b">任命 ' + apN + ' 人</span> · <span class="b">免职 ' + rmN + ' 人</span> · ' + fmtDate(g.date) + '</div>' +
+      '</div>' +
+      '<div class="rs-section">';
+
+    if (apN){
+      html += '<div class="group-tag app"><span>✓</span>任命（' + apN + '）</div>' +
+        '<table class="rs-table"><thead><tr><th style="width:22%;">姓名</th><th style="width:42%;">新职务</th><th style="width:36%;">原职务</th></tr></thead><tbody>';
+      g.appointments.forEach(function(a){
+        html += '<tr>' +
+          '<td><span class="name">' + escapeHtml(a.name) + '</span>' + (a.isViceMin ? '<br><span class="tag tag-impact-h" style="margin-top:2px;font-size:10px;">副部级+</span>' : '') + '</td>' +
+          '<td class="role-new">' + escapeHtml(a.newRole) + '</td>' +
+          '<td class="role-old">' + (a.oldRole ? escapeHtml(a.oldRole) : '<span class="empty-cell">—</span>') + '</td>' +
+        '</tr>';
+        if (a.isViceMin && a.analysis){
+          html += '<tr><td colspan="3" style="padding:0 6px 6px;">' +
+            '<div class="analysis">' +
+              '<div class="row"><span class="key">基本履历</span><span class="val">' + escapeHtml(a.analysis.bio) + '</span></div>' +
+              '<div class="row"><span class="key">高层交集</span><span class="val">' + escapeHtml(a.analysis.leaderLink) + '</span></div>' +
+              '<div class="row"><span class="key">腾讯交集</span><span class="val">' + escapeHtml(a.analysis.tencentLink) + '</span></div>' +
+              '<div class="row"><span class="key">影响研判</span><span class="val">' + escapeHtml(a.analysis.impact) + '</span></div>' +
+              (a.personUrl ? '<div class="row"><span class="key">履历来源</span><span class="val">' + escapeHtml(a.personSource || '权威渠道') + ' · <a href="' + a.personUrl + '" target="_blank" style="color:var(--brand-6);font-weight:500;">查看 ›</a></span></div>' : '') +
+            '</div>' +
+          '</td></tr>';
+        }
+      });
+      html += '</tbody></table>';
+    }
+
+    if (rmN){
+      html += '<div class="group-tag rem"><span>✕</span>免职（' + rmN + '）</div>' +
+        '<table class="rs-table"><thead><tr><th style="width:30%;">姓名</th><th style="width:70%;">免去职务</th></tr></thead><tbody>';
+      g.removals.forEach(function(r){
+        html += '<tr><td><span class="name">' + escapeHtml(r.name) + '</span></td><td class="role-old">' + escapeHtml(r.oldRole) + '</td></tr>';
+      });
+      html += '</tbody></table>';
+    }
+
+    if (g.note){
+      html += '<div class="interp" style="margin-top:10px;">' + escapeHtml(g.note) + '</div>';
+    }
+
+    html += '</div>' +
+      '<div class="rs-source"><span>来源：' + escapeHtml(g.source) + '</span><a href="' + g.url + '" target="_blank">查看原文 ›</a>' +
+        (g.urlAlt ? '<a href="' + g.urlAlt + '" target="_blank" style="margin-left:10px;">' + escapeHtml(g.urlAltLabel || '备用源 ›') + ' ›</a>' : '') +
+      '</div>' +
+    '</div>';
+  });
+
+  wrap.innerHTML = html;
+}
+
+/* 动态（行业动态 + 腾讯公司动态） */
+function renderTx(){
+  const wrap = document.getElementById('tx-body');
+  const industry = INDUSTRY.filter(dateMatch);
+  const tencent = TENCENT.filter(dateMatch);
+
+  let html = '<div class="section-title">行业动态<span class="section-count">' + industry.length + '</span></div>';
+  if (industry.length === 0){
+    html += '<div class="empty"><div class="text">该日无行业动态命中</div></div>';
+  } else {
+    industry.forEach(function(t){
+      html += '<div class="card">' +
+        '<div class="meta">' +
+          '<span class="tag tag-date">' + fmtDate(t.date) + '</span>' +
+          '<span class="tag tag-region">' + escapeHtml(t.company) + '</span>' +
+        '</div>' +
+        '<div class="title-line">' + escapeHtml(t.title) + '</div>' +
+        '<div class="interp">' + escapeHtml(t.summary) + '</div>' +
+        '<div class="source">' +
+          '<span>来源：' + escapeHtml(t.source) + '</span>' +
+          '<a href="' + t.url + '" target="_blank">查看原文 ›</a>' +
+        '</div>' +
+      '</div>';
+    });
+  }
+
+  html += '<div class="section-title">腾讯公司动态<span class="section-count">' + tencent.length + '</span></div>';
+  if (tencent.length === 0){
+    html += '<div class="empty"><div class="text">该日无腾讯一手动态</div></div>';
+  } else {
+    tencent.forEach(function(t){
+      html += '<div class="card">' +
+        '<div class="meta">' +
+          '<span class="tag tag-date">' + fmtDate(t.date) + '</span>' +
+          '<span class="tag tag-region">腾讯</span>' +
+        '</div>' +
+        '<div class="title-line">' + escapeHtml(t.title) + '</div>' +
+        '<div class="interp">' + escapeHtml(t.summary) + '</div>' +
+        '<div class="source">' +
+          '<span>来源：' + escapeHtml(t.source) + '</span>' +
+          (t.url && t.url !== '#' ? '<a href="' + t.url + '" target="_blank">查看原文 ›</a>' : '') +
+        '</div>' +
+      '</div>';
+    });
+  }
+
+  html += '<div class="card" style="margin-top:8px;"><div class="interp" style="margin-bottom:0;">说明：行业动态按日收集，覆盖国内主要大模型/AI 厂商（豆包、Kimi、DeepSeek、文心、混元等）；腾讯公司一手公告或权威首发单列于行业动态后。每条均附原始出处链接，可点击核验。海外厂商若在本期窗口内有重大公开动态，将单独补录。</div></div>';
+
+  wrap.innerHTML = html;
+}
+
+/* 区域重要活动 */
+function renderEvent(){
+  const wrap = document.getElementById('event-body');
+  let html = '<div class="section-title">区域重要活动<span class="section-count">' + EVENTS.length + '</span></div>';
+  EVENTS.forEach(function(e){
+    html += '<div class="ev-card">' +
+      '<div class="ev-date">' +
+        '<div class="big">' + escapeHtml(e.bigDate) + '</div>' +
+        '<div class="city">' + escapeHtml(e.city) + '</div>' +
+      '</div>' +
+      '<div class="ev-body">' +
+        '<div class="ev-name">' + escapeHtml(e.name) + '</div>' +
+        '<div class="ev-meta">📍 ' + escapeHtml(e.loc) + ' · ' + escapeHtml(e.time) + '</div>' +
+        '<div class="ev-rel">' + escapeHtml(e.rel) + '</div>' +
+        (e.url ? '<div class="source" style="margin-top:10px;padding-top:8px;border-top:1px dashed var(--line);"><span>来源：' + escapeHtml(e.source || '') + '</span><a href="' + e.url + '" target="_blank">查看官网 ›</a></div>' : '') +
+      '</div>' +
+    '</div>';
+  });
+  wrap.innerHTML = html;
+}
+
+function renderAll(){
+  renderDigest();
+  renderAlert();
+  renderPolicy();
+  renderRs();
+  renderTx();
+  renderEvent();
+}
+
+/* 日期下拉 */
+(function bindDatePicker(){
+  const picker = document.getElementById('datePicker');
+  const modal = document.getElementById('dateModal');
+  const cancel = document.getElementById('dateCancel');
+  const text = document.getElementById('datePickerText');
+  const opts = modal.querySelectorAll('.opt');
+
+  function setActive(date){
+    opts.forEach(function(o){
+      o.classList.toggle('cur', o.dataset.date === date);
+    });
+  }
+
+  function labelOf(date){
+    if (date === 'all') return '所有 · 5月6日—5月10日';
+    const d = date.split('-');
+    const isToday = date === '2026-05-10';
+    return parseInt(d[1]) + '月' + parseInt(d[2]) + '日 · ' + (isToday ? '今日' : '单日');
+  }
+
+  picker.addEventListener('click', function(){
+    setActive(CURRENT_DATE);
+    modal.classList.add('show');
+  });
+  cancel.addEventListener('click', function(){ modal.classList.remove('show'); });
+  modal.addEventListener('click', function(e){
+    if (e.target === modal) modal.classList.remove('show');
+  });
+  opts.forEach(function(o){
+    o.addEventListener('click', function(){
+      CURRENT_DATE = o.dataset.date;
+      text.textContent = labelOf(CURRENT_DATE);
+      modal.classList.remove('show');
+      renderAll();
+    });
+  });
+})();
+
+renderAll();
+
+});
+</script>
+
 </body>
 </html>
