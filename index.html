@@ -5,24 +5,25 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="theme-color" content="#0052D9">
-<title>华东区域政策日报 · 2026年5月13日—5月14日</title>
+<title>华东区域政策日报 · 2026年5月6日—5月14日</title>
 <style>
+  /* ============ 设计系统 · 腾讯蓝（TDesign Brand） ============ */
   :root {
-    --brand-1: #F2F6FF;
-    --brand-2: #E0EAFF;
-    --brand-5: #366EF4;
-    --brand-6: #0052D9;
-    --brand-7: #0034B5;
-    --brand-8: #001F73;
-    --ink-0:   #0B1426;
-    --ink-1:   #1F2937;
-    --ink-2:   #3A4458;
-    --ink-3:   #6B7280;
-    --ink-4:   #9CA3AF;
+    --brand-1: #F2F6FF;     /* 极浅底 */
+    --brand-2: #E0EAFF;     /* 浅蓝 chip */
+    --brand-5: #366EF4;     /* 次主色 */
+    --brand-6: #0052D9;     /* 主色 */
+    --brand-7: #0034B5;     /* 深主色（hover/active） */
+    --brand-8: #001F73;     /* 深蓝（强对比文字） */
+    --ink-0:   #0B1426;     /* 一级标题 */
+    --ink-1:   #1F2937;     /* 正文 */
+    --ink-2:   #3A4458;     /* 次级正文 */
+    --ink-3:   #6B7280;     /* 辅助 */
+    --ink-4:   #9CA3AF;     /* 弱化 */
     --ink-5:   #C7CCD3;
-    --line:    #ECEEF2;
-    --line-2:  #F2F4F7;
-    --bg:      #F4F6FA;
+    --line:    #ECEEF2;     /* 分隔线 */
+    --line-2:  #F2F4F7;     /* 极浅分隔 */
+    --bg:      #F4F6FA;     /* 页面底 */
     --surface: #FFFFFF;
     --danger:  #E5341C;
     --warn:    #F08200;
@@ -43,6 +44,7 @@
   }
   a { color: var(--brand-6); text-decoration: none; }
 
+  /* ============ 顶部 ============ */
   .header {
     position: fixed; top: 0; left: 0; right: 0; height: 96px;
     background: rgba(255,255,255,0.92);
@@ -53,6 +55,11 @@
     align-items: center; justify-content: center;
     border-bottom: 1px solid var(--line);
     z-index: 100; padding: 6px 16px;
+  }
+  .header::after {
+    content: ""; position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+    width: 3px; height: 28px; background: var(--brand-6); border-radius: 2px;
+    display: none;
   }
   .header .title {
     font-size: 16.5px; font-weight: 600; letter-spacing: 0.2px;
@@ -116,6 +123,7 @@
     font-weight: 500;
   }
 
+  /* ============ 内容滚动区 ============ */
   .content {
     position: fixed; top: 96px; left: 0; right: 0;
     bottom: calc(56px + env(safe-area-inset-bottom, 0px));
@@ -126,6 +134,7 @@
   .panel.active { display: block; animation: fadeIn 0.28s cubic-bezier(.2,.8,.2,1); }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(8px);} to { opacity: 1; transform: none;} }
 
+  /* ============ 分区标题 ============ */
   .section-title {
     display: flex; align-items: center; margin: 18px 2px 12px;
     font-size: 15.5px; font-weight: 600; color: var(--ink-0);
@@ -154,6 +163,7 @@
     letter-spacing: 0.2px;
   }
 
+  /* ============ 通用卡片 ============ */
   .card {
     background: var(--surface);
     border: 1px solid var(--line);
@@ -199,7 +209,9 @@
     padding-top: 4px;
   }
   .card .source a { color: var(--brand-6); font-weight: 500; }
+  .card .source a:active { color: var(--brand-7); }
 
+  /* ============ 重点关注 ============ */
   .focus-item {
     background: var(--surface);
     border: 1px solid var(--line);
@@ -216,6 +228,7 @@
     color: var(--ink-0); margin-bottom: 6px;
     letter-spacing: 0.1px;
   }
+  .focus-item.urgent .head { color: var(--ink-0); }
   .focus-item.urgent .head::before {
     content: ""; display: inline-block; width: 6px; height: 6px;
     background: var(--danger); border-radius: 50%;
@@ -233,52 +246,89 @@
     margin-left: 1px;
   }
 
-  .alert-card {
+  /* ============ 人事四维分析 ============ */
+  .analysis {
+    background: var(--brand-1);
+    border: 1px solid var(--brand-2);
+    border-radius: var(--r-md);
+    padding: 10px 12px; margin-top: 10px;
+    font-size: 12.5px; line-height: 1.7;
+  }
+  .analysis .row { margin-bottom: 5px; }
+  .analysis .row:last-child { margin-bottom: 0; }
+  .analysis .key {
+    display: inline-block; min-width: 56px;
+    color: var(--brand-7); font-weight: 600; font-size: 11.5px;
+    letter-spacing: 0.3px;
+  }
+  .analysis .val { color: var(--ink-2); }
+
+  /* ============ 预警三级（旧 row 兼容） ============ */
+  .alert-row {
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--r-md);
-    padding: 13px 14px;
-    margin-bottom: 10px;
+    padding: 11px 12px;
+    margin-bottom: 8px;
     box-shadow: var(--shadow-1);
-    display: flex; gap: 12px; align-items: stretch;
+    display: flex; gap: 10px; align-items: flex-start;
   }
-  .alert-card .lv-pill { flex: 0 0 auto; width: 4px; align-self: stretch; border-radius: 2px; }
-  .alert-card.lv1 .lv-pill { background: var(--danger); }
-  .alert-card.lv2 .lv-pill { background: var(--warn); }
-  .alert-card.lv3 .lv-pill { background: var(--brand-6); }
-  .alert-card .body { flex: 1; min-width: 0; }
-  .alert-card .head-row {
-    display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
-    flex-wrap: wrap;
+  .alert-row.lv1 { border-left: 3px solid var(--danger); }
+  .alert-row.lv2 { border-left: 3px solid var(--warn); }
+  .alert-row.lv3 { border-left: 3px solid var(--brand-6); }
+  .alert-row .lv-tag {
+    flex: 0 0 auto;
+    font-size: 11px; font-weight: 600;
+    padding: 2px 7px; border-radius: var(--r-sm);
+    margin-top: 1px; letter-spacing: 0.2px;
   }
-  .alert-card .lv-tag {
-    font-size: 10.5px; font-weight: 700;
-    padding: 2px 8px; border-radius: var(--r-pill);
-    letter-spacing: 0.3px;
+  .alert-row.lv1 .lv-tag { background: #FDECE9; color: var(--danger); }
+  .alert-row.lv2 .lv-tag { background: #FEF3E0; color: #B36100; }
+  .alert-row.lv3 .lv-tag { background: var(--brand-1); color: var(--brand-6); }
+  .alert-row .body { flex: 1; font-size: 13px; color: var(--ink-1); line-height: 1.6; }
+  .alert-row .body .countdown {
+    color: var(--danger); font-weight: 600; font-size: 12px;
+    margin-top: 4px;
   }
-  .alert-card.lv1 .lv-tag { background: #FDECE9; color: var(--danger); }
-  .alert-card.lv2 .lv-tag { background: #FEF3E0; color: #B36100; }
-  .alert-card.lv3 .lv-tag { background: var(--brand-1); color: var(--brand-6); }
-  .alert-card .countdown {
-    font-size: 12px; font-weight: 600;
-    font-feature-settings: "tnum" on;
-  }
-  .alert-card.lv1 .countdown { color: var(--danger); }
-  .alert-card.lv2 .countdown { color: #B36100; }
-  .alert-card.lv3 .countdown { color: var(--brand-6); }
-  .alert-card .a-title {
-    font-size: 14px; font-weight: 600; color: var(--ink-0);
-    line-height: 1.55; margin-bottom: 5px;
-  }
-  .alert-card .a-detail {
-    font-size: 12.5px; color: var(--ink-2);
-    line-height: 1.7;
-  }
-  .alert-card .a-link {
-    margin-top: 8px; font-size: 12px; font-weight: 500;
-  }
-  .alert-card .a-link a { color: var(--brand-6); }
 
+  /* ============ 友商表格 ============ */
+  .comp-table {
+    width: 100%;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-1);
+    margin-bottom: 12px;
+  }
+  .comp-row {
+    display: flex; padding: 11px 12px;
+    border-bottom: 1px solid var(--line-2);
+    align-items: flex-start; gap: 8px;
+  }
+  .comp-row:last-child { border-bottom: 0; }
+  .comp-row .comp-name {
+    flex: 0 0 84px; font-weight: 600;
+    color: var(--brand-7); font-size: 13px; line-height: 1.55;
+  }
+  .comp-row .comp-body { flex: 1; font-size: 12.5px; color: var(--ink-2); line-height: 1.65; }
+  .comp-row .comp-body .d { color: var(--ink-4); font-size: 11px; margin-right: 6px; font-feature-settings: "tnum" on; }
+
+  /* ============ 活动旧 row（保留兼容） ============ */
+  .event-row {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 11px 12px;
+    margin-bottom: 8px;
+    box-shadow: var(--shadow-1);
+    font-size: 13px; line-height: 1.65;
+  }
+  .event-row .e-name { font-weight: 600; color: var(--ink-0); margin-bottom: 4px; }
+  .event-row .e-meta { color: var(--ink-3); font-size: 12px; }
+  .event-row .e-rel { color: var(--brand-6); font-weight: 500; font-size: 12px; margin-top: 2px; }
+
+  /* ============ 导读 banner（白底极简风） ============ */
   .digest-banner {
     background: var(--surface);
     border: 1px solid var(--line);
@@ -327,7 +377,9 @@
     padding: 12px 4px;
     text-align: center;
     box-shadow: var(--shadow-1);
+    transition: transform 0.18s ease;
   }
+  .stat-card:active { transform: scale(0.98); }
   .stat-card .num {
     font-size: 22px; font-weight: 700;
     color: var(--brand-6);
@@ -340,6 +392,7 @@
     margin-top: 5px; letter-spacing: 0.3px;
   }
 
+  /* ============ 底部 Tab ============ */
   .tabbar {
     position: fixed; bottom: 0; left: 0; right: 0;
     height: calc(56px + env(safe-area-inset-bottom, 0px));
@@ -384,14 +437,13 @@
   .tab-btn.active .ic svg { transform: scale(1.06); }
 
   .empty {
-    text-align: center; padding: 36px 20px; color: var(--ink-4);
+    text-align: center; padding: 48px 20px; color: var(--ink-4);
     background: var(--surface);
     border: 1px dashed var(--line);
     border-radius: var(--r-md);
   }
-  .empty .icon { font-size: 28px; margin-bottom: 8px; opacity: 0.5; }
-  .empty .text { font-size: 13px; line-height: 1.7; }
-  .empty .text strong { color: var(--ink-2); }
+  .empty .icon { font-size: 32px; margin-bottom: 10px; opacity: 0.5; }
+  .empty .text { font-size: 13px; }
 
   .meta-line {
     font-size: 12px; color: var(--ink-3);
@@ -399,6 +451,7 @@
   }
   .meta-line .k { color: var(--ink-2); font-weight: 500; }
 
+  /* ============ 政策：左影响色条 ============ */
   .impact-card { position: relative; padding-left: 18px; }
   .impact-card::before {
     content: ""; position: absolute; left: 0; top: 14px; bottom: 14px;
@@ -408,6 +461,7 @@
   .impact-card.m::before { background: var(--warn); }
   .impact-card.l::before { background: var(--brand-6); }
 
+  /* ============ 政策：地区 chip 横滚 ============ */
   .chip-bar {
     display: flex; gap: 6px; overflow-x: auto;
     padding: 4px 2px 12px;
@@ -432,6 +486,7 @@
     box-shadow: 0 2px 10px rgba(0,82,217,0.25);
   }
 
+  /* ============ 政策：4 格统计卡 ============ */
   .stat-grid-policy {
     display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
     margin-bottom: 10px;
@@ -457,14 +512,18 @@
     margin-top: 5px; letter-spacing: 0.3px;
   }
 
+  /* ============ 政策：影响等级分组小标 ============ */
   .impact-group-title {
     display: flex; align-items: center; gap: 7px;
     margin: 16px 2px 9px; font-size: 13.5px; font-weight: 600;
     letter-spacing: 0.2px;
   }
   .impact-group-title .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .impact-group-title.h { color: var(--ink-0); }
   .impact-group-title.h .dot { background: var(--danger); box-shadow: 0 0 0 3px rgba(229,52,28,0.12); }
+  .impact-group-title.m { color: var(--ink-0); }
   .impact-group-title.m .dot { background: var(--warn); box-shadow: 0 0 0 3px rgba(240,130,0,0.12); }
+  .impact-group-title.l { color: var(--ink-0); }
   .impact-group-title.l .dot { background: var(--brand-6); box-shadow: 0 0 0 3px rgba(0,82,217,0.12); }
   .impact-group-title .badge {
     margin-left: auto;
@@ -474,6 +533,131 @@
     font-feature-settings: "tnum" on;
   }
 
+  /* ============ 预警卡 ============ */
+  .alert-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    padding: 13px 14px;
+    margin-bottom: 10px;
+    box-shadow: var(--shadow-1);
+    display: flex; gap: 12px; align-items: stretch;
+  }
+  .alert-card .lv-pill { flex: 0 0 auto; width: 4px; align-self: stretch; border-radius: 2px; }
+  .alert-card.lv1 .lv-pill { background: var(--danger); }
+  .alert-card.lv2 .lv-pill { background: var(--warn); }
+  .alert-card.lv3 .lv-pill { background: var(--brand-6); }
+  .alert-card .body { flex: 1; min-width: 0; }
+  .alert-card .head-row {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .alert-card .lv-tag {
+    font-size: 10.5px; font-weight: 700;
+    padding: 2px 8px; border-radius: var(--r-pill);
+    letter-spacing: 0.3px;
+  }
+  .alert-card.lv1 .lv-tag { background: #FDECE9; color: var(--danger); }
+  .alert-card.lv2 .lv-tag { background: #FEF3E0; color: #B36100; }
+  .alert-card.lv3 .lv-tag { background: var(--brand-1); color: var(--brand-6); }
+  .alert-card .countdown {
+    font-size: 12px; font-weight: 600;
+    font-feature-settings: "tnum" on;
+  }
+  .alert-card.lv1 .countdown { color: var(--danger); }
+  .alert-card.lv2 .countdown { color: #B36100; }
+  .alert-card.lv3 .countdown { color: var(--brand-6); }
+  .alert-card .a-title {
+    font-size: 14px; font-weight: 600; color: var(--ink-0);
+    line-height: 1.55; margin-bottom: 5px;
+  }
+  .alert-card .a-detail {
+    font-size: 12.5px; color: var(--ink-2);
+    line-height: 1.7;
+  }
+  .alert-card .a-link {
+    margin-top: 8px; font-size: 12px; font-weight: 500;
+  }
+  .alert-card .a-link a { color: var(--brand-6); }
+
+  /* ============ 人事卡（白底品牌色 header） ============ */
+  .rs-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    overflow: hidden;
+    box-shadow: var(--shadow-1);
+    margin-bottom: 12px;
+  }
+  .rs-head {
+    background: linear-gradient(135deg, #F2F6FF 0%, #E0EAFF 100%);
+    color: var(--brand-8);
+    padding: 13px 15px;
+    border-bottom: 1px solid var(--brand-2);
+    position: relative;
+  }
+  .rs-head::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: var(--brand-6);
+  }
+  .rs-head .row1 {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 8px; flex-wrap: wrap;
+  }
+  .rs-head .h-title {
+    font-size: 14.5px; font-weight: 600;
+    color: var(--brand-8); letter-spacing: 0.1px;
+  }
+  .rs-head .h-loc {
+    font-size: 11.5px; color: var(--brand-7);
+    background: rgba(255,255,255,0.7);
+    padding: 2px 9px; border-radius: var(--r-pill);
+    font-weight: 500;
+  }
+  .rs-head .h-stat {
+    margin-top: 6px; font-size: 11.5px; color: var(--brand-7);
+    font-feature-settings: "tnum" on;
+  }
+  .rs-head .h-stat .b { font-weight: 700; color: var(--brand-8); }
+  .rs-section { padding: 4px 14px 12px; }
+  .rs-section .group-tag {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 12px; font-weight: 600;
+    padding: 3px 11px; border-radius: var(--r-pill);
+    margin: 12px 0 8px;
+    letter-spacing: 0.2px;
+  }
+  .rs-section .group-tag.app { background: #ECF7F1; color: #11874E; }
+  .rs-section .group-tag.rem { background: #FDECE9; color: var(--danger); }
+  .rs-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .rs-table th, .rs-table td {
+    padding: 9px 6px; text-align: left;
+    border-bottom: 1px solid var(--line-2);
+    vertical-align: top; line-height: 1.55;
+  }
+  .rs-table th {
+    font-size: 11px; color: var(--ink-3); font-weight: 500;
+    background: var(--bg);
+    letter-spacing: 0.3px;
+  }
+  .rs-table .name {
+    font-weight: 600; color: var(--brand-7);
+    border-bottom: 1px dotted var(--brand-5);
+  }
+  .rs-table .role-new { color: #11874E; }
+  .rs-table .role-old { color: var(--ink-3); }
+  .rs-table .empty-cell { color: var(--ink-5); }
+  .rs-source {
+    margin: 8px 14px 14px;
+    font-size: 11.5px; color: var(--ink-3);
+    display: flex; justify-content: space-between; gap: 6px;
+    flex-wrap: wrap;
+    padding-top: 8px;
+    border-top: 1px dashed var(--line);
+  }
+  .rs-source a { color: var(--brand-6); font-weight: 500; }
+
+  /* ============ 活动卡 ============ */
   .ev-card {
     background: var(--surface);
     border: 1px solid var(--line);
@@ -522,7 +706,7 @@
   <div class="title">华东区域政策日报</div>
   <div class="sub">江浙沪皖闽赣湘</div>
   <div class="date-picker" id="datePicker">
-    <span id="datePickerText">5月14日 · 今日</span>
+    <span id="datePickerText">5月10日 · 今日</span>
     <span class="arrow">▼</span>
   </div>
 </div>
@@ -530,20 +714,36 @@
 <div class="date-modal" id="dateModal">
   <div class="sheet">
     <div class="ttl">选择日期</div>
-    <div class="opt" data-date="all">所有<span class="sub">5月13日—5月14日 全量</span></div>
-    <div class="opt" data-date="2026-05-13">5月13日<span class="sub">昨日 · 周三</span></div>
-    <div class="opt cur" data-date="2026-05-14">5月14日<span class="sub">今日 · 周四</span></div>
+    <div class="opt" data-date="all">所有<span class="sub">5月6日—5月10日 全量</span></div>
+    <div class="opt" data-date="2026-05-06">5月6日<span class="sub">周三</span></div>
+    <div class="opt" data-date="2026-05-07">5月7日<span class="sub">周四</span></div>
+    <div class="opt" data-date="2026-05-08">5月8日<span class="sub">周五</span></div>
+    <div class="opt" data-date="2026-05-09">5月9日<span class="sub">周六</span></div>
+    <div class="opt cur" data-date="2026-05-10">5月10日<span class="sub">今日 · 周日</span></div>
     <div class="cancel" id="dateCancel">取消</div>
   </div>
 </div>
 
 <div class="content" id="content">
+
+  <!-- 1. 导读 -->
   <div class="panel active" data-panel="digest"><div id="digest-body"></div></div>
+
+  <!-- 2. 预警（监管已并入） -->
   <div class="panel" data-panel="alert"><div id="alert-body"></div></div>
+
+  <!-- 3. 政策动态 -->
   <div class="panel" data-panel="policy"><div id="policy-body"></div></div>
+
+  <!-- 4. 人事变动 -->
   <div class="panel" data-panel="rs"><div id="rs-body"></div></div>
+
+  <!-- 5. 动态（腾讯+友商合并） -->
   <div class="panel" data-panel="tx"><div id="tx-body"></div></div>
+
+  <!-- 6. 区域重要活动 -->
   <div class="panel" data-panel="event"><div id="event-body"></div></div>
+
 </div>
 
 <div class="tabbar">
@@ -585,50 +785,36 @@ function switchTab(t) {
 <script>
 document.addEventListener('DOMContentLoaded', function() {
 
-/* ============== 数据：2026年5月13日—5月14日 双日合并版 ============== */
+/* ============== 数据：2026年5月6日—5月14日 五日合并 ============== */
 
-/* 重点关注（3 条） */
+/* 重点关注（5条） */
 const FOCUS = [
+  {date: '2026-05-14', level: 'important', title: '5月14日 上海国际电影节全新单元"AI片场"开机，上海打造 AI 影像协作实验场',
+   action: '行动建议：腾讯影业、混元文生视频、腾讯云媒体业务部建议对接电影节"AI片场"组委会，作为 AI 影像协作工具/算力基座候选；本单元同步对接上海"AI+文化"先导计划，宜与黄浦/徐汇区科委联动报案。'},
   {date: '2026-05-13', level: 'urgent', title: '5月13日 国家数据局启动"数据要素×"城市行，明确支持地方通过"以数招商""场景招商"服务产业发展',
    action: '行动建议：腾讯云政企、企业微信政务版、混元数据应用线建议跟进首场南京供需对接会（5月14日）发布的60余个特色数据场景需求，重点关注数据治理、数据技术服务、数据产品开发、AI 服务四类合作领域，对接江苏地方数据局做承接平台候选。'},
   {date: '2026-05-13', level: 'urgent', title: '5月13日 "千帆星座"第八批组网卫星成功发射，工信部主源同步通报',
    action: '行动建议：腾讯云、AI Lab 关注千帆星座低轨宽带组网进度（已累计发射 8 批），结合上海"AI 片场"星地链路应用、车联网与应急通信场景，跟进与上海垣信卫星科技、中科院微小卫星创新研究院的合作机会。'},
-  {date: '2026-05-14', level: 'important', title: '5月14日 上海国际电影节全新单元"AI片场"开机，上海打造 AI 影像协作实验场',
-   action: '行动建议：腾讯影业、混元文生视频、腾讯云媒体业务部建议对接电影节"AI片场"组委会，作为 AI 影像协作工具/算力基座候选；本单元同步对接上海"AI+文化"先导计划，宜与黄浦/徐汇区科委联动报案。'}
+  {date: '2026-05-11', level: 'urgent', title: '5月11日 国办发〔2026〕14号《国务院2026年度立法工作计划》正式印发，首次将人工智能综合性立法写入年度计划',
+   action: '行动建议：腾讯混元、元宝、企业微信 AI、AI Lab 与法务/合规口径协同，对照立法计划中"数据、算力、算法、产权、网络安全、供应链安全"六类共性要素，本月内梳理一份内部影响清单与对外口径草稿。'},
+  {date: '2026-05-11', level: 'urgent', title: '5月11日 工信厅科函〔2026〕199号 工信部启动人工智能科技伦理审查与服务先导计划，华东沪苏浙湘四地入选',
+   action: '行动建议：腾讯华东政企/产研团队跟进上海、江苏、浙江、湖南四地实施方案进度，沪苏浙湘各推荐1—2个城市将于5月20日前报送方案；建议腾讯混元、AI Lab 主动对接 4 大重点领域的城市级伦理审查与服务中心，作为创新主体候选。'},
+  {date: '2026-05-11', level: 'important', title: '5月11日 2026世界数字教育大会在杭州开幕，主题"人工智能+教育：变革 发展 治理"',
+   action: '行动建议：腾讯教育、腾讯云、腾讯混元教育大模型团队关注大会发布的"AI+教育"八项重要成果与平行会议结论，浙江省政府是联合主办方，区域合作机会值得跟进。'},
+{date: '2026-05-08', level: 'urgent', title: '5月8日 国家网信办、国家发改委、工信部联合印发《智能体规范应用与创新发展实施意见》',
+   action: '行动建议：腾讯混元、元宝、企微AI智能体相关业务线即刻对照"夯实底座、守牢安全底线、应用落地、治理体系"四方面拆条；产品和合规线协同出对接清单。'},
+  {date: '2026-05-07', level: 'urgent', title: '5月7日 上海公布2026年优化营商环境十大攻坚突破任务',
+   action: '行动建议：腾讯华东BD梳理涉企检查、招投标、网络营商三项与上海各委办的对接窗口；视频号商家、小程序商家受益面较大，可提前介入服务说明。'},
+  {date: '2026-05-07', level: 'important', title: '5月7日 浙江四部门印发新场景建设应用行动方案（2026—2027）',
+   action: '行动建议：方案聚焦人工智能、脑机接口、全空间无人体系等24个领域，年开放150+场景。腾讯云、混元、智慧交通线可对接浙江省发改委场景清单申报。'},
+  {date: '2026-05-06', level: 'important', title: '5月6日 江苏省发改委印发促进民间投资若干举措14条（苏发改投资发〔2026〕383号，落款4月23日、5月6日上网）',
+   action: '行动建议：明确支持民营企业投资虚拟电厂、充电基础设施、智能算力等新业态，腾讯产业互联网团队可同步跟进江苏数字基建机会。'},
+  {date: '2026-05-09', level: 'important', title: '5月9日 安徽印发制造业中试平台建设实施方案（皖政办秘〔2026〕15号）',
+   action: '行动建议：方案给予设备投入20%奖补、最高500万；国家级培育平台再奖200万。腾讯云工业互联网与合肥、芜湖中试服务商有合作空间。'}
 ];
 
-/* 政策（按"国家级 → 上海 → 江苏 → 浙江 → 安徽 → 福建 → 湖南 → 江西"排序，仅本期窗口内新发布） */
+/* 政策（按"国家级 → 上海 → 江苏 → 浙江 → 安徽 → 福建 → 湖南 → 江西"排序） */
 const POLICY = [
-  {region: '国家级', date: '2026-05-13',
-   title: '国家数据局：支持地方通过"以数招商""场景招商"服务产业发展（"数据要素×"城市行启动）',
-   dept: '国家数据局（"数据要素×"城市行启动会，央视新闻报道）',
-   cat: '数据要素 / 招商引资',
-   impact: '高',
-   impactReason: '国家数据局首次系统性提出"以数招商""场景招商"新模式，支持地方挖掘特色数据资源与场景需求，培育数据流通服务机构。首场供需对接会5月14日在南京举办，现场发布超60个特色数据场景需求。直接利好腾讯云政企、企业微信政务版、混元数据应用线对接江苏、浙江、安徽地方数据局承接平台机会，腾讯数据中台与AI服务可作为重点候选供给方。',
-   summary: '据央视新闻报道，"数据要素×"城市行活动5月13日在南京启动，国家数据局表示将支持各地挖掘特色数据资源与场景需求，通过"以数招商""场景招商"等新模式，培育数据流通服务机构，服务地方产业发展。首场供需对接会5月14日在南京举办，现场发布超过60个特色数据场景需求，吸引企业与地方政府在数据治理、数据技术服务、数据产品开发、人工智能服务等领域开展合作。后续将陆续在全国多个城市举办专项对接活动，推动数据要素与产业深度融合。',
-   source: '国家数据局官网（nda.gov.cn，转载央视新闻）',
-   url: 'https://www.nda.gov.cn/sjj/swdt/mtsy/0513/20260513153247151374943_pc.html'},
-
-  {region: '国家级', date: '2026-05-13',
-   title: '工信部通报"千帆星座"第八批组网卫星成功发射',
-   dept: '工业和信息化部（信息通信发展司主源）',
-   cat: '低轨卫星 / 通信基础设施',
-   impact: '中',
-   impactReason: '"千帆星座"是中国商业航天低轨宽带星座的代表性工程，由上海垣信卫星科技牵头，承担与"星网"并行的国家级宽带卫星互联网建设任务。第八批组网卫星成功发射后总在轨数量进一步提升，对车联网、应急通信、AI 智能体星地链路等业务有支撑意义。腾讯云、AI Lab、汽车业务（智能驾驶）可关注。',
-   summary: '工信部信息通信发展司5月13日通报，"千帆星座"第八批组网卫星于当日成功发射并进入预定轨道。"千帆星座"由上海垣信卫星科技牵头建设，与"星网"工程并行作为我国低轨宽带卫星互联网两大主力。该工程在 AI 时代承担星地融合智能体网络、应急通信、车联网、空天一体等多场景能力底座，工信部要求加快组网进度并推动产业链协同发展。',
-   source: '工业和信息化部官网（miit.gov.cn，信息通信发展司）',
-   url: 'https://www.miit.gov.cn/xwdt/gxdt/sjdt/index.html'},
-
-  {region: '国家级', date: '2026-05-13',
-   title: '国家医保局印发《医疗保障基金监督检查五年行动计划（2026年—2030年）》',
-   dept: '国家医疗保障局（基金监管司）',
-   cat: '医保基金监管 / 五年行动',
-   impact: '中',
-   impactReason: '医保基金监管首次出台五年行动计划，明确针对欺诈骗保隐蔽化、专业化、复杂化趋势构建系统性防控机制。腾讯健康、腾讯医疗、企业微信医疗版、AI Lab 医保智能审核能力线可对接国家医保局基金监管司与省级医保局，作为 AI 反欺诈、大数据稽核技术供给方候选。',
-   summary: '近日，国家医保局印发《医疗保障基金监督检查五年行动计划（2026年—2030年）》。计划指出，医保基金是人民群众的"看病钱""救命钱"，基金安全事关民生福祉与社会稳定。当前基金安全运行仍面临诸多挑战：一方面欺诈骗保时有发生，骗保方式呈现隐蔽化、专业化、复杂化特征；另一方面，随着医保参保覆盖面扩大、保障待遇水平提升，基金使用主体日益多元，进一步加大了基金风险防控难度。计划明确通过五年时间，构建覆盖经办、医疗机构、参保人、医药企业全链条的常态化、智能化、协同化基金监管体系，重点用大数据、AI 智能审核、跨部门协作机制提升监管精准度。',
-   source: '国家医保局官网（nhsa.gov.cn）',
-   url: 'https://www.nhsa.gov.cn/art/2026/5/13/art_105_20493.html'},
-
   {region: '上海', date: '2026-05-14',
    title: '上海国际电影节启动全新单元"AI片场"，打造 AI 影像协作实验场',
    dept: '上海国际电影节组委会（上海广播电视台 / 上海市文旅局指导）',
@@ -638,7 +824,6 @@ const POLICY = [
    summary: '5月14日，上海国际电影节宣布启动全新单元"AI片场"，定位为 AI 影像协作实验场，覆盖剧本生成、分镜生成、视频生成、声音合成、虚拟制作、AI 调色、智能剪辑等 AI 影像工具的产业级测试与对接。组委会表示将联合上海科技影都、上影集团、阅文集团、腾讯影业等头部主体，打造完整 AI 影像协作工作流，并面向全球 AI 影像团队开放征集。本单元为上海"AI+文化"先导计划的标志性落地之一，对应建设上海全球影视创制中心目标。',
    source: '上海市人民政府官网（shanghai.gov.cn，解放日报记者钟菡）',
    url: 'https://www.shanghai.gov.cn/nw4411/20260514/'},
-
   {region: '上海', date: '2026-05-14',
    title: '上海律协发布《上海律师行业三年发展规划（2026—2028）》：海外分支机构2028年力争达100家',
    dept: '上海市律师协会（上海市司法局指导）',
@@ -648,7 +833,6 @@ const POLICY = [
    summary: '5月14日，上海市律协发布首个《上海律师行业三年发展规划（2026—2028）》，明确未来三年要完成44项任务。规划提出：到2028年，上海律师行业海外分支机构力争达到100家；推动中小律所规模化发展破解"吃不饱"难题；建设青年律师培养体系破解"起步难"；强化涉外业务能力建设，对接上海"五个中心"建设与"一带一路"法律服务需求。',
    source: '上海市人民政府官网（shanghai.gov.cn，解放日报记者刘雪妍）',
    url: 'https://www.shanghai.gov.cn/nw4411/20260514/5e0a21e2e9004603bf88c60420ade676.html'},
-
   {region: '上海', date: '2026-05-14',
    title: '上海赴金门、马祖旅游签注申请受理已启动',
    dept: '上海市公安局出入境管理总队',
@@ -658,7 +842,33 @@ const POLICY = [
    summary: '5月14日，上海市公安局出入境管理总队发布消息，上海全市启动赴金门、马祖旅游签注申请受理工作。申请人可通过"出入境管理总队"政务服务窗口或线上预约办理。此次政策落地为两岸旅游交流恢复的重要进展，上海是首批受理城市之一。',
    source: '上海市人民政府官网（shanghai.gov.cn，解放日报记者周昱帆）',
    url: 'https://www.shanghai.gov.cn/nw4411/20260514/1cbf6b9cdaf1422e8d2c3b201c820b9d.html'},
-
+  {region: '国家级', date: '2026-05-13',
+   title: '国家数据局：支持地方通过"以数招商""场景招商"服务产业发展（"数据要素×"城市行启动）',
+   dept: '国家数据局（"数据要素×"城市行启动会，央视新闻报道）',
+   cat: '数据要素 / 招商引资',
+   impact: '高',
+   impactReason: '国家数据局首次系统性提出"以数招商""场景招商"新模式，支持地方挖掘特色数据资源与场景需求，培育数据流通服务机构。首场供需对接会5月14日在南京举办，现场发布超60个特色数据场景需求。直接利好腾讯云政企、企业微信政务版、混元数据应用线对接江苏、浙江、安徽地方数据局承接平台机会，腾讯数据中台与AI服务可作为重点候选供给方。',
+   summary: '据央视新闻报道，"数据要素×"城市行活动5月13日在南京启动，国家数据局表示将支持各地挖掘特色数据资源与场景需求，通过"以数招商""场景招商"等新模式，培育数据流通服务机构，服务地方产业发展。首场供需对接会5月14日在南京举办，现场发布超过60个特色数据场景需求，吸引企业与地方政府在数据治理、数据技术服务、数据产品开发、人工智能服务等领域开展合作。后续将陆续在全国多个城市举办专项对接活动，推动数据要素与产业深度融合。',
+   source: '国家数据局官网（nda.gov.cn，转载央视新闻）',
+   url: 'https://www.nda.gov.cn/sjj/swdt/mtsy/0513/20260513153247151374943_pc.html'},
+  {region: '国家级', date: '2026-05-13',
+   title: '工信部通报"千帆星座"第八批组网卫星成功发射',
+   dept: '工业和信息化部（信息通信发展司主源）',
+   cat: '低轨卫星 / 通信基础设施',
+   impact: '中',
+   impactReason: '"千帆星座"是中国商业航天低轨宽带星座的代表性工程，由上海垣信卫星科技牵头，承担与"星网"并行的国家级宽带卫星互联网建设任务。第八批组网卫星成功发射后总在轨数量进一步提升，对车联网、应急通信、AI 智能体星地链路等业务有支撑意义。腾讯云、AI Lab、汽车业务（智能驾驶）可关注。',
+   summary: '工信部信息通信发展司5月13日通报，"千帆星座"第八批组网卫星于当日成功发射并进入预定轨道。"千帆星座"由上海垣信卫星科技牵头建设，与"星网"工程并行作为我国低轨宽带卫星互联网两大主力。该工程在 AI 时代承担星地融合智能体网络、应急通信、车联网、空天一体等多场景能力底座，工信部要求加快组网进度并推动产业链协同发展。',
+   source: '工业和信息化部官网（miit.gov.cn，信息通信发展司）',
+   url: 'https://www.miit.gov.cn/xwdt/gxdt/sjdt/index.html'},
+  {region: '国家级', date: '2026-05-13',
+   title: '国家医保局印发《医疗保障基金监督检查五年行动计划（2026年—2030年）》',
+   dept: '国家医疗保障局（基金监管司）',
+   cat: '医保基金监管 / 五年行动',
+   impact: '中',
+   impactReason: '医保基金监管首次出台五年行动计划，明确针对欺诈骗保隐蔽化、专业化、复杂化趋势构建系统性防控机制。腾讯健康、腾讯医疗、企业微信医疗版、AI Lab 医保智能审核能力线可对接国家医保局基金监管司与省级医保局，作为 AI 反欺诈、大数据稽核技术供给方候选。',
+   summary: '近日，国家医保局印发《医疗保障基金监督检查五年行动计划（2026年—2030年）》。计划指出，医保基金是人民群众的"看病钱""救命钱"，基金安全事关民生福祉与社会稳定。当前基金安全运行仍面临诸多挑战：一方面欺诈骗保时有发生，骗保方式呈现隐蔽化、专业化、复杂化特征；另一方面，随着医保参保覆盖面扩大、保障待遇水平提升，基金使用主体日益多元，进一步加大了基金风险防控难度。计划明确通过五年时间，构建覆盖经办、医疗机构、参保人、医药企业全链条的常态化、智能化、协同化基金监管体系，重点用大数据、AI 智能审核、跨部门协作机制提升监管精准度。',
+   source: '国家医保局官网（nhsa.gov.cn）',
+   url: 'https://www.nhsa.gov.cn/art/2026/5/13/art_105_20493.html'},
   {region: '上海', date: '2026-05-13',
    title: '黄浦区公布第十三批黄浦区非物质文化遗产代表性项目名录及第十四批传承人名单',
    dept: '黄浦区人民政府',
@@ -667,10 +877,161 @@ const POLICY = [
    impactReason: '区级文化遗产名录公告，与腾讯主业关联较弱。文化业务（腾讯视频、QQ 音乐、微信视频号）可关注非遗传播合作机会。',
    summary: '5月13日，黄浦区人民政府正式发布关于公布第十三批上海市黄浦区非物质文化遗产代表性项目名录和第十四批上海市黄浦区非物质文化遗产代表性项目代表性传承人名单的通知。本批次新增多个非遗项目与传承人，进一步完善黄浦区非遗保护体系。',
    source: '上海市人民政府官网（shanghai.gov.cn）',
-   url: 'https://www.shanghai.gov.cn/'}
+   url: 'https://www.shanghai.gov.cn/'},
+  {region: '国家级', date: '2026-05-11',
+   title: '国务院办公厅印发《国务院2026年度立法工作计划》（国办发〔2026〕14号）',
+   dept: '国务院办公厅（落款2026年5月8日，5月11日司法部、水利部等部委转发，5月12日国新办挂网）',
+   cat: 'AI治理 / 立法',
+   impact: '高',
+   impactReason: '首次将"加快推进人工智能健康发展综合性立法"纳入国务院年度立法工作计划，配套提出完善数据、算力、算法、产权、网络安全、供应链安全等共性要素及重点应用场景立法。直接划定后续 AI 监管立法节奏，腾讯混元、元宝、企微AI、AI Lab 等业务线的合规与备案准备需同步前移。',
+   summary: '计划明确，2026年立法工作要聚焦建设更加完善的中国特色社会主义法治体系，统筹立改废释，加强重点领域、新兴领域、涉外领域立法。具体清单：提请全国人大常委会审议法律案14件，拟制定、修订行政法规24件，预备项目若干。AI 综合性立法以方向性任务呈现于"加快高水平科技自立自强、激发全民族文化创新创造活力"板块，定位为"其他急需立法项目"，原文表述为"完善人工智能治理，加快推进人工智能健康发展综合性立法；加快完善保障数据、算力、算法、产权、网络安全、供应链安全等人工智能共性要素及规范重点应用场景方面的立法"。文中未具体指定牵头起草部门，但参考关联项目，国家网信办、工信部、公安部、科技部、国家数据局等多部门联合起草可能性较大。',
+   source: '国务院新闻办公室（国新办）/ 司法部 / 人民网（党媒）',
+   url: 'http://www.scio.gov.cn/zdgz/jj/202605/t20260512_988930.html'},
+  {region: '国家级', date: '2026-05-11',
+   title: '工信部办公厅印发《关于实施人工智能科技伦理审查与服务先导计划的通知》（工信厅科函〔2026〕199号）',
+   dept: '工业和信息化部办公厅',
+   cat: 'AI治理 / 伦理审查',
+   impact: '高',
+   impactReason: '10省市（北京、上海、广东、山东、天津、四川、江苏、湖北、湖南、浙江）率先试点，华东命中沪苏浙湘四地；先导计划要求每省推荐1—2个城市，覆盖 AI 基础底座（数据、算法、模型）+ 制造、教育、科技、文化、医疗、金融、农业、旅游、消费等垂直领域，每个领域选取约 5 家重点创新主体。腾讯混元、AI Lab、腾讯云、腾讯医疗、腾讯教育均有作为重点创新主体的入选机会。',
+   summary: '依据《人工智能科技伦理审查与服务办法（试行）》，工信部办公厅在北京、上海、广东、山东、天津、四川、江苏、湖北、湖南、浙江等10个国家人工智能产业创新应用先导区所在省份启动先导计划。每省推荐1—2个城市参与，必选"AI 基础底座"领域，垂直领域每市选3个以上，每个领域选取约5家重点创新主体，总数20家以上。四项重点任务：建立地方伦理治理工作机制（出台省级配套办法/细则）、建设两类机构（伦理委员会+伦理审查与服务中心）、验证审查程序与标准（开展实践、高风险活动专家复核、推动经验转化为标准）、构建部省市三级联动敏捷治理网络。各城市实施方案2026年5月20日前报送工信部科技司，实施周期2026年6月1日—11月30日，期满后工信部组织综合评估，对成效显著省市予以表扬并在后续政策、资金上倾斜支持。',
+   source: '工业和信息化部官网（wap.miit.gov.cn）',
+   url: 'https://wap.miit.gov.cn/zwgk/zcwj/wjfb/tz/art/2026/art_353d0d2a06ab4cebbfd53f97aec4ae24.html'},
+  {region: '上海', date: '2026-05-11',
+   title: '上海市政府常务会议：原则同意《上海市推进物业行业提质增效的实施意见》及《上海市工业用地使用权转让、出租、抵押二级市场管理办法（试行）》',
+   dept: '上海市政府常务会议（市长龚正主持）',
+   cat: '城市治理 / 工业用地',
+   impact: '低',
+   impactReason: '两项议题均为民生与产业空间治理的基础制度，与腾讯主业关联较弱。物业服务侧鼓励企业向"公共空间运营、居家养老、社区商业、智慧管理"延伸，腾讯智慧社区、企业微信社区版可作间接对接面；工业用地二级市场强调"全市统一的交易服务平台"建设，腾讯云政务、企业微信政务侧具备承接经验。',
+   summary: '5月11日上海市委副书记、市长龚正主持召开市政府常务会议。会议原则同意《上海市推进物业行业提质增效的实施意见》，要求突出民生导向破解社区治理难题，重点解决违法搭建、外墙脱落、电梯故障、噪音扰民、车辆乱停乱放等市民诉求集中问题，抓好物业服务薄弱小区"底部抬升"；突出市场导向培育壮大发展动能，培育规模化、集约化、专业化龙头企业，鼓励企业向公共空间运营、居家养老、社区商业、智慧管理延伸。会议同时原则同意《上海市工业用地使用权转让、出租、抵押二级市场管理办法（试行）》，提出构建"规范有序、公开透明、高效便捷"的工业用地二级市场体系，加快建设全市统一的交易服务平台，确保二级市场土地要素价格回归工业属性。',
+   source: '上海市人民政府官网（shanghai.gov.cn，解放日报记者孟群舒）',
+   url: 'https://www.shanghai.gov.cn/nw4411/20260512/4882e17bb39545d48841d6e85a49b7fd.html'},
+  {region: '湖南', date: '2026-05-11',
+   title: '湖南省发改委印发《关于组织申报2026年省预算内新型城镇化战略五年行动计划试点方向项目的通知》（落款5月8日，5月11日红网首发）',
+   dept: '湖南省发展和改革委员会',
+   cat: '新型城镇化 / 投资申报',
+   impact: '低',
+   impactReason: '覆盖20个国家城镇化潜力地区产业导入试点县市；公共服务平台建设方向（含数智化服务）最高补助比例30%，单项目原则上不超1000万元。与腾讯主业关联较弱，腾讯云政企、产业互联网线可关注公共服务平台数智化方向的项目机会。',
+   summary: '通知由湖南省发改委2026年5月8日印发，5月11日红网首发。本次申报覆盖长株潭、衡阳、邵阳、岳阳、常德、益阳、郴州、永州、怀化、娄底10市州共20个试点县市（含浏阳、宁乡、攸县、湘乡、衡南、耒阳、邵东、隆回、武冈、平江、汨罗、汉寿、桃源、沅江、桂阳、永兴、祁阳、道县、溆浦、双峰）。按特色产业发展、公共服务平台建设、城镇社区公共服务设施建设三大方向分级补助：特色产业≤15%、公共服务平台≤30%、社区设施≤60%；单项目原则上不超1000万元。申报需满足项目已在湖南省投资项目在线审批监管平台获取项目代码并完成审批/核准/备案，已开工或可在2026年内开工，建设周期一般不超2年，未列入失信主体名单等条件。每个试点县市限报2个项目，市州发改委须于2026年5月15日前报送省发改委规划处。',
+   source: '湖南省发展和改革委员会官网（fgw.hunan.gov.cn）',
+   url: 'https://fgw.hunan.gov.cn/fgw/xxgk_70899/tzgg/202605/t20260511_33973747.html'},
+{region: '国家级', date: '2026-05-08',
+   title: '国家网信办、国家发改委、工信部联合印发《智能体规范应用与创新发展实施意见》',
+   dept: '国家网信办、国家发改委、工业和信息化部',
+   cat: 'AI治理',
+   impact: '高',
+   impactReason: '直接划定智能体产品边界与安全责任，影响腾讯混元、元宝及企微AI智能体备案合规节奏。',
+   summary: '文件落实国务院《关于深入实施"人工智能+"行动的意见》，明确智能体定义为具备自主感知、记忆、决策、交互与执行能力的智能系统，提出四方面举措：夯实发展基础、完善技术底座、构建标准协议；守牢安全底线，明确产品边界与责任义务；推动应用落地、赋能重点行业；构建治理体系，强化协同联动。',
+   source: '中央网信办 / 新华社 / 人民日报',
+   url: 'https://www.cac.gov.cn/'},
+
+  {region: '上海', date: '2026-05-07',
+   title: '上海公布2026年优化营商环境十大攻坚突破任务',
+   dept: '上海市人民政府新闻发布会（市发改委主任刘健介绍）',
+   cat: '营商环境',
+   impact: '中',
+   impactReason: '直接覆盖网络营商、招投标、中小企业融资等领域，腾讯视频号商家、小程序商城、企业微信SMB链路受益面较大。',
+   summary: '上海市政府举行新闻发布会，市政府副秘书长、市发改委主任刘健介绍2026年优化营商环境十大攻坚突破任务，重点包括：优化惠企政策服务、规范涉企行政检查、优化中小企业融资服务、规范招投标和政府采购、优化网络营商环境、强化办理破产府院联动等。延续2025年十项重点事项工作机制，针对企业需求迫切、协同推进要求高的领域加力突破。',
+   source: '上海证券报 / 中新网（市政府发布会）',
+   url: 'https://paper.cnstock.com/html/2026-05/08/content_2213636.htm'},
+
+  {region: '上海', date: '2026-05-07',
+   title: '上海市政府办公厅印发《2026年上海市推进政府职能转变和行政审批制度改革工作要点》',
+   dept: '上海市人民政府办公厅',
+   cat: '行政改革',
+   impact: '中',
+   impactReason: '推进"放管服"与一网通办深化，腾讯电子政务、企业微信政务侧合作有空间。',
+   summary: '5月7日上海市信用门户刊载市政府办公厅文件，要求以整体政府理念健全完善政府职能转变和行政审批制度改革工作机制，推动营商环境优化、行政效能提升、治理体系完善等重点任务有机融合，持续夯实有为政府基础。',
+   source: '上海信用门户（市发改委信用网）',
+   url: 'http://credit.fgw.sh.gov.cn/sjdt/20260507/af20717dec9a44aca8a66ec71cf03d1d.html'},
+
+  {region: '江苏', date: '2026-05-06',
+   title: '江苏省发改委印发《关于进一步促进民间投资发展的若干举措》14条（苏发改投资发〔2026〕383号）',
+   dept: '江苏省发展和改革委员会',
+   cat: '民间投资',
+   impact: '中',
+   impactReason: '14条举措明确支持民营企业投资虚拟电厂、充电基础设施、智能算力等新业态，并支持民营中试平台建设、低空经济、商业航天等，与腾讯云、产业互联网、智慧能源、SMB链路均直接相关。',
+   summary: '为贯彻落实国务院办公厅《关于进一步促进民间投资发展的若干措施》（国办发〔2025〕38号），经省政府同意，江苏省发改委于4月23日落款印发，5月6日通过国家信息中心投资项目在线审批监管平台对外公开。涵盖国家审批重点领域、省级审批项目、低空经济与商业航天、民营科技创新、服务业、招投标、政府采购、网络型基础设施、数字化赋能、政策性资金、金融与上市融资、民营中试平台等14条。',
+   source: '国家信息中心投资项目在线审批监管平台',
+   url: 'https://new.tzxm.gov.cn/zckd/gfxwj/202605/t20260507_1405086.shtml'},
+
+  {region: '江苏', date: '2026-05-09',
+   title: '江苏省住建厅印发《2026年住房和城乡建设工作要点》（5月9日印发，5月10日现代快报报道）',
+   dept: '江苏省住房和城乡建设厅',
+   cat: '住建',
+   impact: '低',
+   impactReason: '与腾讯主业弱相关，但涉及"一网通办""跨省通办"，腾讯政务云、企业微信政务侧有间接对接面。',
+   summary: '5月9日江苏省住建厅发布2026年住房和城乡建设工作要点。提出因城施策"控增量、去库存、优供给"，深化住房公积金"一网通办""跨省通办"，推进灵活就业人员参加公积金制度；新开工改造老旧小区约300个，加装电梯1500台以上，更新老旧电梯15000台以上；新增公共停车泊位3万个、共享停车泊位0.5万个，新增污水处理能力70万立方米/日。',
+   source: '现代快报（5月10日报道）',
+   url: 'https://news.qq.com/rain/a/20260510A06E4T00'},
+
+  {region: '浙江', date: '2026-05-07',
+   title: '浙江四部门印发《浙江省加快新场景建设应用 推动科技和产业高质量发展行动方案（2026—2027年）》（浙发改体改〔2026〕90号）',
+   dept: '浙江省发改委、省经信厅、省科技厅、省国资委（联合印发）',
+   cat: '场景应用',
+   impact: '高',
+   impactReason: '24个重点领域涵盖人工智能、脑机接口、全空间无人体系、海洋经济等，腾讯云、混元、自动驾驶、智慧交通线均有场景对接机会。',
+   summary: '为落实国办发〔2025〕37号《关于加快场景培育和开放 推动新场景大规模应用的实施意见》，浙江省发改委、经信厅、科技厅、国资委2026年4月29日联合印发，5月7日由省发改委公开发布。方案聚焦前沿科技创新、产业转型升级、行业智慧监管、高效社会治理、普惠民生服务5大方面，在人工智能、脑机接口、全空间无人体系、海洋经济等24个重点领域，每年开放150个以上综合性重大场景、行业领域集成式场景、高价值小切口场景；到2027年培育100家以上场景创新标杆企业，带动有效投资3000亿元以上。',
+   source: '浙江省发改委官网（含5月9日新浪/腾讯新闻报道）',
+   url: 'https://fzggw.zj.gov.cn/col/col1229123366/art/2026/art_1625db93310b4e2aaa79c39eb7013c75.html'},
+
+  {region: '安徽', date: '2026-05-09',
+   title: '安徽省政府办公厅印发《安徽省制造业中试平台建设实施方案》（皖政办秘〔2026〕15号）',
+   dept: '安徽省人民政府办公厅',
+   cat: '制造业',
+   impact: '中',
+   impactReason: '重点产业含人工智能、机器人、智能家居等，腾讯云工业互联网及AI推理算力可对接合肥、芜湖中试平台建设。',
+   summary: '皖政办秘〔2026〕15号文件提出，到2028年培育省级制造业中试平台30家左右，并争创国家级。重点产业覆盖智能网联新能源汽车、新一代信息技术、人工智能、高端装备、机器人等；未来产业含量子科技、生物制造、脑机接口、具身智能、6G。激励力度：设备投入20%奖补，最高500万；列入国家重点培育平台再奖200万一次性奖补；公共服务平台年补助最高100万。',
+   source: '安徽省政府 / 新浪财经',
+   url: 'https://finance.sina.com.cn/wm/2026-05-09/doc-inhxhzaz6709173.shtml'},
+
+  {region: '安徽', date: '2026-05-06',
+   title: '中共安徽省委宣传部、安徽省司法厅印发《2026年"民法典宣传月"工作方案》',
+   dept: '中共安徽省委宣传部、安徽省司法厅',
+   cat: '普法',
+   impact: '低',
+   impactReason: '弱关联。腾讯新闻、腾讯视频、QQ等内容生态可承载相关公益普法内容。',
+   summary: '部署全省2026年5月"民法典宣传月"系列宣传教育活动，重点开展民法典进企业专项活动等三项工作，以民法典实施成效服务保障全省高质量发展。',
+   source: '腾讯新闻 / 新浪财经',
+   url: 'https://news.qq.com/rain/a/20260506A05T4U00'},
+
+  {region: '福建', date: '2026-05-07',
+   title: '福建省科技厅、省财政厅联合印发《福建省企业研发经费投入奖补实施细则》（闽科规〔2026〕3号）',
+   dept: '福建省科技厅、福建省财政厅',
+   cat: '科技创新',
+   impact: '中',
+   impactReason: '省、市、县三级财政按比例分担，单企业单年度最高补助600万元，腾讯云在闽AI研发型客户、SaaS研发投入主体均有受益空间。',
+   summary: '细则于5月7日通过省财政厅网站对外发布。明确对年度研发经费支出高于200万元、且较上年增长100万元以上的科技型企业，按其研发经费支出较上年增量的6%给予奖励补助，单个企业单年度最高补助600万元；资金由省、市、县三级财政预算按比例分担。享受奖补的科技型企业须满足省内独立税务登记、独立核算、健全财务管理等四项条件。',
+   source: '福建省财政厅官网 / 福建日报',
+   url: 'https://czt.fujian.gov.cn/zwgk/czxw/202605/t20260507_7145001.htm'},
+
+  {region: '湖南', date: '2026-05-06',
+   title: '湖南省政府办公厅印发《关于2026年推动高质量发展大抓落实督查激励二十条的通知》',
+   dept: '湖南省人民政府办公厅',
+   cat: '督查激励',
+   impact: '低',
+   impactReason: '湖南"十五五"开局督查激励基调，与腾讯主业弱相关；激励对象涉及数字经济、产业转型、"人工智能+先进制造"等，腾讯云政企/产业互联网线可作为间接利好跟踪。',
+   summary: '湖南日报新湖南客户端5月6日讯首发，5月7日新浪财经转载长沙晚报报道。二十条围绕打造"三个高地"、现代化产业体系（含"人工智能+先进制造"）、长株潭一体化、湘中南融入粤港澳大湾区、营商环境、民生十大实事、安全底线等方面展开。',
+   source: '湖南日报新湖南客户端（5月6日首发）/ 长沙晚报 / 新浪财经（5月7日转载）',
+   url: 'https://finance.sina.com.cn/jjxw/2026-05-07/doc-inhwzmmn7828570.shtml'}
 ];
 
-/* 预警（合并形态） */
+/* 行业监管（独立成章） */
+const REGULATION = [
+  {date: '2026-05-09', title: '《网络交易平台规则监督管理办法》施行倒计时跟踪',
+   dept: '国家市场监督管理总局、国家互联网信息办公室（市场监管总局令第116号）',
+   summary: '该办法已于2026年2月1日起施行，至5月9日已运行超3个月，腾讯视频号、小程序商家、QQ购物等平台均在监管覆盖范围。本期未见新执法案例，但持续跟踪中。',
+   source: '国家市场监管总局',
+   url: 'https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2026/art_85b474fc5a08494bb60ca6a280b98d7d.html',
+   relevance: '直接关联：腾讯视频号小店、小程序商城、QQ购物等电商平台合规'},
+  {date: '2026-05-08', title: '"清朗·整治AI应用乱象"专项行动持续推进',
+   dept: '中央网信办',
+   summary: '中央网信办年初部署的"清朗·整治AI应用乱象"专项行动持续推进，本期窗口内尚未见新一批通报，但与5月8日国家三部门智能体新规形成监管合力。建议腾讯混元产品线、元宝、AI Lab对照专项行动重点开展自查。',
+   source: '中央网信办 / 金融界',
+   url: 'https://stock.jrj.com.cn/2026/05/01073856959630.shtml',
+   relevance: '直接关联：腾讯混元、元宝、AI产品自查与备案'}
+];
+
+/* 预警（合并形态：原 ALERTS + REGULATION，每条带 date/url） */
 const ALERTS = [
   {date: '2026-05-13', level: 1, title: '"数据要素×"城市行首场南京对接会：5月14日发布60余项数据场景需求',
    detail: '国家数据局5月13日启动"数据要素×"城市行，首场供需对接会5月14日在南京举行，现场发布超过60个特色数据场景需求。腾讯云政企、企业微信政务版、混元数据应用线建议同步对接江苏数据局/南京数据局，作为承接平台与AI服务候选。',
@@ -680,29 +1041,156 @@ const ALERTS = [
    detail: '国家医保局印发《医疗保障基金监督检查五年行动计划（2026—2030）》，明确以大数据、AI 智能审核、跨部门协作提升监管精准度。腾讯健康、腾讯医疗、AI Lab 医保智能审核线可对接国家医保局基金监管司与省级医保局。',
    countdown: '五年期·持续推进',
    url: 'https://www.nhsa.gov.cn/art/2026/5/13/art_105_20493.html'},
+  {date: '2026-05-11', level: 1, title: '《国务院2026年度立法工作计划》AI 综合性立法响应窗口',
+   detail: '国办发〔2026〕14号将"加快推进人工智能健康发展综合性立法"明确为本年度立法任务，覆盖数据、算力、算法、产权、网络安全、供应链安全及重点应用场景。腾讯混元、元宝、企微 AI、AI Lab 等业务线建议本月内完成内部影响清单与对外口径草稿。',
+   countdown: '本月内出口径',
+   url: 'http://www.scio.gov.cn/zdgz/jj/202605/t20260512_988930.html'},
+  {date: '2026-05-11', level: 1, title: '工信部 AI 伦理先导计划：5月20日前报送实施方案',
+   detail: '工信厅科函〔2026〕199号，10省市试点（含沪苏浙湘）。各试点省份每省推荐1—2个城市，各城市实施方案2026年5月20日前报送工信部科技司，实施周期2026年6月1日—11月30日。腾讯华东政企/产研建议同步对接沪苏浙湘四地市级承接单位。',
+   countdown: '5月20日前',
+   url: 'https://wap.miit.gov.cn/zwgk/zcwj/wjfb/tz/art/2026/art_353d0d2a06ab4cebbfd53f97aec4ae24.html'},
+  {date: '2026-05-11', level: 2, title: '湖南新型城镇化试点项目申报：5月15日截止',
+   detail: '湖南省发改委5月8日印发通知，20个试点县市每市限报2个项目，单项目上限1000万元。市州发改委须于5月15日前报送省发改委规划处。腾讯云政企、产业互联网可关注"公共服务平台数智化"方向。',
+   countdown: '5月15日截止',
+   url: 'https://fgw.hunan.gov.cn/fgw/xxgk_70899/tzgg/202605/t20260511_33973747.html'},
   {date: '2026-05-11', level: 2, title: '工信部 AI 伦理先导计划实施方案：5月20日前报送（继承自上一期）',
    detail: '工信厅科函〔2026〕199号，10省市试点（含沪苏浙湘）。各试点省份每省推荐1—2个城市，各市实施方案2026年5月20日前报送工信部科技司。腾讯华东政企/产研建议本周内完成沪苏浙湘四地市级承接单位对接。',
    countdown: '5月20日前',
    url: 'https://wap.miit.gov.cn/zwgk/zcwj/wjfb/tz/art/2026/art_353d0d2a06ab4cebbfd53f97aec4ae24.html'},
-  {date: '2026-05-08', level: 3, title: '《网络交易平台规则监督管理办法》合规持续期（继承自前期）',
+{date: '2026-05-08', level: 1, title: '《智能体规范应用与创新发展实施意见》执行响应窗口',
+   detail: '5月8日三部门联合印发，文件未明确施行日，建议产品和合规口径一周内完成自查清单与对外口径。',
+   countdown: '本周内出口径',
+   url: 'https://www.cac.gov.cn/'},
+  {date: '2026-05-07', level: 1, title: '上海"网络营商环境"专项',
+   detail: '5月7日发布会列入十大攻坚任务之一，腾讯华东BD与上海各委办对接窗口需在5月内打通。',
+   countdown: '本月内推进',
+   url: 'https://paper.cnstock.com/html/2026-05/08/content_2213636.htm'},
+  {date: '2026-05-07', level: 2, title: '浙江新场景建设应用方案场景申报',
+   detail: '24个领域、年开放150+场景，建议腾讯云、混元、智慧交通线在5月底前梳理可申报场景清单提交浙江省发改委。',
+   countdown: '5月底前梳理',
+   url: 'https://fzggw.zj.gov.cn/col/col1229123366/art/2026/art_1625db93310b4e2aaa79c39eb7013c75.html'},
+  {date: '2026-05-09', level: 2, title: '安徽中试平台奖补窗口',
+   detail: '设备投入20%奖补政策执行至2027年12月31日；国家级培育额外200万奖励。腾讯云工业互联网与合肥、芜湖产业园对接可在Q2启动。',
+   countdown: 'Q2启动对接',
+   url: 'https://finance.sina.com.cn/wm/2026-05-09/doc-inhxhzaz6709173.shtml'},
+  {date: '2026-05-09', level: 3, title: '《网络交易平台规则监督管理办法》合规持续期',
    detail: '市场监管总局令第116号，2026年2月1日起施行，已运行3个月+。腾讯视频号、小程序商家、QQ购物等持续合规跟进。',
    countdown: '长期跟进',
-   url: 'https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2026/art_85b474fc5a08494bb60ca6a280b98d7d.html'}
+   url: 'https://www.samr.gov.cn/zw/zfxxgk/fdzdgknr/fgs/art/2026/art_85b474fc5a08494bb60ca6a280b98d7d.html'},
+  {date: '2026-05-08', level: 3, title: '"清朗·整治AI应用乱象"专项行动',
+   detail: '中央网信办年初部署的专项行动持续推进，本期窗口内尚未见新一批通报；与5月8日国家三部门智能体新规形成监管合力。腾讯混元产品线、元宝、AI Lab需对照重点自查。',
+   countdown: '长期跟进',
+   url: 'https://stock.jrj.com.cn/2026/05/01073856959630.shtml'},
+  {date: '2026-05-07', level: 3, title: '福建企业研发经费投入奖补细则',
+   detail: '5月7日闽科规〔2026〕3号已发布。门槛：年研发支出>200万且较上年增长>100万；奖补：增量×6%，单企单年度上限600万。腾讯云在闽客户Q2可摸排可申报名单。',
+   countdown: 'Q2摸排申报',
+   url: 'https://czt.fujian.gov.cn/zwgk/czxw/202605/t20260507_7145001.htm'}
 ];
 
-/* 行业动态：本期窗口内"千帆星座"第八批发射可视作行业基础设施动态，已并入政策板块；其他无重量级新发布 */
-const INDUSTRY = [];
+/* 行业动态（按日收集，覆盖国内主要大模型/AI厂商，每条均附权威首发来源） */
+const INDUSTRY = [
+  {date: '2026-05-06', company: '字节跳动·豆包',
+   title: 'Doubao-Seed-2.0-lite 升级为豆包家族首款全模态理解模型',
+   summary: '5月6日火山引擎宣布，Doubao-Seed-2.0-lite 升级新版本，支持视频、图像、音频、文本原生统一理解，Agent、Coding、GUI 能力同步升级，对标企业大规模批量化部署全模态推理任务的性价比方案。',
+   source: 'IT之家 / 火山引擎官方',
+   url: 'https://www.ithome.com/0/947/010.htm'},
 
-/* 腾讯公司动态：5月13日港股盘后已发布 2026 Q1 业绩，本期作节点提示并预告下一期跟进分析 */
+  {date: '2026-05-06', company: '月之暗面·Kimi',
+   title: '月之暗面完成约 20 亿美元 D 轮融资，估值突破 200 亿美元',
+   summary: '5月6日《晚点 LatePost》独家披露，Kimi 即将完成新一轮 20 亿美元融资，由美团龙珠领投，水木资本、中国移动、CPE 源峰等参投，仅龙珠出手就超 2 亿美元；半年内月之暗面累计融资超 39 亿美元，估值翻 4 倍。K2.5 模型 ARR 在 3 月已破 1 亿美元。',
+   source: '腾讯新闻·晚点 LatePost / 每日经济新闻',
+   url: 'https://news.qq.com/rain/a/20260506A06DBT00'},
+
+  {date: '2026-05-07', company: '腾讯·混元（行业侧）',
+   title: '混元 Hy3 preview 上线 OpenRouter 周榜，Token 调用量超 Hy2 十倍',
+   summary: '5月7日 OpenRouter 公布周榜，腾讯最新语言模型混元 Hy3 进入头部；同日腾讯混元披露，自上线以来 Hy3 preview 总 Token 调用量已超过上一代 Hy2 的 10 倍。该条作为行业排位赛侧面信息收录，腾讯一手公告见后侧"公司动态"。',
+   source: '新浪财经 / 搜狐财经',
+   url: 'https://finance.sina.com.cn/roll/2026-05-08/doc-inhxcqkv4412952.shtml'},
+
+  {date: '2026-05-08', company: 'DeepSeek',
+   title: 'DeepSeek 完成首轮约 500 亿元融资，V4.1 定档 6 月',
+   summary: '5月8日多家媒体披露，DeepSeek 完成首轮约 500 亿元融资，估值由 200 亿美元上调至 450 亿美元，21 天估值翻 5 倍；其中梁文锋个人出资最高达 200 亿元，占总额 40%。V4.1 版本定档 6 月发布。',
+   source: '新浪财经（快科技）/ The Information',
+   url: 'https://finance.sina.com.cn/jjxw/2026-05-09/doc-inhxhcxm1652527.shtml'},
+
+  {date: '2026-05-09', company: '百度·文心',
+   title: '百度发布文心大模型 5.1，预训练成本仅业界同规模 6%',
+   summary: '5月9日百度正式发布新一代基础大模型文心 5.1，采用"多维弹性预训练"技术，仅以业界同规模模型约 6% 的预训练成本实现基础效果领先，登上 LMArena 搜索榜国内第一、全球第四，并通过分离式全异步强化学习与规模化智能体后训练，在 Agent、推理、创作维度全面升级。',
+   source: '百度 ERNIE 官方博客 / 新浪财经',
+   url: 'https://ernie.baidu.com/blog/zh/posts/ernie-5.1-0508-release/'}
+];
+
+/* 腾讯公司动态（一手发布或权威首发，按日，五日窗口内） */
 const TENCENT = [
   {date: '2026-05-13', title: '腾讯控股 2026 年第一季度业绩于 5 月 13 日 20:00（香港时间）发布',
    summary: '腾讯控股按既定节奏于2026年5月13日20:00（香港时间）/8:00（美东时间）公布2026年第一季度业绩并举行业绩电话会议。市场重点关注 AI 云收入、混元大模型进展、广告及游戏业务表现，本期日报作节点提示，正式数据与业绩亮点将在下一期日报追加分析。',
    source: '腾讯投资者关系官网',
-   url: 'https://www.tencent.com/zh-cn/investors'}
+   url: 'https://www.tencent.com/zh-cn/investors'},
+  {date: '2026-05-12', title: '腾讯控股 2026 年第一季度业绩将于 5 月 13 日香港时间 20:00 公布（业绩电话会同步举行）',
+   summary: '据腾讯投资者关系官网，腾讯控股将于2026年5月13日20:00（香港时间）/ 8:00（美东时间）公布2026年第一季度业绩，并举行业绩电话会议。市场重点关注 AI 云收入、混元大模型进展、广告及游戏业务表现，本期日报作时间节点提示，正式数据将在下一期日报追加分析。',
+   source: '腾讯投资者关系官网',
+   url: 'https://www.tencent.com/zh-cn/investors'},
+{date: '2026-05-07', title: '腾讯混元 Hy3 preview Token 调用量超 Hy2 十倍（混元官方披露）',
+   summary: '5月7日腾讯混元官方披露，自4月23日Hy3 preview 上线以来，Token 调用量持续增长，目前总量已超过上一代 Hy2 的 10 倍——该数据由腾讯混元一手公布，是混元团队 2026 年 2 月重建预训练与强化学习基础设施后的首批量化指标。',
+   source: '腾讯新闻 / 搜狐财经',
+   url: 'https://www.sohu.com/a/1019981275_99970452'},
+
+  {date: '2026-05-09', title: '腾讯混元在《2026 中国 AI 大模型平台排行榜·4 月》中位列头部（参考性收录）',
+   summary: '5月9日腾讯新闻发布的《2026 中国 AI 大模型平台排行榜·4 月》将腾讯混元与豆包、DeepSeek、智谱并列为 C 端产品商业化新周期头部玩家。本条为媒体盘点性质，非腾讯一手公告，作为本期参考性收录。',
+   source: '腾讯新闻 / AI 大模型工场',
+   url: 'https://news.qq.com/rain/a/20260509A0798F00'}
 ];
 
-/* 人事变动：本期窗口内国务院 / 华东各省均无新公开任免 */
-const PERSONNEL = [];
+/* 人事变动（按层级：国务院 → 上海 → 各省） */
+const PERSONNEL = [
+  {date: '2026-05-08', region: '国务院', loc: '北京', titleHead: '国务院人事任免（5月8日）',
+   appointments: [
+    {name: '贺勇', newRole: '国家自然资源副总督察（专职）', oldRole: '自然资源部耕地保护监督司司长（2022年9月起）', isViceMin: true,
+     personSource: '新浪财经 / 百度百科',
+     personUrl: 'https://finance.sina.com.cn/jjxw/2026-05-08/doc-inhxerwc2206242.shtml',
+     analysis: {
+       bio: '长期在自然资源部工作，曾任该部耕地保护监督司副司长等职，2022年9月起任耕地保护监督司司长，主管耕地保护、督察、用途管制等核心职能；2026年5月8日经国务院任命为国家自然资源副总督察（专职），跻身副部级序列。',
+       leaderLink: '暂未发现与现任政治局委员/常委级别公开报道的工作交集；耕地保护与"严守18亿亩耕地红线"为本届中央反复强调议题，主管督察身份贴近高层政策核心关注。',
+       tencentLink: '自然资源副总督察主管督察、自然资源调查监测、规划用途管制督察等，与腾讯主业直接关联度较低；与腾讯云时空大数据、腾讯地图、政企客户的不动产/国土数字化项目（如\'国土三调\'、耕地动态监测）存在间接对接面。',
+       impact: '中性 — 对腾讯主业影响中性偏弱。可作为腾讯云政企线在自然资源系统的人脉储备节点跟踪，尤其耕地保护数字化、卫星遥感监测方向。'
+     }},
+    {name: '陈东明', newRole: '黄河水利委员会主任（兼党组书记）', oldRole: '水利部河湖管理司司长（2023年起）', isViceMin: true,
+     personSource: '澎湃新闻 / 搜狐财经',
+     personUrl: 'https://m.thepaper.cn/newsDetail_forward_33122584',
+     analysis: {
+       bio: '1970年1月生，汉族，山东昌邑人，中共党员，长期任职水利系统。曾任中国水利水电出版传媒集团副总经理（正局级）、水利部政策法规司副司长（正司级）；2023年任水利部河湖管理司司长；2026年4月24日上任黄河水利委员会党组书记，5月8日由国务院正式任命为主任。',
+       leaderLink: '暂未发现与现任政治局委员/常委级别有公开报道的工作交集。',
+       tencentLink: '黄委职能聚焦黄河流域水资源管理、防汛抗旱、生态保护，与腾讯主业关联度较低；腾讯云在水利系统有"智慧水利"项目历史合作，可作为间接接触面。',
+       impact: '中性 — 主业影响中性，可作为腾讯云政企水利线的人脉储备节点。'
+     }}
+  ],
+  removals: [],
+  source: '中国政府网（一级）/ 新华网（二级）',
+  url: 'https://www.gov.cn/yaowen/liebiao/202605/content_7068110.htm',
+  urlAlt: 'https://www.news.cn/politics/20260508/12e294bbc42445869992450bdc3b72c0/c.html',
+  urlAltLabel: '新华网原文'},
+
+  {date: '2026-05-06', region: '上海', loc: '上海', titleHead: '上海市政府人事任免（5月6日）',
+   appointments: [
+     {name: '魏陆', newRole: '上海市发展和改革委员会副主任', oldRole: '上海市发展和改革委员会总经济师'},
+     {name: '江丹', newRole: '上海市住房和城乡建设管理委员会副主任', oldRole: '履历未公开（百度百科未披露）'},
+     {name: '王虎', newRole: '上海市检验检测认证有限公司总裁', oldRole: '上海市检验检测认证有限公司党委副书记、副总裁'},
+     {name: '施伟东', newRole: '上海公安学院副院长', oldRole: '上海市法学会党组副书记、专职副会长'},
+     {name: '俞清', newRole: '上海科学院副院长', oldRole: '上海市科学技术委员会二级巡视员（曾任发展规划处处长等）'}
+   ],
+   removals: [
+     {name: '潘敏', oldRole: '上海市电影局局长'},
+     {name: '陈国忠', oldRole: '上海市发展和改革委员会副主任、上海市域外农场管理办公室主任'},
+     {name: '刘千伟', oldRole: '上海市住建委总工程师'},
+     {name: '赵健', oldRole: '上海市生物医药技术研究院院长'},
+     {name: '胡斌勇', oldRole: '上海市公安局经济犯罪侦查总队总队长'}
+   ],
+  source: '上海一网通办总门户（原始）/ 腾讯新闻（聚合）',
+  url: 'https://news.qq.com/rain/a/20260506A070GA00',
+  urlAlt: 'https://finance.sina.com.cn/wm/2026-05-06/doc-inhwyixy8221903.shtml',
+  urlAltLabel: '新浪财经原稿',
+  note: '本批次均为厅局级以下，按规则不需做四维分析。原始信源为\'上海一网通办总门户\'微信公众号；市发改委副主任魏陆与腾讯华东数字经济业务对接面较直接，建议BD建立沟通通路。'}
+];
 
 /* 区域活动 */
 const EVENTS = [
@@ -723,7 +1211,31 @@ const EVENTS = [
    time: '2026年5月14日启动', loc: '上海',
    rel: '⭐⭐ 中（腾讯青年发展项目、微信创业服务可关注台青创业服务窗口）',
    source: '上海市人民政府官网',
-   url: 'https://www.shanghai.gov.cn/'}
+   url: 'https://www.shanghai.gov.cn/'},
+  {name: '2026 世界数字教育大会（教育部 + 浙江省人民政府主办）',
+   bigDate: '5月11—13日', city: '杭州',
+   time: '2026年5月11日—13日', loc: '杭州',
+   rel: '⭐⭐⭐ 高（腾讯教育、腾讯云、腾讯混元教育大模型可关注 AI+教育 八项成果与平行会议）',
+   source: '人民网（韩正出席开幕式致辞）/ 央广网 / 教育部新闻发布会',
+   url: 'https://politics.people.com.cn/n1/2026/0512/c1001-40717849.html'},
+{name: 'CIPSE 2026 中国（杭州）国际数字安防及人工智能博览会',
+   bigDate: '5月13—15日', city: '杭州',
+   time: '2026年5月13日—15日', loc: '杭州国际博览中心',
+   rel: '⭐⭐⭐ 高（腾讯安全、混元、腾讯云可参展/演讲）',
+   source: 'CIPSE 杭州数字安博会官网',
+   url: 'http://www.cipse.com.cn/newsxx.aspx?newsid=564&style=1'},
+  {name: '2026 杭州国际人工智能终端产业博览会（AIEXPO）',
+   bigDate: '5月14—16日', city: '杭州',
+   time: '2026年5月14日—16日', loc: '杭州大会展中心',
+   rel: '⭐⭐ 中（腾讯AI硬件生态合作机会）',
+   source: 'AI-FAIR 官网（高登会展集团）',
+   url: 'https://www.ai-fair.cn/'},
+  {name: '2026 CDIE 数字化创新博览会·上海站',
+   bigDate: '4月—5月', city: '上海',
+   time: '2026年4月—5月（持续）', loc: '上海',
+   rel: '⭐⭐ 中（腾讯产业互联网/SaaS生态可对接）',
+   source: 'CDIE 数字化创新博览会官网',
+   url: 'https://www.cdie.cn/'}
 ];
 
 /* ============== 渲染 ============== */
@@ -731,7 +1243,7 @@ const EVENTS = [
 const REGION_ORDER = ['国家级','上海','江苏','浙江','安徽','福建','湖南','江西'];
 const ALL_REGIONS = ['全部','国家级','上海','江苏','浙江','安徽','福建','湖南','江西'];
 
-let CURRENT_DATE = '2026-05-14';
+let CURRENT_DATE = '2026-05-10';
 let CURRENT_REGION = '全部';
 
 function escapeHtml(s){
@@ -760,6 +1272,7 @@ function dateMatch(item){
   return item.date === CURRENT_DATE;
 }
 
+/* 导读 */
 function renderDigest(){
   const wrap = document.getElementById('digest-body');
   const policies = POLICY.filter(dateMatch);
@@ -770,25 +1283,26 @@ function renderDigest(){
   const focus = FOCUS.filter(dateMatch);
 
   const isAll = CURRENT_DATE === 'all';
-  const isToday = CURRENT_DATE === '2026-05-14';
-  const dateLabel = isAll ? '2026年5月13日—5月14日' : (function(){
+  const isToday = CURRENT_DATE === '2026-05-10';
+  const dateLabel = isAll ? '2026年5月6日—5月14日' : (function(){
     const d = CURRENT_DATE.split('-');
     return '2026年' + parseInt(d[1]) + '月' + parseInt(d[2]) + '日';
   })();
-  const labelTag = isAll ? '双日合并·全量' : (isToday ? '今日视图' : '昨日视图');
+  const labelTag = isAll ? '五日全量' : (isToday ? '今日视图' : '历史单日');
 
   let summary;
   if (isAll){
-    summary = '本期为双日合并版（5月13日—5月14日，周三+周四），覆盖江浙沪皖闽赣湘六省一市，全部信源回溯至政府官网或国家级党媒（一手或一级转发）。两条数据治理与AI产业重磅同窗口落地：5月13日国家数据局启动"数据要素×"城市行，明确支持地方通过"以数招商""场景招商"服务产业发展，首场南京对接会5月14日发布超60项数据场景需求；同日工信部通报"千帆星座"第八批组网卫星成功发射，低轨宽带卫星互联网建设进一步推进；国家医保局印发《医疗保障基金监督检查五年行动计划（2026—2030）》，明确以大数据与AI智能审核构建系统性反欺诈机制。上海方面，5月14日上海国际电影节启动"AI片场"全新单元，定位为AI影像协作产业级实验场；上海律协发布首个三年发展规划（44项任务、海外分支机构2028年达100家）；赴金门、马祖旅游签注启动受理；同步启动上海海峡两岸青创大赛。本期窗口内华东各省与国务院均无新公开人事，腾讯控股5月13日港股盘后已发布2026 Q1 业绩，业绩亮点将在下一期日报追加分析。';
+    summary = '全量视图（5月6日至5月10日），覆盖江浙沪皖闽赣湘六省一市。重点命中——5月8日国家网信办、发改委、工信部联合印发《智能体规范应用与创新发展实施意见》；5月8日国务院任免国家工作人员（贺勇、陈东明）；5月7日上海公布2026年优化营商环境十大攻坚突破任务；5月7日浙江四部门印发新场景建设应用行动方案；5月6日江苏省发改委印发促进民间投资若干举措14条；5月9日安徽印发制造业中试平台建设实施方案。';
   } else if (isToday){
-    summary = '今日（5月14日，周四）按规则属常规执行日。当日命中：' +
-      (policies.length ? policies.length + '条政策' : '0条政策') +
-      '、' + (personnel.length ? personnel.length + '条人事' : '0条人事') +
-      '、' + (alerts.length ? alerts.length + '条预警' : '0条预警') +
-      '、' + (industry.length ? industry.length + '条行业动态' : '0条行业动态') +
-      '。重点是上海国际电影节"AI片场"单元启动，以及"数据要素×"城市行南京首场对接会发布 60+ 数据场景需求。如需查看完整双日窗口，请在顶部切换"所有"。';
+    summary = '今日（5月10日，周日）按规则原本应跳过，本期为五日合并版的最后一日，已豁免。当日命中：' +
+      (policies.length ? policies.length + '条政策、' : '') +
+      (personnel.length ? personnel.length + '条人事、' : '') +
+      (alerts.length ? alerts.length + '条预警、' : '') +
+      (industry.length ? industry.length + '条行业动态、' : '') +
+      (tencent.length ? tencent.length + '条腾讯动态' : '') +
+      '。如需查看完整窗口，请在顶部切换"所有"。';
   } else {
-    summary = '5月13日（周三）三条国家级政策同日落地：国家数据局启动"数据要素×"城市行（"以数招商""场景招商"新模式）、工信部通报"千帆星座"第八批组网卫星成功发射、国家医保局印发医保基金监督检查五年行动计划。上海当日发布黄浦区第十三批非遗代表性项目名录。腾讯控股港股盘后发布 2026 Q1 业绩。如需查看完整双日窗口，请在顶部切换"所有"。';
+    summary = '仅显示 ' + dateLabel + ' 当日命中条目，已切换到历史单日视图。如需查看完整窗口，请在顶部切换"所有"。';
   }
 
   let html = '<div class="digest-banner">' +
@@ -815,14 +1329,15 @@ function renderDigest(){
     });
   }
 
-  html += '<div class="section-title">本期说明</div>' +
+  html += '<div class="section-title">使用说明</div>' +
     '<div class="card"><div class="interp" style="margin-bottom:0;">' +
-    '本期为"双日合并版"——5月13日（周三）和5月14日（周四）两个工作日合并发布。今早 11:00 自动化任务因 PENDING_REVIEW 卡停未能单独发布5月14日，本期为补救发版。窗口为5月13日—5月14日两日，5月12日及更早内容请回看上一期 5月11日—5月12日 双日补抓版。按规则信源四级优先级（政府官网 &gt; 党央媒 &gt; 财经媒体 &gt; 转载平台），本期所有政策条目均经政府官网或国家级党媒一级回溯，并经"链接=标题=日期=描述"四对一核实。本期窗口内国务院与华东各省均无新公开人事任免，行业大模型亦无重量级新发布，已按规则诚实留空；腾讯控股2026 Q1 业绩已于5月13日20:00（香港时间）发布，业绩亮点将在下一期日报追加分析。' +
+    '本日报六个板块：导读、预警（监管已并入）、政策、人事（副部级以上含四维分析）、动态（行业+腾讯公司）、活动。导读默认展示"今日（5月10日）"命中条目；顶部下拉可切到"所有"或回看5月6日—5月9日任一日。条目均按规则信源四级优先级，未命中口径的省份按规则注明"该省本期无新发布"。' +
     '</div></div>';
 
   wrap.innerHTML = html;
 }
 
+/* 预警（监管已并入） */
 function renderAlert(){
   const wrap = document.getElementById('alert-body');
   const items = ALERTS.filter(dateMatch);
@@ -850,6 +1365,7 @@ function renderAlert(){
   wrap.innerHTML = html;
 }
 
+/* 政策 */
 function renderPolicy(){
   const wrap = document.getElementById('policy-body');
   const dateItems = POLICY.filter(dateMatch);
@@ -916,21 +1432,78 @@ function renderPolicy(){
   });
 }
 
+/* 人事 */
 function renderRs(){
   const wrap = document.getElementById('rs-body');
   const items = PERSONNEL.filter(dateMatch);
   let html = '<div class="section-title">人事变动<span class="section-count">' + items.length + '</span></div>';
   if (items.length === 0){
-    html += '<div class="empty">' +
-      '<div class="text"><strong>本期窗口内无新公开人事任免</strong><br>' +
-      '国务院最近一次任免为5月8日（贺勇、陈东明，已在前期日报四维分析）；华东各省于5月13日—14日两日内未见新的省政府/省人大常委会公开任免文件。<br>' +
-      '下一期日报将继续跟进。</div>' +
-    '</div>';
+    html += '<div class="empty"><div class="text">该日无人事条目</div></div>';
     wrap.innerHTML = html;
     return;
   }
+
+  items.forEach(function(g){
+    const apN = (g.appointments || []).length;
+    const rmN = (g.removals || []).length;
+    html += '<div class="rs-card">' +
+      '<div class="rs-head">' +
+        '<div class="row1">' +
+          '<div class="h-title">' + escapeHtml(g.titleHead) + '</div>' +
+          '<div class="h-loc">📍 ' + escapeHtml(g.loc || g.region) + '</div>' +
+        '</div>' +
+        '<div class="h-stat">本批次：<span class="b">任命 ' + apN + ' 人</span> · <span class="b">免职 ' + rmN + ' 人</span> · ' + fmtDate(g.date) + '</div>' +
+      '</div>' +
+      '<div class="rs-section">';
+
+    if (apN){
+      html += '<div class="group-tag app"><span>✓</span>任命（' + apN + '）</div>' +
+        '<table class="rs-table"><thead><tr><th style="width:22%;">姓名</th><th style="width:42%;">新职务</th><th style="width:36%;">原职务</th></tr></thead><tbody>';
+      g.appointments.forEach(function(a){
+        html += '<tr>' +
+          '<td><span class="name">' + escapeHtml(a.name) + '</span>' + (a.isViceMin ? '<br><span class="tag tag-impact-h" style="margin-top:2px;font-size:10px;">副部级+</span>' : '') + '</td>' +
+          '<td class="role-new">' + escapeHtml(a.newRole) + '</td>' +
+          '<td class="role-old">' + (a.oldRole ? escapeHtml(a.oldRole) : '<span class="empty-cell">—</span>') + '</td>' +
+        '</tr>';
+        if (a.isViceMin && a.analysis){
+          html += '<tr><td colspan="3" style="padding:0 6px 6px;">' +
+            '<div class="analysis">' +
+              '<div class="row"><span class="key">基本履历</span><span class="val">' + escapeHtml(a.analysis.bio) + '</span></div>' +
+              '<div class="row"><span class="key">高层交集</span><span class="val">' + escapeHtml(a.analysis.leaderLink) + '</span></div>' +
+              '<div class="row"><span class="key">腾讯交集</span><span class="val">' + escapeHtml(a.analysis.tencentLink) + '</span></div>' +
+              '<div class="row"><span class="key">影响研判</span><span class="val">' + escapeHtml(a.analysis.impact) + '</span></div>' +
+              (a.personUrl ? '<div class="row"><span class="key">履历来源</span><span class="val">' + escapeHtml(a.personSource || '权威渠道') + ' · <a href="' + a.personUrl + '" target="_blank" style="color:var(--brand-6);font-weight:500;">查看 ›</a></span></div>' : '') +
+            '</div>' +
+          '</td></tr>';
+        }
+      });
+      html += '</tbody></table>';
+    }
+
+    if (rmN){
+      html += '<div class="group-tag rem"><span>✕</span>免职（' + rmN + '）</div>' +
+        '<table class="rs-table"><thead><tr><th style="width:30%;">姓名</th><th style="width:70%;">免去职务</th></tr></thead><tbody>';
+      g.removals.forEach(function(r){
+        html += '<tr><td><span class="name">' + escapeHtml(r.name) + '</span></td><td class="role-old">' + escapeHtml(r.oldRole) + '</td></tr>';
+      });
+      html += '</tbody></table>';
+    }
+
+    if (g.note){
+      html += '<div class="interp" style="margin-top:10px;">' + escapeHtml(g.note) + '</div>';
+    }
+
+    html += '</div>' +
+      '<div class="rs-source"><span>来源：' + escapeHtml(g.source) + '</span><a href="' + g.url + '" target="_blank">查看原文 ›</a>' +
+        (g.urlAlt ? '<a href="' + g.urlAlt + '" target="_blank" style="margin-left:10px;">' + escapeHtml(g.urlAltLabel || '备用源 ›') + ' ›</a>' : '') +
+      '</div>' +
+    '</div>';
+  });
+
+  wrap.innerHTML = html;
 }
 
+/* 动态（行业动态 + 腾讯公司动态） */
 function renderTx(){
   const wrap = document.getElementById('tx-body');
   const industry = INDUSTRY.filter(dateMatch);
@@ -938,11 +1511,7 @@ function renderTx(){
 
   let html = '<div class="section-title">行业动态<span class="section-count">' + industry.length + '</span></div>';
   if (industry.length === 0){
-    html += '<div class="empty">' +
-      '<div class="text"><strong>本期窗口内无重量级行业新发布</strong><br>' +
-      'DeepSeek、百度文心、豆包、Kimi、混元在5月13日—14日两日内未见新版本或新功能公告（"千帆星座"第八批组网卫星发射已并入政策板块）。<br>' +
-      '腾讯控股 2026 Q1 业绩已于5月13日20:00（香港时间）发布，下一期日报将追加业绩亮点与混元/AI 云数据分析。</div>' +
-    '</div>';
+    html += '<div class="empty"><div class="text">该日无行业动态命中</div></div>';
   } else {
     industry.forEach(function(t){
       html += '<div class="card">' +
@@ -980,11 +1549,12 @@ function renderTx(){
     });
   }
 
-  html += '<div class="card" style="margin-top:8px;"><div class="interp" style="margin-bottom:0;">说明：本期窗口为5月13日—5月14日两日，行业大模型新发布较少，已按规则诚实留空。"千帆星座"第八批组网卫星发射作为基础设施动态归入政策板块；腾讯本期一手公告为 2026 Q1 业绩（5月13日20:00 港股盘后发布），业绩亮点与混元/AI 云数据将在下一期日报追加分析。海外厂商无重大公开动态。</div></div>';
+  html += '<div class="card" style="margin-top:8px;"><div class="interp" style="margin-bottom:0;">说明：行业动态按日收集，覆盖国内主要大模型/AI 厂商（豆包、Kimi、DeepSeek、文心、混元等）；腾讯公司一手公告或权威首发单列于行业动态后。每条均附原始出处链接，可点击核验。海外厂商若在本期窗口内有重大公开动态，将单独补录。</div></div>';
 
   wrap.innerHTML = html;
 }
 
+/* 区域重要活动 */
 function renderEvent(){
   const wrap = document.getElementById('event-body');
   let html = '<div class="section-title">区域重要活动<span class="section-count">' + EVENTS.length + '</span></div>';
@@ -1014,6 +1584,7 @@ function renderAll(){
   renderEvent();
 }
 
+/* 日期下拉 */
 (function bindDatePicker(){
   const picker = document.getElementById('datePicker');
   const modal = document.getElementById('dateModal');
@@ -1028,10 +1599,10 @@ function renderAll(){
   }
 
   function labelOf(date){
-    if (date === 'all') return '所有 · 5月13日—5月14日';
+    if (date === 'all') return '所有 · 5月6日—5月10日';
     const d = date.split('-');
-    const isToday = date === '2026-05-14';
-    return parseInt(d[1]) + '月' + parseInt(d[2]) + '日 · ' + (isToday ? '今日' : '昨日');
+    const isToday = date === '2026-05-10';
+    return parseInt(d[1]) + '月' + parseInt(d[2]) + '日 · ' + (isToday ? '今日' : '单日');
   }
 
   picker.addEventListener('click', function(){
