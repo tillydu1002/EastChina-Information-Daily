@@ -1243,7 +1243,7 @@ const EVENTS = [
 const REGION_ORDER = ['国家级','上海','江苏','浙江','安徽','福建','湖南','江西'];
 const ALL_REGIONS = ['全部','国家级','上海','江苏','浙江','安徽','福建','湖南','江西'];
 
-let CURRENT_DATE = '2026-05-10';
+let CURRENT_DATE = 'all';
 let CURRENT_REGION = '全部';
 
 function escapeHtml(s){
@@ -1283,7 +1283,7 @@ function renderDigest(){
   const focus = FOCUS.filter(dateMatch);
 
   const isAll = CURRENT_DATE === 'all';
-  const isToday = CURRENT_DATE === '2026-05-10';
+  const isToday = CURRENT_DATE === '2026-05-14';
   const dateLabel = isAll ? '2026年5月6日—5月14日' : (function(){
     const d = CURRENT_DATE.split('-');
     return '2026年' + parseInt(d[1]) + '月' + parseInt(d[2]) + '日';
