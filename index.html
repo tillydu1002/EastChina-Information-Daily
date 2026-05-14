@@ -706,7 +706,7 @@
   <div class="title">华东区域政策日报</div>
   <div class="sub">江浙沪皖闽赣湘</div>
   <div class="date-picker" id="datePicker">
-    <span id="datePickerText">5月10日 · 今日</span>
+    <span id="datePickerText">所有 · 5月6日—5月14日</span>
     <span class="arrow">▼</span>
   </div>
 </div>
@@ -714,12 +714,16 @@
 <div class="date-modal" id="dateModal">
   <div class="sheet">
     <div class="ttl">选择日期</div>
-    <div class="opt" data-date="all">所有<span class="sub">5月6日—5月10日 全量</span></div>
+    <div class="opt cur" data-date="all">所有<span class="sub">5月6日—5月14日 全量</span></div>
     <div class="opt" data-date="2026-05-06">5月6日<span class="sub">周三</span></div>
     <div class="opt" data-date="2026-05-07">5月7日<span class="sub">周四</span></div>
     <div class="opt" data-date="2026-05-08">5月8日<span class="sub">周五</span></div>
     <div class="opt" data-date="2026-05-09">5月9日<span class="sub">周六</span></div>
-    <div class="opt cur" data-date="2026-05-10">5月10日<span class="sub">今日 · 周日</span></div>
+    <div class="opt" data-date="2026-05-10">5月10日<span class="sub">周日</span></div>
+    <div class="opt" data-date="2026-05-11">5月11日<span class="sub">周一</span></div>
+    <div class="opt" data-date="2026-05-12">5月12日<span class="sub">周二</span></div>
+    <div class="opt" data-date="2026-05-13">5月13日<span class="sub">周三</span></div>
+    <div class="opt" data-date="2026-05-14">5月14日<span class="sub">今日 · 周四</span></div>
     <div class="cancel" id="dateCancel">取消</div>
   </div>
 </div>
@@ -1599,9 +1603,9 @@ function renderAll(){
   }
 
   function labelOf(date){
-    if (date === 'all') return '所有 · 5月6日—5月10日';
+    if (date === 'all') return '所有 · 5月6日—5月14日';
     const d = date.split('-');
-    const isToday = date === '2026-05-10';
+    const isToday = date === '2026-05-14';
     return parseInt(d[1]) + '月' + parseInt(d[2]) + '日 · ' + (isToday ? '今日' : '单日');
   }
 
